@@ -1,6 +1,6 @@
 import sys
-sys.path.append("../../../../../dlapplication-dev")
-sys.path.append("../../../../../dlplatform-dev")
+sys.path.append("../../../../../dlapplication")
+sys.path.append("../../../../../dlplatform")
 
 
 from environments.local_environment import Experiment
