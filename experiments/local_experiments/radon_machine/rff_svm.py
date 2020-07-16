@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.fft
 
+
 def feature_map(x_mat, omega):
 	"""
 	:param x_mat: n x d matrix (each row is a data point)
@@ -31,15 +32,17 @@ def feature_map(x_mat, omega):
 	# return ((1 / D) ** 0.5) * (np.hstack((cos_omega_x_mat, sin_omega_x_mat))).T
 	return ((1 / D) ** 0.5) * (np.hstack((cos_omega_x_mat, sin_omega_x_mat)))
 
-# def fourier_transform(omega, D):
-# 	exp_pow = - np.sum(np.square(omega)) / 2
-# 	return (2 * np.pi) ** (- D / 2) * np.exp(exp_pow)
 
-def fourier_transform(omega, D):
-	scipy.fft.fftn()
+def sample_omega(x_mat, D, d):
+	"""
+	:param x_mat: n x d matrix (each row is a data point)
+	:param D: Number of samples
+	:param d: Number of dimensions of data (and for resulting omega)
+	:return: iid sample from scaled normal distribution
+	"""
+	# Setting scale
+	scale = (2 * np.pi) ** ((1 - D) * 0.5)
 
-
-
-def inverse_fourier_transform(p):
-	a = p / ((2 * np.pi) ** (- D / 2))
-	b = -2 * np.log(a)
+	# Scaled sample from the normal distribution
+	omega = scale * np.random.normal(loc=0, scale=1, size=(D, d))
+	return omega
