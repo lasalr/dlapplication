@@ -46,11 +46,13 @@ class Experiment():
         exp_path = name + "_" + self.getTimestamp()
         os.mkdir(exp_path)
         self.writeExperimentSummary(exp_path, name)
+        # Create coordinator
         t = Process(target = self.createCoordinator, args=(exp_path, ), name = 'coordinator')    
         #t.daemon = True
         t.start()
         jobs = [t]
         time.sleep(self.sleepTime)
+        # Create each worker
         for taskid in range(self.numberOfNodes):
             t = Process(target = self.createWorker, args=(taskid, exp_path, self.executionMode, self.devices, self.modelsPer, ), name = "worker_" + str(taskid))
             #t.daemon = True
