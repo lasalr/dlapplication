@@ -23,7 +23,7 @@ if __name__ == "__main__":
     learnerFactory = SklearnBatchLearnerFactory(LogisticRegression, {'regParam' : regParam, 'dim' : dim})
     
     dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes, indices = 'roundRobin', shuffle = False)
-    stoppingCriterion = MaxAmountExamples(100)
+    stoppingCriterion = MaxAmountExamples(30000)
         
     aggregator = Average()
     sync = AggregationAtTheEnd()
