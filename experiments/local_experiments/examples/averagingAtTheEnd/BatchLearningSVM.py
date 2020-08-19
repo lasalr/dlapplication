@@ -6,6 +6,7 @@ sys.path.append("../../../../../dlplatform")
 from environments.local_environment import Experiment
 from environments.datasources.standardDataSourceFactories import SVMLightDataSourceFactory
 from DLplatform.aggregating import Average
+from DLplatform.aggregating import RadonPoint
 from DLplatform.synchronizing.aggAtTheEnd import AggregationAtTheEnd
 from DLplatform.learning.factories.sklearnBatchLearnerFactory import SklearnBatchLearnerFactory
 from DLplatform.learning.batch.sklearnClassifiers import LogisticRegression
@@ -24,9 +25,9 @@ if __name__ == "__main__":
     learnerFactory = SklearnBatchLearnerFactory(LinearSVC, {'regParam' : regParam, 'dim' : dim})
     
     dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes, indices = 'roundRobin', shuffle = False)
-    stoppingCriterion = MaxAmountExamples(30000)
+    stoppingCriterion = MaxAmountExamples(3000)
         
-    aggregator = Average()
+    aggregator = RadonPoint()
     sync = AggregationAtTheEnd()
     
     exp = Experiment(executionMode = 'cpu', messengerHost = messengerHost, messengerPort = messengerPort, 
