@@ -56,10 +56,12 @@ class Experiment():
         for taskid in range(self.numberOfNodes):
             t = Process(target = self.createWorker, args=(taskid, exp_path, self.executionMode, self.devices, self.modelsPer, ), name = "worker_" + str(taskid))
             #t.daemon = True
+            print("Running t.start() for job:", t)
             t.start()
             jobs.append(t)
             time.sleep(self.sleepTime)
         for job in jobs:
+            print("Running job.join() for:", job)
             job.join()
         print('experiment done.')
 

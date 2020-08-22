@@ -18,14 +18,14 @@ if __name__ == "__main__":
   
     messengerHost = 'localhost'
     messengerPort = 5672
-    numberOfNodes = 3
+    numberOfNodes = 5
     
-    regParam = 0.1
+    regParam = 0.001
     dim = 4 #skin_segmentation has 4 attributes
     learnerFactory = SklearnBatchLearnerFactory(LinearSVC, {'regParam' : regParam, 'dim' : dim})
     
     dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes, indices = 'roundRobin', shuffle = False)
-    stoppingCriterion = MaxAmountExamples(3000)
+    stoppingCriterion = MaxAmountExamples(6000)
         
     aggregator = RadonPoint()
     sync = AggregationAtTheEnd()
@@ -34,4 +34,4 @@ if __name__ == "__main__":
         numberOfNodes = numberOfNodes, sync = sync, 
         aggregator = aggregator, learnerFactory = learnerFactory, 
         dataSourceFactory = dsFactory, stoppingCriterion = stoppingCriterion, sleepTime=0)
-    exp.run("RadonMachine_test")
+    exp.run("Linear_SVC_radon_point")
