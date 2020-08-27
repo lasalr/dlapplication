@@ -115,10 +115,48 @@ class SVMLightDataSource(FileDataSource):
         self.X = np.array(X.todense())
         self.y = y
 
-    ''' 
-    return: (instance, label) with instance being a numpy array and label being a float
-    '''
     def getNext(self):
+        """
+        return: (instance, label) with instance being a numpy array and label being a float
+        """
+        instance = self.X[self._indices[self._examplesCount]]
+        label = self.y[self._indices[self._examplesCount]]
+        self._examplesCount += 1
+        self.checkEpochEnd()
+        return instance, label
+
+    def checkEpochEnd(self):
+        if self._examplesCount == len(self._indices):
+            self._examplesCount = 0
+            if self._shuffle:
+                np.random.shuffle(self._indices)
+
+
+class CSVDataSource(FileDataSource):
+
+    """
+    For comma separated value data sources
+    """
+
+    def __init__(self, filename, indices, name, nodeId, numberOfNodes, shuffle=False):
+        DataSource.__init__(self, name=name)
+
+        self._filename = filename
+        self._indices = getattr(self, indices)(nodeId, numberOfNodes)
+        self._shuffle = shuffle
+        if self._shuffle:
+            np.random.shuffle(self._indices)
+        self._examplesCount = 0
+
+    def prepare(self):
+        X, y = load_svmlight_file(self._filename)
+        self.X = np.array(X.todense())
+        self.y = y
+
+    def getNext(self):
+        """
+        return: (instance, label) with instance being a numpy array and label being a float
+        """
         instance = self.X[self._indices[self._examplesCount]]
         label = self.y[self._indices[self._examplesCount]]
         self._examplesCount += 1
