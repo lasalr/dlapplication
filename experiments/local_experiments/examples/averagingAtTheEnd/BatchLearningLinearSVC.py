@@ -19,10 +19,11 @@ if __name__ == "__main__":
   
     messengerHost = 'localhost'
     messengerPort = 5672
-    numberOfNodes = 4
+    numberOfNodes = 3
     
     regParam = 0.01
-    dim = 4 #skin_segmentation has 4 attributes
+    # dim = 4 #skin_segmentation has 4 attributes
+    dim = 28  # HIGGS has 28 features
     learnerFactory = SklearnBatchLearnerFactory(LinearSVC, {'regParam' : regParam, 'dim' : dim})
     
     # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
@@ -32,7 +33,7 @@ if __name__ == "__main__":
         filename="../../../../data/HIGGS/HIGGS.csv",
         decoder=HIGGSDecoder(), numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False)
 
-    stoppingCriterion = MaxAmountExamples(6000)
+    stoppingCriterion = MaxAmountExamples(3000)
         
     aggregator = Average()
     sync = AggregationAtTheEnd()
