@@ -17,7 +17,7 @@ from DLplatform.stopping import MaxAmountExamples
 if __name__ == "__main__":
     messengerHost = 'localhost'
     messengerPort = 5672
-    numberOfNodes = 2
+    numberOfNodes = 3
 
     regParam = 0.01
     # dim = 4 #skin_segmentation has 4 attributes
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         filename="../../../../data/HIGGS/HIGGS.csv",
         decoder=HIGGSDecoder(), numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False)
 
-    stoppingCriterion = MaxAmountExamples(120)
+    stoppingCriterion = MaxAmountExamples(12000)
 
     aggregator = Average()  # RadonPoint()
     sync = AggregationAtTheEnd()
