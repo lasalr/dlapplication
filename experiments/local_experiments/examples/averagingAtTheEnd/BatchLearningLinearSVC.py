@@ -5,7 +5,7 @@ sys.path.append("../../../../../dlplatform")
 
 from environments.local_environment import Experiment
 from environments.datasources.standardDataSourceFactories import FileDataSourceFactory, SVMLightDataSourceFactory
-from environments.datasources.dataDecoders.otherDataDecoders import HIGGSDecoder
+from environments.datasources.dataDecoders.otherDataDecoders import CSVDecoder
 from DLplatform.aggregating import Average
 from DLplatform.aggregating import RadonPoint
 from DLplatform.synchronizing.aggAtTheEnd import AggregationAtTheEnd
@@ -17,23 +17,23 @@ from DLplatform.stopping import MaxAmountExamples
 if __name__ == "__main__":
     messengerHost = 'localhost'
     messengerPort = 5672
-    numberOfNodes = 3
+    numberOfNodes = 6
 
     regParam = 0.01
     # dim = 4 #skin_segmentation has 4 attributes
-    dim = 28  # HIGGS has 28 features
+    dim = 18  # SUSY has 18 features
     learnerFactory = SklearnBatchLearnerFactory(LinearSVC, {'regParam': regParam, 'dim': dim})
 
     # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
     # indices = 'roundRobin', shuffle = False)
 
     dsFactory = FileDataSourceFactory(
-        filename="../../../../data/HIGGS/HIGGS.csv",
-        decoder=HIGGSDecoder(), numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False)
+        filename="../../../../data/SUSY/SUSY.csv",
+        decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False)
 
-    stoppingCriterion = MaxAmountExamples(12000)
+    stoppingCriterion = MaxAmountExamples(1000)
 
-    aggregator = Average()  # RadonPoint()
+    aggregator = RadonPoint()  # RadonPoint()
     sync = AggregationAtTheEnd()
 
     exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
