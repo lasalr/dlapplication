@@ -12,8 +12,11 @@ import numpy as np
 import math
 import subprocess
 
-class Experiment():    
-    def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory, dataSourceFactory, stoppingCriterion, initHandler = InitializationHandler(), sleepTime = 5):
+
+class Experiment():
+    def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
+                 dataSourceFactory, stoppingCriterion, initHandler=InitializationHandler(),
+                 dataScheduler=IntervalDataScheduler, sleepTime=5):
         self.executionMode = executionMode
         if executionMode == 'cpu':
             self.devices = None
@@ -38,6 +41,7 @@ class Experiment():
         self.dataSourceFactory = dataSourceFactory
         self.stoppingCriterion = stoppingCriterion
         self.initHandler = initHandler
+        self.dataScheduler = dataScheduler
         self._uniqueId = str(os.getpid())
         self.sleepTime = sleepTime
 
@@ -47,15 +51,17 @@ class Experiment():
         os.mkdir(exp_path)
         self.writeExperimentSummary(exp_path, name)
         # Create coordinator
-        t = Process(target = self.createCoordinator, args=(exp_path, ), name = 'coordinator')    
-        #t.daemon = True
+        t = Process(target=self.createCoordinator, args=(exp_path,), name='coordinator')
+        # t.daemon = True
         t.start()
         jobs = [t]
         time.sleep(self.sleepTime)
         # Create each worker
         for taskid in range(self.numberOfNodes):
-            t = Process(target = self.createWorker, args=(taskid, exp_path, self.executionMode, self.devices, self.modelsPer, ), name = "worker_" + str(taskid))
-            #t.daemon = True
+            t = Process(target=self.createWorker,
+                        args=(taskid, exp_path, self.executionMode, self.devices, self.modelsPer,),
+                        name="worker_" + str(taskid))
+            # t.daemon = True
             print("Running t.start() for job:", t)
             t.start()
             jobs.append(t)
@@ -68,14 +74,15 @@ class Experiment():
     def createCoordinator(self, exp_path):
         coordinator = Coordinator()
         coordinator.setInitHandler(self.initHandler)
-        comm = RabbitMQComm(hostname = self.messengerHost, port = self.messengerPort, user = 'guest', password = 'guest', uniqueId = self._uniqueId)
-        os.mkdir(os.path.join(exp_path,'coordinator'))
-        commLogger = LearningLogger(path=os.path.join(exp_path,'coordinator'), id="communication", level = 'INFO')
+        comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
+                            uniqueId=self._uniqueId)
+        os.mkdir(os.path.join(exp_path, 'coordinator'))
+        commLogger = LearningLogger(path=os.path.join(exp_path, 'coordinator'), id="communication", level='INFO')
         comm.setLearningLogger(commLogger)
         coordinator.setCommunicator(comm)
         self.sync.setAggregator(self.aggregator)
         coordinator.setSynchronizer(self.sync)
-        logger = LearningLogger(path=exp_path, id="coordinator", level = 'INFO')
+        logger = LearningLogger(path=exp_path, id="coordinator", level='INFO')
         coordinator.setLearningLogger(logger)
         print("Starting coordinator...\n")
         coordinator.run()
@@ -85,20 +92,21 @@ class Experiment():
         if executionMode == 'cpu':
             device = None
         else:
-            print("device for node", id, "is gpu", id//modelsPer)
-            device = devices[id//modelsPer]
+            print("device for node", id, "is gpu", id // modelsPer)
+            device = devices[id // modelsPer]
         nodeId = str(id)
         w = Worker(nodeId)
-        dataScheduler = IntervalDataScheduler()
-        dataSource = self.dataSourceFactory.getDataSource(nodeId = id)
-        dataScheduler.setDataSource(source = dataSource)
+        dataScheduler = self.dataScheduler()
+        dataSource = self.dataSourceFactory.getDataSource(nodeId=id)
+        dataScheduler.setDataSource(source=dataSource)
         w.setDataScheduler(dataScheduler)
-        comm = RabbitMQComm(hostname = self.messengerHost, port = self.messengerPort, user = 'guest', password = 'guest', uniqueId = self._uniqueId)
-        os.mkdir(os.path.join(exp_path,"worker" + str(id)))
-        commLogger = LearningLogger(path=os.path.join(exp_path,"worker" + str(id)), id="communication", level = 'INFO')
+        comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
+                            uniqueId=self._uniqueId)
+        os.mkdir(os.path.join(exp_path, "worker" + str(id)))
+        commLogger = LearningLogger(path=os.path.join(exp_path, "worker" + str(id)), id="communication", level='INFO')
         comm.setLearningLogger(commLogger)
         w.setCommunicator(comm)
-        logger = LearningLogger(path=exp_path, id="worker" + str(id), level = 'INFO')
+        logger = LearningLogger(path=exp_path, id="worker" + str(id), level='INFO')
         learner = self.learnerFactory.getLearnerOnDevice(executionMode, device)
         learner.setLearningLogger(logger)
         learner.setStoppingCriterion(self.stoppingCriterion)
@@ -107,22 +115,22 @@ class Experiment():
         w.setLearner(learner)
         print("create worker " + nodeId + "\n")
         w.run()
-    
+
     def getTimestamp(self):
         return time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime(time.time()))
-    
+
     def writeExperimentSummary(self, path, name):
         outString = "Experiment " + name + " Summary:\n\n"
         outString += "Start:\t" + str(self.start_time) + "\n"
-        outString += "Number of Nodes:\t"+str(self.numberOfNodes)+"\n"
-        outString += "Learner:\t\t\t"+str(self.learnerFactory)+"\n"
-        outString += "Data source:\t\t"+str(self.dataSourceFactory)+"\n"
-        outString += "Sync:\t\t\t"+str(self.sync)+"\n"
-        outString += "Aggregator:\t\t"+str(self.aggregator)+"\n"
-        outString += "Stopping criterion:\t"+str(self.stoppingCriterion)+"\n"
-        outString += "Messenger Host:\t\t"+str(self.messengerHost)+"\n"
-        outString += "Messenger Port:\t\t"+str(self.messengerPort)+"\n"
-        
+        outString += "Number of Nodes:\t" + str(self.numberOfNodes) + "\n"
+        outString += "Learner:\t\t\t" + str(self.learnerFactory) + "\n"
+        outString += "Data source:\t\t" + str(self.dataSourceFactory) + "\n"
+        outString += "Sync:\t\t\t" + str(self.sync) + "\n"
+        outString += "Aggregator:\t\t" + str(self.aggregator) + "\n"
+        outString += "Stopping criterion:\t" + str(self.stoppingCriterion) + "\n"
+        outString += "Messenger Host:\t\t" + str(self.messengerHost) + "\n"
+        outString += "Messenger Port:\t\t" + str(self.messengerPort) + "\n"
+
         summaryFile = os.path.join(path, "summary.txt")
         f = open(summaryFile, 'w')
         f.write(outString)
