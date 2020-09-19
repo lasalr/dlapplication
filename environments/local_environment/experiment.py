@@ -1,3 +1,4 @@
+import tracemalloc
 from multiprocessing import Process
 from DLplatform.coordinator import Coordinator, InitializationHandler
 from DLplatform.worker import Worker
@@ -12,11 +13,14 @@ import numpy as np
 import math
 import subprocess
 
+MEM_TRACE = False
+
 
 class Experiment():
     def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
                  dataSourceFactory, stoppingCriterion, initHandler=InitializationHandler(),
                  dataScheduler=IntervalDataScheduler, sleepTime=5):
+        # TODO need to find out where the RadonPoint classes __call__() is called.
         self.executionMode = executionMode
         if executionMode == 'cpu':
             self.devices = None
@@ -72,6 +76,9 @@ class Experiment():
         print('experiment done.')
 
     def createCoordinator(self, exp_path):
+        # if MEM_TRACE:
+        #     tracemalloc.start(100)
+
         coordinator = Coordinator()
         coordinator.setInitHandler(self.initHandler)
         comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
@@ -85,9 +92,21 @@ class Experiment():
         logger = LearningLogger(path=exp_path, id="coordinator", level='INFO')
         coordinator.setLearningLogger(logger)
         print("Starting coordinator...\n")
+
+        # if MEM_TRACE:
+        #     snapshot = tracemalloc.take_snapshot()
+        #     top_stats = snapshot.statistics('lineno')
+        #     print("Process ID:", str(os.getpid()), "[ Top 10 ] - coordinator.run() in createCoordinator() in Experiment")
+        #     for stat in top_stats[:10]:
+        #         print(stat)
+
         coordinator.run()
 
+
     def createWorker(self, id, exp_path, executionMode, devices, modelsPer):
+        if MEM_TRACE:
+            tracemalloc.start(1000)
+
         print("start creating worker" + str(id))
         if executionMode == 'cpu':
             device = None
@@ -114,7 +133,20 @@ class Experiment():
         learner.setSynchronizer(self.sync)
         w.setLearner(learner)
         print("create worker " + nodeId + "\n")
+        if MEM_TRACE:
+            snapshot = tracemalloc.take_snapshot()
+            top_stats = snapshot.statistics('lineno')
+            print("Process ID:", str(os.getpid()), "[ Top 10 ] - before w.run() in createWorker() in Experiment")
+            for stat in top_stats[:10]:
+                print(stat)
         w.run()
+
+        # if MEM_TRACE:
+        #     snapshot = tracemalloc.take_snapshot()
+        #     top_stats = snapshot.statistics('lineno')
+        #     print("Process ID:", str(os.getpid()), "[ Top 10 ] - w.run() in createWorker() in Experiment")
+        #     for stat in top_stats[:10]:
+        #         print(stat)
 
     def getTimestamp(self):
         return time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime(time.time()))

@@ -1,6 +1,10 @@
 from environments.datasources.standardDataSources import FileDataSource, SVMLightDataSource
 import os
 
+import tracemalloc
+
+MEM_TRACE = True
+
 from DLplatform.dataprovisioning.dataSourceFactory import DataSourceFactory
 
 class FileDataSourceFactory(DataSourceFactory):
@@ -13,10 +17,20 @@ class FileDataSourceFactory(DataSourceFactory):
         self.cache          = cache
         
     def getDataSource(self, nodeId):
+        if MEM_TRACE:
+            tracemalloc.start(1000)
         name = os.path.basename(self.filename).split('.')[0]
         dataSource = FileDataSource(filename = self.filename, decodeLine = self.decoder, name = name, 
                                     indices = self.indices, nodeId=nodeId, numberOfNodes=self.numberOfNodes, 
                                     shuffle = self.shuffle, cache = self.cache)
+
+        if MEM_TRACE:
+            snapshot = tracemalloc.take_snapshot()
+            top_stats = snapshot.statistics('lineno')
+            print("Process ID:", str(os.getpid()), '[ Top 10 ] at end of getDataSource() in FileDataSourceFactory')
+            for stat in top_stats[:10]:
+                print(stat)
+
         return dataSource
 
     def __str__(self):
