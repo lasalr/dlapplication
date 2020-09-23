@@ -65,7 +65,7 @@ class FileDataSource(DataSource):
         indices = []
         counter = 0
         fp = open(self._filename, "r")
-        for l in fp.readlines():
+        for l in fp:
             if len(l) > 2 and counter % numberOfNodes == nodeIndexNumber:
                 indices.append(counter)
             counter += 1
@@ -76,7 +76,7 @@ class FileDataSource(DataSource):
         indices = []
         counter = 0
         fp = open(self._filename, "r")
-        for l in fp.readlines():
+        for l in fp:
             if len(l) > 2:
                 indices.append(counter)
             counter += 1
