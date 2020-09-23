@@ -13,7 +13,6 @@ import numpy as np
 import math
 import subprocess
 
-MEM_TRACE = False
 class Experiment():    
     def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
                  dataSourceFactory, stoppingCriterion, initHandler=InitializationHandler(),
@@ -54,7 +53,7 @@ class Experiment():
         exp_path = name + "_" + self.getTimestamp()
         os.mkdir(exp_path)
         self.writeExperimentSummary(exp_path, name)
-        # Create coordinator
+        t = Process(target = self.createCoordinator, args=(exp_path, self.minStartNodes, self.minStopNodes), name = 'coordinator')    
         #t.daemon = True
         t.start()
         jobs = [t]
