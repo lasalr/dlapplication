@@ -13,6 +13,8 @@ import numpy as np
 import math
 import subprocess
 
+MEM_TRACE = False
+
 class Experiment():    
     def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
                  dataSourceFactory, stoppingCriterion, initHandler=InitializationHandler(),
