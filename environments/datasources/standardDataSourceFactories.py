@@ -3,7 +3,7 @@ import os
 
 import tracemalloc
 
-MEM_TRACE = True
+MEM_TRACE = False
 
 from DLplatform.dataprovisioning.dataSourceFactory import DataSourceFactory
 
