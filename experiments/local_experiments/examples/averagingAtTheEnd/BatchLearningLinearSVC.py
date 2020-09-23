@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
         messengerHost = 'localhost'
         messengerPort = 5672
-        numberOfNodes = 3
+        numberOfNodes = 20
 
         regParam = 0.01
         # dim = 4 #skin_segmentation has 4 attributes
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             shuffle=False,
             cache=False)
 
-        stoppingCriterion = MaxAmountExamples(500)
+        stoppingCriterion = MaxAmountExamples(5000)
 
         aggregator = RadonPoint()  # RadonPoint()
         sync = AggregationAtTheEnd()
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
                          numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator, learnerFactory=learnerFactory,
                          dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0,
-                         dataScheduler=IntervalDataScheduler)
+                         dataScheduler=BatchDataScheduler)
 
         if CPU_TRACE:
             import cProfile
