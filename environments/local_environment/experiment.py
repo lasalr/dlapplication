@@ -14,12 +14,10 @@ import math
 import subprocess
 
 MEM_TRACE = False
-
-
-class Experiment():
+class Experiment():    
     def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
                  dataSourceFactory, stoppingCriterion, initHandler=InitializationHandler(),
-                 dataScheduler=IntervalDataScheduler, sleepTime=5):
+                 dataScheduler=IntervalDataScheduler, sleepTime=5, minStartNodes=0, minStopNodes=0):
         # TODO need to find out where the RadonPoint classes __call__() is called.
         self.executionMode = executionMode
         if executionMode == 'cpu':
@@ -48,6 +46,8 @@ class Experiment():
         self.dataScheduler = dataScheduler
         self._uniqueId = str(os.getpid())
         self.sleepTime = sleepTime
+        self.minStartNodes = minStartNodes
+        self.minStopNodes = minStopNodes
 
     def run(self, name):
         self.start_time = time.time()
@@ -55,8 +55,7 @@ class Experiment():
         os.mkdir(exp_path)
         self.writeExperimentSummary(exp_path, name)
         # Create coordinator
-        t = Process(target=self.createCoordinator, args=(exp_path,), name='coordinator')
-        # t.daemon = True
+        #t.daemon = True
         t.start()
         jobs = [t]
         time.sleep(self.sleepTime)
@@ -75,11 +74,11 @@ class Experiment():
             job.join()
         print('experiment done.')
 
-    def createCoordinator(self, exp_path):
+    def createCoordinator(self, exp_path, minStartNodes, minStopNodes):
         # if MEM_TRACE:
         #     tracemalloc.start(100)
-
-        coordinator = Coordinator()
+        print("create coordinator with minStart", minStartNodes, "and minStop", minStopNodes)
+        coordinator = Coordinator(minStartNodes, minStopNodes)
         coordinator.setInitHandler(self.initHandler)
         comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
                             uniqueId=self._uniqueId)
