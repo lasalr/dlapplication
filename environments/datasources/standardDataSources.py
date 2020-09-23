@@ -25,6 +25,8 @@ class FileDataSource(DataSource):
     def prepare(self):
         if self._cache:
             self._cachedData = []
+            # TODO check if this is to make sure file is kept open if not, consider using
+            #  with open() as: to enable automatic file closure
             for l in open(self._filename, "r").readlines():
                 if len(l) > 2:
                     self._cachedData.append(l)
