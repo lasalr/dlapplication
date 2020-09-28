@@ -16,10 +16,7 @@ import subprocess
 MEM_TRACE = False
 
 class Experiment():    
-    def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
-                 dataSourceFactory, stoppingCriterion, initHandler=InitializationHandler(),
-                 dataScheduler=IntervalDataScheduler, sleepTime=5, minStartNodes=0, minStopNodes=0):
-        # TODO need to find out where the RadonPoint classes __call__() is called.
+    def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory, dataSourceFactory, stoppingCriterion, initHandler = InitializationHandler(), dataScheduler = IntervalDataScheduler, minStartNodes=0, minStopNodes=0, sleepTime = 5):
         self.executionMode = executionMode
         if executionMode == 'cpu':
             self.devices = None

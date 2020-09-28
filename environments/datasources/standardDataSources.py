@@ -25,7 +25,6 @@ class FileDataSource(DataSource):
     def prepare(self):
         if self._cache:
             self._cachedData = []
-
             with open(self._filename, "r").readlines() as lines:
                 for l in lines:
                     if len(l) > 2:
