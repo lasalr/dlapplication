@@ -30,7 +30,8 @@ if __name__ == "__main__":
 
     dsFactory = FileDataSourceFactory(
         filename="../../../../data/SUSY/SUSY.csv",
-        decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False)
+        decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
+        shuffle=False, cache=False)
 
     stoppingCriterion = MaxAmountExamples(5000)
 
