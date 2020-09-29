@@ -49,7 +49,8 @@ class Experiment():
 
     def run(self, name):
         self.start_time = time.time()
-        exp_path = name + "_" + self.getTimestamp()
+        # exp_path = name + "_" + self.getTimestamp()
+        exp_path = './Results/' + name + "_" + self.getTimestamp()
         os.mkdir(exp_path)
         self.writeExperimentSummary(exp_path, name)
         t = Process(target = self.createCoordinator, args=(exp_path, self.minStartNodes, self.minStopNodes), name = 'coordinator')    
