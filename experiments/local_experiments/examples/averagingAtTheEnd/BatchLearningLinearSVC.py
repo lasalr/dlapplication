@@ -24,17 +24,15 @@ LOG_CONSOLE = True
 if __name__ == "__main__":
 
     try:
-        if MEM_TRACE:
-            # Store frames
-            tracemalloc.start(1000)
 
         messengerHost = 'localhost'
         messengerPort = 5672
-        numberOfNodes = 20
+        numberOfNodes = 21
 
         regParam = 0.01
         # dim = 4 #skin_segmentation has 4 attributes
         dim = 18  # SUSY has 18 features
+        # dim = 28  # HIGGS has 28 features
         learnerFactory = SklearnBatchLearnerFactory(LinearSVC, {'regParam': regParam, 'dim': dim})
 
         # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
@@ -46,8 +44,13 @@ if __name__ == "__main__":
             shuffle=False,
             cache=False)
 
-        stoppingCriterion = MaxAmountExamples(5000)
+        # dsFactory = FileDataSourceFactory(
+        #     filename="../../../../data/HIGGS/HIGGS.csv",
+        #     decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
+        #     shuffle=False,
+        #     cache=False)
 
+        stoppingCriterion = MaxAmountExamples(2000)
         aggregator = RadonPoint()  # RadonPoint()
         sync = AggregationAtTheEnd()
 
@@ -56,33 +59,7 @@ if __name__ == "__main__":
                          dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0,
                          dataScheduler=BatchDataScheduler)
 
-        if CPU_TRACE:
-            import cProfile
-
-            cProfile.run('exp.run("Linear_SVC" + "_" + aggregator.__str__())')
-        else:
-            exp.run("Linear_SVC" + "_" + aggregator.__str__())
-
-        # Memory tracing
-        # if MEM_TRACE:
-        #     snapshot = tracemalloc.take_snapshot()
-        #     print("memory snapshot in taken in", __name__)
-        #     top_stats = snapshot.statistics('lineno')
-        #     top_stats_tb = snapshot.statistics('traceback')
-        #
-        #     print("Process ID:", str(os.getpid()), "[ Top 10 ]")
-        #     for stat in top_stats[:10]:
-        #         print(stat)
-        #
-        #     stat_tb = top_stats_tb[0]
-        #     print("%s memory blocks: %.1f KiB" % (stat_tb.count, stat_tb.size / 1024))
-        #     for line in stat_tb.traceback.format():
-        #         print(line)
-
-        if MEM_TRACE:
-            current, peak = tracemalloc.get_traced_memory()
-            print(f"Current memory usage is {current / 10 ** 6}MB; Peak was {peak / 10 ** 6}MB")
-            tracemalloc.stop()
+        exp.run("Linear_SVC" + "_" + aggregator.__str__())
 
     finally:
         # Set console output to file at src. Below code will copy and rename the file
