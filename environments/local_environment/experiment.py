@@ -1,4 +1,3 @@
-import tracemalloc
 from multiprocessing import Process
 from DLplatform.coordinator import Coordinator, InitializationHandler
 from DLplatform.worker import Worker
@@ -13,9 +12,7 @@ import numpy as np
 import math
 import subprocess
 
-MEM_TRACE = False
-
-class Experiment():    
+class Experiment():
     def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
                  dataSourceFactory, stoppingCriterion, initHandler = InitializationHandler(),
                  dataScheduler = IntervalDataScheduler, minStartNodes=0, minStopNodes=0, sleepTime = 5):
@@ -76,8 +73,6 @@ class Experiment():
         print('experiment done.')
 
     def createCoordinator(self, exp_path, minStartNodes, minStopNodes):
-        # if MEM_TRACE:
-        #     tracemalloc.start(100)
         print("create coordinator with minStart", minStartNodes, "and minStop", minStopNodes)
         coordinator = Coordinator(minStartNodes, minStopNodes)
         coordinator.setInitHandler(self.initHandler)
@@ -93,19 +88,9 @@ class Experiment():
         coordinator.setLearningLogger(logger)
         print("Starting coordinator...\n")
 
-        # if MEM_TRACE:
-        #     snapshot = tracemalloc.take_snapshot()
-        #     top_stats = snapshot.statistics('lineno')
-        #     print("Process ID:", str(os.getpid()), "[ Top 10 ] - coordinator.run() in createCoordinator() in Experiment")
-        #     for stat in top_stats[:10]:
-        #         print(stat)
-
         coordinator.run()
 
-
     def createWorker(self, id, exp_path, executionMode, devices, modelsPer):
-        if MEM_TRACE:
-            tracemalloc.start(1000)
 
         print("start creating worker" + str(id))
         if executionMode == 'cpu':
@@ -133,20 +118,8 @@ class Experiment():
         learner.setSynchronizer(self.sync)
         w.setLearner(learner)
         print("create worker " + nodeId + "\n")
-        if MEM_TRACE:
-            snapshot = tracemalloc.take_snapshot()
-            top_stats = snapshot.statistics('lineno')
-            print("Process ID:", str(os.getpid()), "[ Top 10 ] - before w.run() in createWorker() in Experiment")
-            for stat in top_stats[:10]:
-                print(stat)
-        w.run()
 
-        # if MEM_TRACE:
-        #     snapshot = tracemalloc.take_snapshot()
-        #     top_stats = snapshot.statistics('lineno')
-        #     print("Process ID:", str(os.getpid()), "[ Top 10 ] - w.run() in createWorker() in Experiment")
-        #     for stat in top_stats[:10]:
-        #         print(stat)
+        w.run()
 
     def getTimestamp(self):
         return time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime(time.time()))

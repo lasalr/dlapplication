@@ -15,9 +15,6 @@ from DLplatform.learning.batch.sklearnClassifiers import LinearSVC
 from DLplatform.stopping import MaxAmountExamples
 from DLplatform.dataprovisioning import BatchDataScheduler, IntervalDataScheduler
 
-import tracemalloc
-
-MEM_TRACE = False
 CPU_TRACE = False
 LOG_CONSOLE = True
 
