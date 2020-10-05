@@ -38,23 +38,21 @@ if __name__ == "__main__":
         dsFactory = FileDataSourceFactory(
             filename="../../../../data/SUSY/SUSY.csv",
             decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
-            shuffle=False,
-            cache=False)
+            shuffle=False, cache=False)
 
         # dsFactory = FileDataSourceFactory(
         #     filename="../../../../data/HIGGS/HIGGS.csv",
         #     decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
-        #     shuffle=False,
-        #     cache=False)
+        #     shuffle=False, cache=False)
 
         stoppingCriterion = MaxAmountExamples(2000)
-        aggregator = RadonPoint()  # RadonPoint()
+        aggregator = RadonPoint()
         sync = AggregationAtTheEnd()
 
         exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
                          numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator, learnerFactory=learnerFactory,
                          dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0,
-                         dataScheduler=BatchDataScheduler, minStartNodes=numberOfNodes)
+                         dataScheduler=BatchDataScheduler, minStartNodes=numberOfNodes, minStopNodes=numberOfNodes)
 
         exp.run("Linear_SVC" + "_" + aggregator.__str__())
 
