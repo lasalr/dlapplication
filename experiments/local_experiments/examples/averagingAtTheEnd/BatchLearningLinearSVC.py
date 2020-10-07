@@ -10,12 +10,10 @@ from DLplatform.aggregating import Average
 from DLplatform.aggregating import RadonPoint
 from DLplatform.synchronizing.aggAtTheEnd import AggregationAtTheEnd
 from DLplatform.learning.factories.sklearnBatchLearnerFactory import SklearnBatchLearnerFactory
-from DLplatform.learning.batch.sklearnClassifiers import LogisticRegression
-from DLplatform.learning.batch.sklearnClassifiers import LinearSVC
+from DLplatform.learning.batch.sklearnClassifiers import LogisticRegression, LinearSVC, LinearSVCRandomFF, LinearSVCNystrom
 from DLplatform.stopping import MaxAmountExamples
 from DLplatform.dataprovisioning import BatchDataScheduler, IntervalDataScheduler
 
-CPU_TRACE = False
 LOG_CONSOLE = True
 
 if __name__ == "__main__":
