@@ -63,7 +63,7 @@ if __name__ == "__main__":
             import datetime
 
             src = '../../../../../Console Logs/console_logs.txt'
-            dst = '../../../../../Console Logs/console_logs_' + str(datetime.datetime.now()).replace(':', '_') + '.txt'
+            dst = './Results/' + 'console_logs_' + str(datetime.datetime.now()).replace(':', '_') + '.txt'
             shutil.copyfile(src, dst)
             # if os.path.isfile(path=src) and os.path.isfile(path=dst):
             #     os.remove(path=src)
