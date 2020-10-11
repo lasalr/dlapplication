@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
         messengerHost = 'localhost'
         messengerPort = 5672
-        numberOfNodes = 90
+        numberOfNodes = 100
 
         regParam = 0.001
         # dim = 4 #skin_segmentation has 4 attributes
@@ -53,6 +53,7 @@ if __name__ == "__main__":
                          dataScheduler=BatchDataScheduler, minStartNodes=numberOfNodes, minStopNodes=numberOfNodes)
 
         exp.run("Linear_SVC" + "_" + aggregator.__str__())
+        # exp.run("Linear_SVC")
 
     finally:
         # Set console output to file at src. Below code will copy and rename the file
