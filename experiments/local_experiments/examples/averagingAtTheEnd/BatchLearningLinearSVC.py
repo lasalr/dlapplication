@@ -22,13 +22,13 @@ if __name__ == "__main__":
 
         messengerHost = 'localhost'
         messengerPort = 5672
-        numberOfNodes = 31
+        numberOfNodes = 90
 
         regParam = 0.001
         # dim = 4 #skin_segmentation has 4 attributes
         dim = 18  # SUSY has 18 features
         # dim = 28  # HIGGS has 28 features
-        learnerFactory = SklearnBatchLearnerFactory(LinearSVCNystrom, {'regParam': regParam, 'dim': dim})
+        learnerFactory = SklearnBatchLearnerFactory(LinearSVC, {'regParam': regParam, 'dim': dim})
 
         # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
         # indices = 'roundRobin', shuffle = False)
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
         exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
                          numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator, learnerFactory=learnerFactory,
-                         dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0.1,
+                         dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0.2,
                          dataScheduler=BatchDataScheduler, minStartNodes=numberOfNodes, minStopNodes=numberOfNodes)
 
         exp.run("Linear_SVC" + "_" + aggregator.__str__())
