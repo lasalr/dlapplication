@@ -26,22 +26,22 @@ if __name__ == "__main__":
 
         regParam = 0.001
         # dim = 4 #skin_segmentation has 4 attributes
-        # dim = 18  # SUSY has 18 features
-        dim = 28  # HIGGS has 28 features
+        dim = 18  # SUSY has 18 features
+        # dim = 28  # HIGGS has 28 features
         learnerFactory = SklearnBatchLearnerFactory(LinearSVCNystrom, {'regParam': regParam, 'dim': dim})
 
         # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
         # indices = 'roundRobin', shuffle = False)
 
-        # dsFactory = FileDataSourceFactory(
-        #     filename="../../../../data/SUSY/SUSY.csv",
-        #     decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
-        #     shuffle=False, cache=False)
-
         dsFactory = FileDataSourceFactory(
-            filename="../../../../data/HIGGS/HIGGS.csv",
+            filename="../../../../data/SUSY/SUSY.csv",
             decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
             shuffle=False, cache=False)
+
+        # dsFactory = FileDataSourceFactory(
+        #     filename="../../../../data/HIGGS/HIGGS.csv",
+        #     decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
+        #     shuffle=False, cache=False)
 
         stoppingCriterion = MaxAmountExamples(20000)
         aggregator = RadonPoint()
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
         exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
                          numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator, learnerFactory=learnerFactory,
-                         dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0,
+                         dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0.1,
                          dataScheduler=BatchDataScheduler, minStartNodes=numberOfNodes, minStopNodes=numberOfNodes)
 
         exp.run("Linear_SVC" + "_" + aggregator.__str__())
