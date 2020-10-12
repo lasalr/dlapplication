@@ -15,7 +15,7 @@ import subprocess
 class Experiment():
     def __init__(self, executionMode, messengerHost, messengerPort, numberOfNodes, sync, aggregator, learnerFactory,
                  dataSourceFactory, stoppingCriterion, initHandler = InitializationHandler(),
-                 dataScheduler = IntervalDataScheduler, minStartNodes=0, minStopNodes=0, sleepTime = 5):
+                 dataScheduler = IntervalDataScheduler, minStartNodes=0, minStopNodes=0, sleepTime = 5, coordinatorSleepTime = 4):
         self.executionMode = executionMode
         if executionMode == 'cpu':
             self.devices = None
@@ -47,6 +47,7 @@ class Experiment():
         self.minStopNodes = minStopNodes
         self.start_time = 0
         self.end_time = 0
+        self.coordinatorSleepTime = coordinatorSleepTime
 
     def run(self, name):
         self.start_time = time.time()
@@ -78,7 +79,7 @@ class Experiment():
 
     def createCoordinator(self, exp_path, minStartNodes, minStopNodes):
         print("create coordinator with minStart", minStartNodes, "and minStop", minStopNodes)
-        coordinator = Coordinator(minStartNodes, minStopNodes)
+        coordinator = Coordinator(minStartNodes, minStopNodes, self.coordinatorSleepTime)
         coordinator.setInitHandler(self.initHandler)
         comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
                             uniqueId=self._uniqueId)
