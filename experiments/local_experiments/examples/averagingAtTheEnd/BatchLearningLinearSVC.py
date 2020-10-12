@@ -15,6 +15,7 @@ from DLplatform.learning.batch.sklearnClassifiers import LogisticRegression, Lin
 from DLplatform.stopping import MaxAmountExamples
 from DLplatform.dataprovisioning import BatchDataScheduler, IntervalDataScheduler
 from itertools import product
+from datetime import datetime
 
 LOG_CONSOLE = True
 
@@ -22,11 +23,18 @@ if __name__ == "__main__":
 
     messengerHost = 'localhost'
     messengerPort = 5672
-    node_counts = [x for x in range(20, 81, 10)]
-    learners = [LinearSVC, LinearSVCRandomFF]
-    regParams = [0.1, 0.01, 0.001, 0.0001]
-    aggregators = [RadonPoint(), Average()]
-    max_example_values = [x for x in range(10000, 100001, 10000)]
+
+    # node_counts = [x for x in range(20, 81, 10)]
+    # learners = [LinearSVC, LinearSVCRandomFF]
+    # regParams = [0.1, 0.01, 0.001, 0.0001]
+    # aggregators = [RadonPoint(), Average()]
+    # max_example_values = [x for x in range(10000, 100001, 10000)]
+
+    node_counts = [40]
+    learners = [LinearSVC]
+    regParams = [0.01]
+    aggregators = [RadonPoint()]
+    max_example_values = [10000]
 
     # dim = 4 #skin_segmentation has 4 attributes
     dim = 18  # SUSY has 18 features

@@ -45,6 +45,8 @@ class Experiment():
         self.sleepTime = sleepTime
         self.minStartNodes = minStartNodes
         self.minStopNodes = minStopNodes
+        self.start_time = 0
+        self.end_time = 0
 
     def run(self, name):
         self.start_time = time.time()
@@ -70,6 +72,8 @@ class Experiment():
         for job in jobs:
             # print("Running job.join() for:", job)
             job.join()
+
+        self.end_time = time.time()
         print('experiment done.')
 
     def createCoordinator(self, exp_path, minStartNodes, minStopNodes):
@@ -134,6 +138,7 @@ class Experiment():
         outString += "Stopping criterion:\t" + str(self.stoppingCriterion) + "\n"
         outString += "Messenger Host:\t\t" + str(self.messengerHost) + "\n"
         outString += "Messenger Port:\t\t" + str(self.messengerPort) + "\n"
+        outString += "Run Time:\t\t" +str(self.start_time - self.end_time) + "\n"
 
         summaryFile = os.path.join(path, "summary.txt")
         f = open(summaryFile, 'w')
