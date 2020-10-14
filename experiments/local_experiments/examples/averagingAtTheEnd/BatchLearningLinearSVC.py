@@ -37,15 +37,11 @@ if __name__ == "__main__":
     # aggregators = [RadonPoint()]
     # max_example_values = [2000]
 
-    # dim = 4 #skin_segmentation has 4 attributes
-    dim = 18  # SUSY has 18 features
-    # dim = 28  # HIGGS has 28 features
-
     sync = AggregationAtTheEnd()
     try:
-        for ((node_count, coord_sleep), learner, regParam, aggregator, max_example_value)\
+        for ((node_count, coordinator_sleep_time), learner, regParam, aggregator, max_example_value)\
                 in product(zip(node_counts, coord_sleep_times), learners, regParams, aggregators, max_example_values):
-            print('node_count =', node_count, 'coord_sleep =',coord_sleep, 'learner =', learner,
+            print('node_count =', node_count, 'coordinator_sleep_time =', coordinator_sleep_time, 'learner =', learner,
                   'regParam =', regParam, 'aggregator =', aggregator, 'max_example_value =', max_example_value)
             # TODO add count to print statement
 
@@ -74,7 +70,8 @@ if __name__ == "__main__":
                              numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator,
                              learnerFactory=learnerFactory, dataSourceFactory=dsFactory,
                              stoppingCriterion=stoppingCriterion, sleepTime=0.2, dataScheduler=BatchDataScheduler,
-                             minStartNodes=numberOfNodes, minStopNodes=numberOfNodes, coordinatorSleepTime=coord_sleep)
+                             minStartNodes=numberOfNodes, minStopNodes=numberOfNodes,
+                             coordinatorSleepTime=coordinator_sleep_time)
 
             exp.run(learner.__name__ + '_' + aggregator.__str__())
 
