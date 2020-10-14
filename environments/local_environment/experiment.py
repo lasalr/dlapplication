@@ -132,14 +132,17 @@ class Experiment():
         outString = "Experiment " + name + " Summary:\n\n"
         outString += "Start:\t" + str(self.start_time) + "\n"
         outString += "Number of Nodes:\t" + str(self.numberOfNodes) + "\n"
-        outString += "Learner:\t\t\t" + str(self.learnerFactory) + "\n"
         outString += "Data source:\t\t" + str(self.dataSourceFactory) + "\n"
+        outString += "Learner Factory:\t\t\t" + str(self.learnerFactory) + "\n"
+        outString += "Learner:\t\t\t" + str(self.learnerFactory.getLearner()._name) + "\n"
+        outString += "Learner Params:\t\t\t" + str(self.learnerFactory.sklearnParams) + "\n"
         outString += "Sync:\t\t\t" + str(self.sync) + "\n"
         outString += "Aggregator:\t\t" + str(self.aggregator) + "\n"
         outString += "Stopping criterion:\t" + str(self.stoppingCriterion) + "\n"
         outString += "Messenger Host:\t\t" + str(self.messengerHost) + "\n"
         outString += "Messenger Port:\t\t" + str(self.messengerPort) + "\n"
         outString += "Run Time:\t\t" +str(self.start_time - self.end_time) + "\n"
+        outString += "Coordinator Sleep Time (s):\t\t" +str(self.coordinatorSleepTime) + "\n"
 
         summaryFile = os.path.join(path, "summary.txt")
         f = open(summaryFile, 'w')
