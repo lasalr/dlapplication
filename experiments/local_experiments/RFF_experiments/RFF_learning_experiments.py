@@ -3,7 +3,7 @@ import os
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
-from split_data import split_dataset
+from experiments.local_experiments.RFF_experiments.data_handling import split_dataset
 from environments.local_environment import Experiment
 from environments.datasources.standardDataSourceFactories import FileDataSourceFactory, SVMLightDataSourceFactory
 from environments.datasources.dataDecoders.otherDataDecoders import CSVDecoder
