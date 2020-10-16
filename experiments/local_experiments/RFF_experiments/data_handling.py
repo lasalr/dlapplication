@@ -1,5 +1,7 @@
 import os
 from random import shuffle
+import numpy as np
+import pandas as pd
 
 RANDOM_SEED = 123
 
@@ -53,6 +55,13 @@ def split_dataset(file_path: str, validation_ratio=0.1, test_ratio=0.2, override
         test_file_writer.writelines(test_data)
     with open(train_file_path, 'a') as train_file_writer:
         train_file_writer.writelines(train_data)
+
+
+def load_data(path: str, label_col: int, d: int):
+    df = pd.read_csv(filepath_or_buffer=path, names=[x for x in range(0, d + 1)])
+    labels = df.iloc[:, label_col].to_numpy(dtype=np.int32)
+    features = df.drop(df.columns[label_col], axis=1).to_numpy()
+    return features, labels
 
 
 if __name__ == '__main__':
