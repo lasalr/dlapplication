@@ -60,8 +60,8 @@ if __name__ == '__main__':
     print('ROC AUC Score for {} model without RFF={}'.
           format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
-    gamma_initial = 0.3
-    n_values = [100, 50, 25]
+    gamma_initial = 0.1
+    n_values = [250, 200, 150, 100]
     gamma_values = [gamma_initial, gamma_initial*0.99, gamma_initial*0.95, gamma_initial*0.90, gamma_initial*0.80,
                     gamma_initial*0.60, gamma_initial*0.30, gamma_initial*0.10, gamma_initial*0.05, gamma_initial*0.01]
     counter = 0
