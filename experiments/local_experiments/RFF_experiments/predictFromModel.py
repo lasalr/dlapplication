@@ -9,7 +9,8 @@ sys.path.append("../../../../dlplatform")
 
 if __name__ == "__main__":
     with open(
-            '../examples/averagingAtTheEnd/Results/Results-HPC/LinearSVC_Radon point_2020-10-12_22-56-24/coordinator/currentAveragedState', 'rb') as f:
+            '../examples/averagingAtTheEnd/Results/Results-HPC/LinearSVC_Radon '
+            'point_2020-10-12_22-56-24/coordinator/currentAveragedState', 'rb') as f:
         averaged_model = pickle.load(f)
 
     print(type(averaged_model))
