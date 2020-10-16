@@ -1,46 +1,12 @@
-from sklearn.svm import LinearSVC
-from sklearn.svm import SVC
-import numpy as np
-import pandas as pd
-from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
-from scipy.spatial.distance import pdist
 from sklearn.kernel_approximation import RBFSampler
 from itertools import product
 
+from experiments.local_experiments.RFF_experiments.data_handling import load_data
+from experiments.local_experiments.RFF_experiments.training_evaluating import gamma_estimate, train_rff_linear_svc, \
+    evaluate_model
+
 RANDOM_STATE = 123
-
-
-def load_data(path: str, label_col: int, d: int):
-    df = pd.read_csv(filepath_or_buffer=path, names=[x for x in range(0, d + 1)])
-    labels = df.iloc[:, label_col].to_numpy(dtype=np.int32)
-    features = df.drop(df.columns[label_col], axis=1).to_numpy()
-    return features, labels
-
-
-def train_rff_linear_svc(X, y, c, sampler: RBFSampler = None):
-    if sampler is not None:
-        X = sampler.fit_transform(X)
-
-    model = LinearSVC(C=c, max_iter=500, dual=False, random_state=RANDOM_STATE)
-    model.fit(X, y)
-    return model
-
-
-def gamma_estimate(features, n=100):
-    index = np.random.choice(features.shape[0], n, replace=False)
-    features = features[index]
-    return pdist(features).mean()
-
-
-def evaluate_model(X_test, y_test, model: LinearSVC, sampler: RBFSampler = None):
-    if sampler is not None:
-        X_test_sampled = sampler.fit_transform(X_test)
-        decision_scores = model.decision_function(X_test_sampled)
-    else:
-        decision_scores = model.decision_function(X_test)
-
-    return roc_auc_score(y_true=y_test, y_score=decision_scores)
 
 
 if __name__ == '__main__':
