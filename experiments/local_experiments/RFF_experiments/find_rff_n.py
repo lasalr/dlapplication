@@ -61,9 +61,9 @@ if __name__ == '__main__':
           format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
     gamma_initial = 0.1
-    n_values = [250, 200, 150, 100]
-    gamma_values = [gamma_initial, gamma_initial*0.99, gamma_initial*0.95, gamma_initial*0.90, gamma_initial*0.80,
-                    gamma_initial*0.60, gamma_initial*0.30, gamma_initial*0.10, gamma_initial*0.05, gamma_initial*0.01]
+    n_values = [300, 250, 200, 150, 100, 50, 25, 5]
+    gamma_values = [gamma_initial, gamma_initial*0.90, gamma_initial*0.80, gamma_initial*0.60, gamma_initial*0.30,
+                    gamma_initial*0.10, gamma_initial*0.05, gamma_initial*0.01]
     counter = 0
     total_count = len(list(product(n_values, gamma_values)))
     best_model_params = {'ROC_AUC': 0}
