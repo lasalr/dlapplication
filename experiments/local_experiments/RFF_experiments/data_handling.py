@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from random import shuffle
 import numpy as np
 import pandas as pd
@@ -62,6 +63,24 @@ def load_data(path: str, label_col: int, d: int):
     labels = df.iloc[:, label_col].to_numpy(dtype=np.int32)
     features = df.drop(df.columns[label_col], axis=1).to_numpy()
     return features, labels
+
+
+def write_experiment(path, name: str, start_time, experiment_list: [dict]):
+    out_string = 'Experiments conducted: {}\n'.format(len(experiment_list))
+    out_string += 'Start time: {}\n'.format(str(start_time))
+    out_string += 'End time: {}\n'.format(str(datetime.now()))
+    out_string += '\n--------------Best result--------------\n'
+    for k, v in sorted(experiment_list, key=lambda ky: ky['ROC_AUC'], reverse=True)[0].items():
+        out_string += str(k) + '= ' + str(v) + '\n'
+
+    out_string += '\n--------------All results--------------\n'
+    for experiment in experiment_list:
+        for k, v in experiment.items():
+            out_string += str(k) + '= ' + str(v) + '\n'
+
+    out_file = os.path.join(path, 'Results_' + str(name) + str(start_time).replace(':', '_').replace(' ', '_') + '.txt')
+    with open(out_file, 'w') as f:
+        f.write(out_string)
 
 
 if __name__ == '__main__':
