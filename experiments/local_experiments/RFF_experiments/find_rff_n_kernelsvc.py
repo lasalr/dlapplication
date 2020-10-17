@@ -26,11 +26,17 @@ if __name__ == '__main__':
     print('ROC AUC Score for {} model without RFF={}'.
           format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
+    # Without RFF Linear SVC (scaled)
+    svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param, scale=True)
+    print('ROC AUC Score for {} model with scaling, without RFF={}'.
+          format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
+
     # Without RFF kernel SVC
+    reg_param = 0.0001
     kernel_type = 'rbf'
-    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param)
-    print('ROC AUC Score for {} model without RFF and {} kernel={}'.
-          format('SVC (kernel)', kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
+    print('ROC AUC Score for {} model without RFF, regParam-{} and {} kernel={} and scaling'.
+          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
 
 
 
