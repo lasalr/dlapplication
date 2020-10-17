@@ -1,10 +1,16 @@
+import sys
+
 from sklearn.model_selection import train_test_split
 from sklearn.kernel_approximation import RBFSampler
 from itertools import product
 
+sys.path.append("../../../../dlapplication")
+sys.path.append("../../../../dlplatform")
+
 from experiments.local_experiments.RFF_experiments.data_handling import load_data
 from experiments.local_experiments.RFF_experiments.training_evaluating import gamma_estimate, train_rff_linear_svc, \
     evaluate_model, train_rff_kernel_svm
+
 
 RANDOM_STATE = 123
 

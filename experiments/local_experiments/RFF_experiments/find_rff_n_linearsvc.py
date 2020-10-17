@@ -6,6 +6,9 @@ from sklearn.kernel_approximation import RBFSampler
 from itertools import product
 from datetime import datetime
 
+sys.path.append("../../../../dlapplication")
+sys.path.append("../../../../dlplatform")
+
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, write_experiment
 from experiments.local_experiments.RFF_experiments.training_evaluating import gamma_estimate, train_rff_linear_svc, \
     evaluate_model
