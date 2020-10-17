@@ -25,8 +25,11 @@ def train_rff_linear_svc(X, y, c, sampler: RBFSampler = None, scale=False):
         return model
 
 
-def train_rff_kernel_svm(X, y, c, scale=False):
-    model = SVC(kernel='rbf', gamma='auto', C=c, max_iter=1000, random_state=RANDOM_STATE)
+def train_rff_kernel_svm(X, y, c, scale=False, svm_kernel_gamma=None):
+    if svm_kernel_gamma is None:
+        model = SVC(kernel='rbf', gamma='auto', C=c, max_iter=4000, random_state=RANDOM_STATE)
+    else:
+        model = SVC(kernel='rbf', gamma=svm_kernel_gamma, C=c, max_iter=1000, random_state=RANDOM_STATE)
 
     if scale:
         model_pipeline = make_pipeline(StandardScaler(), model)
