@@ -13,18 +13,21 @@ from experiments.local_experiments.RFF_experiments.training_evaluating import ga
     evaluate_model
 
 RANDOM_STATE = 123
-MAX_PROCESSES = 50
+MAX_PROCESSES = 25
 
 
-def train_eval(counter, g, n, reg_param, return_queue: multiprocessing.Queue):
-    print('\nExperiment number {} of {}, n={}, g={}'.format(counter, total_count, n, g))
+def train_eval_multiprocess(counter: int, total_count: int, X_train, y_train, X_test, y_test, g: float, n: int,
+                            reg_param: float, return_queue: multiprocessing.Queue):
+    print('\nRunning experiment {} of {}, n={}, g={}'.format(counter, total_count, n, g))
     rbf_sampler = RBFSampler(gamma=g, n_components=n, random_state=RANDOM_STATE)
     svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param, sampler=rbf_sampler)
     roc_auc = evaluate_model(X_test, y_test, model=svc_model, sampler=rbf_sampler)
-    print('ROC AUC Score for {} model with {} RFF components ={}'.format('LinearSVC', n, roc_auc))
+    print('Experiment {} of {}, ROC AUC Score for {} model with {} RFF components ={}'.
+          format(counter, total_count, 'LinearSVC', n, roc_auc))
 
     # Adding dict of results and parameters to multiprocessing.Queue
-    return_queue.put({'experiment_no': counter, 'ROC_AUC': roc_auc, 'rff_n_components': n, 'rff_gamma': g, 'reg_param': reg_param})
+    return_queue.put({'experiment_no': counter, 'ROC_AUC': roc_auc, 'rff_n_components': n, 'rff_gamma': g,
+                      'reg_param': reg_param})
 
 
 if __name__ == '__main__':
@@ -46,21 +49,21 @@ if __name__ == '__main__':
           format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
     gamma_initial = 0.005
-    n_values = [x for x in range(5, 60, 2)]
-    gamma_values = [gamma_initial, gamma_initial * 0.90, gamma_initial * 0.80, gamma_initial * 0.60,
-                    gamma_initial * 0.30,
-                    gamma_initial * 0.10, gamma_initial * 0.05, gamma_initial * 0.01]
+    n_values = [x for x in range(15, 50, 2)]
+    gamma_values = [gamma_initial]
     counter = 0
     total_count = len(list(product(n_values, gamma_values)))
-    # best_model_params = {'ROC_AUC': 0}
+
     all_model_params = []
     jobs = []
     q = multiprocessing.Queue()
     for (n, g) in product(n_values, gamma_values):
         counter += 1
-        p = multiprocessing.Process(target=train_eval, args=(counter, g, n, reg_param, q))
+        p = multiprocessing.Process(target=train_eval_multiprocess,
+                                    args=(counter, total_count, X_train, y_train, X_test, y_test, g, n, reg_param, q))
         jobs.append(p)
         p.start()
+        print('Started process with ID={}'.format(str(os.getpid())))
         if len(jobs) > MAX_PROCESSES > q.qsize():
             time.sleep(5)
 
@@ -72,15 +75,15 @@ if __name__ == '__main__':
         # Sorting the list based on ROC_AUC
 
     # Writing results to file before ordering on ROC_AUC
-    write_experiment(path='./Results/', name='find_rff_linearsvc_sequenced',
+    write_experiment(path='./Results/', name='find_rff_linearsvc_sequenced_',
                      start_time=start_time, experiment_list=all_model_params)
 
-    all_model_params = sorted(all_model_params, key=lambda k: k['ROC_AUC'])
+    all_model_params = sorted(all_model_params, key=lambda k: k['ROC_AUC'], reverse=True)
 
     # print('All the model parameters and results:\n{}'.format(all_model_params))
     print('Best model parameters:', all_model_params[0])
     print('Worst model parameters:', all_model_params[-1])
 
     # Writing results to file after ordering on ROC_AUC
-    write_experiment(path=os.path.join(os.getcwd(), 'Results'), name='find_rff_linearsvc_ranked',
+    write_experiment(path=os.path.join(os.getcwd(), 'Results'), name='find_rff_linearsvc_ranked_',
                      start_time=start_time, experiment_list=all_model_params)
