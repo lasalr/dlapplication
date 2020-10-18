@@ -9,7 +9,7 @@ sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, write_experiment
-from experiments.local_experiments.RFF_experiments.training_evaluating import evaluate_model, train_rff_kernel_svm
+from experiments.local_experiments.RFF_experiments.training_evaluating import evaluate_model_roc_auc, train_rff_kernel_svm
 
 
 RANDOM_STATE = 123
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True,
                                          svm_kernel_gamma=kernel_gamma, df_shape=df_shape)
 
-        roc_auc = evaluate_model(X_test, y_test, model=svc_model)
+        roc_auc = evaluate_model_roc_auc(model=svc_model, X_test=X_test, y_test=y_test)
         print('ROC AUC Score for {} model with={}'.format('Kernel SVM', roc_auc))
 
         # Appending all results and parameters into a list of dicts
