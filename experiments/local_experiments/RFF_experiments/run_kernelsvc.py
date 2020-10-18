@@ -27,11 +27,12 @@ if __name__ == '__main__':
     print('Split data')
 
     reg_param_initial = 0.01
-    reg_params = [reg_param_initial*5000, reg_param_initial*1000, reg_param_initial*500, reg_param_initial*100,
-                  reg_param_initial*10, reg_param_initial, reg_param_initial*0.30, reg_param_initial*0.10,
-                  reg_param_initial*0.05, reg_param_initial*0.01]
+    reg_params = [reg_param_initial]
+    # reg_params = [reg_param_initial*5000, reg_param_initial*1000, reg_param_initial*500, reg_param_initial*100,
+    #               reg_param_initial*10, reg_param_initial, reg_param_initial*0.30, reg_param_initial*0.10,
+    #               reg_param_initial*0.05, reg_param_initial*0.01]
 
-    kernel_gamma_vals = ['scale', 'auto', 0.0001, 0.001, 0.01, 0.1, 1, 10, 100]
+    kernel_gamma_vals = [0.000001, 0.000005, 0.00001, 0.00005, 0.0001, 0.0005, 0.001]
     df_shapes = ['ovo', 'ovr']
 
     counter = 0
