@@ -16,7 +16,7 @@ from experiments.local_experiments.RFF_experiments.training_evaluating import ga
     evaluate_model
 
 RANDOM_STATE = 123
-MAX_PROCESSES = 25
+MAX_PROCESSES = 4
 
 
 def train_eval_multiprocess(counter: int, total_count: int, X_train, y_train, X_test, y_test, g: float, n: int,
