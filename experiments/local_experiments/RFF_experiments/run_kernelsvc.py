@@ -1,21 +1,22 @@
+import os
 import sys
 
 from sklearn.model_selection import train_test_split
-from sklearn.kernel_approximation import RBFSampler
 from itertools import product
+from datetime import datetime
 
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.data_handling import load_data
-from experiments.local_experiments.RFF_experiments.training_evaluating import gamma_estimate, train_rff_linear_svc, \
-    evaluate_model, train_rff_kernel_svm
+from experiments.local_experiments.RFF_experiments.data_handling import load_data, write_experiment
+from experiments.local_experiments.RFF_experiments.training_evaluating import evaluate_model, train_rff_kernel_svm
 
 
 RANDOM_STATE = 123
 
 
 if __name__ == '__main__':
+    start_time = datetime.now()
     dim = 18  # SUSY has 18 features
     reg_param = 0.01
     file_path = '../../../data/SUSY/SUSY.csv'
@@ -24,52 +25,48 @@ if __name__ == '__main__':
     print('loaded data')
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=RANDOM_STATE)
     print('Split data')
-    # gamma_initial = gamma_estimate(X_train, 10000)
-    # print('gamma estimate={}'.format(gamma_initial))
 
-    # # Without RFF Linear SVC
-    # svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param)
-    # print('ROC AUC Score for {} model without RFF={}'.
-    #       format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
-    #
-    # # Without RFF Linear SVC (scaled)
-    # svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param, scale=True)
-    # print('ROC AUC Score for {} model with scaling, without RFF={}'.
-    #       format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
+    reg_param_initial = 0.01
+    reg_params = [reg_param_initial*5000, reg_param_initial*1000, reg_param_initial*500, reg_param_initial*100,
+                  reg_param_initial*10, reg_param_initial, reg_param_initial*0.30, reg_param_initial*0.10,
+                  reg_param_initial*0.05, reg_param_initial*0.01]
 
-    # Without RFF kernel SVC
-    reg_param = 10
-    kernel_type = 'rbf'
-    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
-    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
-          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+    kernel_gamma_vals = ['scale', 'auto', 0.0001, 0.001, 0.01, 0.1, 1, 10, 100]
+    df_shapes = ['ovo', 'ovr']
 
-    reg_param = 25
-    kernel_type = 'rbf'
-    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
-    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
-          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+    counter = 0
+    total_count = len(list(product(reg_params, kernel_gamma_vals, df_shapes)))
+    all_model_params = []
+    for (reg_param, kernel_gamma, df_shape) in product(reg_params, kernel_gamma_vals, df_shapes):
+        counter += 1
+        print('\nExperiment number {} of {}, reg_param={}, kernel_gamma={}, df_shape={}'.
+              format(counter, total_count, reg_param, kernel_gamma, df_shape))
 
-    reg_param = 50
-    kernel_type = 'rbf'
-    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
-    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
-          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+        svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True,
+                                         svm_kernel_gamma=kernel_gamma, df_shape=df_shape)
 
-    reg_param = 100
-    kernel_type = 'rbf'
-    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
-    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
-          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+        roc_auc = evaluate_model(X_test, y_test, model=svc_model)
+        print('ROC AUC Score for {} model with={}'.format('Kernel SVM', roc_auc))
 
-    # # Without RFF kernel SVC with custom svm kernel gamma
-    # reg_param = 5
-    # svm_kernel_gamma = 10
-    # kernel_type = 'rbf'
-    # svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True, svm_kernel_gamma=svm_kernel_gamma)
-    # print('For {} model without RFF, regParam={}, kernel={}, svm_kernel_gamma={} and scaling ROC_AUC={}'.
-    #       format('SVC (kernel)', reg_param, kernel_type, svm_kernel_gamma,
-    #              evaluate_model(X_test, y_test, model=svc_model)))
+        # Appending all results and parameters into a list of dicts
+        all_model_params.append({'experiment_no': counter, 'ROC_AUC': roc_auc, 'reg_param': reg_param,
+                                 'kernel_gamma': kernel_gamma, 'df_shape': df_shape})
+
+        # Sorting the list based on ROC_AUC
+
+    # Writing results to file before ordering on ROC_AUC
+    write_experiment(path='./Results/', name='find_rff_kernelsvc_sequenced_',
+                     start_time=start_time, experiment_list=all_model_params)
+
+    # Sorting results in descending order based on ROC_AUC
+    all_model_params = sorted(all_model_params, key=lambda k: k['ROC_AUC'], reverse=True)
+
+    # print('All the model parameters and results:\n{}'.format(all_model_params))
+    print('Best model parameters:', all_model_params[0])
+
+    # Writing results to file after ordering on ROC_AUC
+    write_experiment(path=os.path.join(os.getcwd(), 'Results'), name='find_rff_kernelsvc_ranked_',
+                     start_time=start_time, experiment_list=all_model_params)
 
 
 
