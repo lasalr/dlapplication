@@ -34,7 +34,7 @@ if __name__ == '__main__':
           format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
     gamma_initial = 0.005
-    n_values = [x for x in range(15, 50, 2)]
+    n_values = [x for x in range(15, 80, 2)]
 
     # gamma_values = [gamma_initial, gamma_initial*0.90, gamma_initial*0.80, gamma_initial*0.60, gamma_initial*0.30,
     #                 gamma_initial*0.10, gamma_initial*0.05, gamma_initial*0.01]
