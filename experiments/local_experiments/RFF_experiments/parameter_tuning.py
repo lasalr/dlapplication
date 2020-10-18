@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print('Starting: Parameter tuning for Linear SVC without RFF...')
     param_grid = {'C': [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100], 'dual': [True, False], 'random_state': [RANDOM_STATE]}
 
-    gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring=roc_auc_scorer, n_jobs=-1, pre_dispatch=3)
+    gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring=roc_auc_scorer, n_jobs=-1, pre_dispatch=-1)
     gs_model.fit(X, y)
     write_csv(path='./Results/', name='param_tune_linearsvc_', start_time=start_time,
               results=gs_model.cv_results_, sortby_col='rank_test_score')
