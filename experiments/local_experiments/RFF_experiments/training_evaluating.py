@@ -45,7 +45,7 @@ def gamma_estimate(features, n=100):
     return pdist(features).mean()
 
 
-def evaluate_model(X_test, y_test, model, sampler: RBFSampler = None):
+def evaluate_model_roc_auc(model, X_test, y_test, sampler: RBFSampler = None):
     if sampler is not None:
         X_test_sampled = sampler.fit_transform(X_test)
         decision_scores = model.decision_function(X_test_sampled)
@@ -53,3 +53,8 @@ def evaluate_model(X_test, y_test, model, sampler: RBFSampler = None):
         decision_scores = model.decision_function(X_test)
 
     return roc_auc_score(y_true=y_test, y_score=decision_scores)
+
+
+def roc_auc_scorer(model, X, y):
+    decision_scores = model.decision_function(X)
+    return roc_auc_score(y_true=y, y_score=decision_scores)

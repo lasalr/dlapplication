@@ -11,7 +11,7 @@ sys.path.append("../../../../dlplatform")
 
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, write_experiment
 from experiments.local_experiments.RFF_experiments.training_evaluating import gamma_estimate, train_rff_linear_svc, \
-    evaluate_model
+    evaluate_model_roc_auc
 
 RANDOM_STATE = 123
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # Without RFF
     svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param)
     print('ROC AUC Score for {} model without RFF={}'.
-          format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
+          format('LinearSVC', evaluate_model_roc_auc(model=svc_model, X_test=X_test, y_test=y_test)))
 
     gamma_initial = 0.005
     n_values = [x for x in range(15, 80, 2)]
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         print('\nExperiment number {} of {}, n={}, g={}'.format(counter, total_count, n, g))
         rbf_sampler = RBFSampler(gamma=g, n_components=n, random_state=RANDOM_STATE)
         svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param, sampler=rbf_sampler)
-        roc_auc = evaluate_model(X_test, y_test, model=svc_model, sampler=rbf_sampler)
+        roc_auc = evaluate_model_roc_auc(model=svc_model, X_test=X_test, y_test=y_test, sampler=rbf_sampler)
         print('ROC AUC Score for {} model with {} RFF components ={}'.format('LinearSVC', n, roc_auc))
 
         # Appending all results and parameters into a list of dicts
