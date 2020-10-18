@@ -15,7 +15,6 @@ from experiments.local_experiments.RFF_experiments.training_evaluating import ga
 
 RANDOM_STATE = 123
 
-
 if __name__ == '__main__':
     start_time = datetime.now()
     dim = 18  # SUSY has 18 features
@@ -26,8 +25,8 @@ if __name__ == '__main__':
     print('loaded data')
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=RANDOM_STATE)
     print('Split data')
-    gamma_initial = gamma_estimate(X_train, 10000)
-    print('gamma estimate={}\n'.format(gamma_initial))
+    # gamma_initial = gamma_estimate(X_train, 10000)
+    # print('gamma estimate={}\n'.format(gamma_initial))
 
     # Without RFF
     svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param)
