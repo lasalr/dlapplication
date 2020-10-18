@@ -38,20 +38,38 @@ if __name__ == '__main__':
     #       format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
     # Without RFF kernel SVC
-    reg_param = 0.01
+    reg_param = 10
     kernel_type = 'rbf'
     svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
     print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
           format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
 
-    # Without RFF kernel SVC with custom svm kernel gamma
-    reg_param = 5
-    svm_kernel_gamma = 0.001
+    reg_param = 25
     kernel_type = 'rbf'
-    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True, svm_kernel_gamma=svm_kernel_gamma)
-    print('For {} model without RFF, regParam={}, kernel={}, svm_kernel_gamma={} and scaling ROC_AUC={}'.
-          format('SVC (kernel)', reg_param, kernel_type, svm_kernel_gamma,
-                 evaluate_model(X_test, y_test, model=svc_model)))
+    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
+    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
+          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+
+    reg_param = 50
+    kernel_type = 'rbf'
+    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
+    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
+          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+
+    reg_param = 100
+    kernel_type = 'rbf'
+    svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True)
+    print('For {} model without RFF, regParam={}, kernel={} and scaling ROC_AUC={}'.
+          format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
+
+    # # Without RFF kernel SVC with custom svm kernel gamma
+    # reg_param = 5
+    # svm_kernel_gamma = 10
+    # kernel_type = 'rbf'
+    # svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True, svm_kernel_gamma=svm_kernel_gamma)
+    # print('For {} model without RFF, regParam={}, kernel={}, svm_kernel_gamma={} and scaling ROC_AUC={}'.
+    #       format('SVC (kernel)', reg_param, kernel_type, svm_kernel_gamma,
+    #              evaluate_model(X_test, y_test, model=svc_model)))
 
 
 
