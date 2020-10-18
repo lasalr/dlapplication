@@ -24,18 +24,18 @@ if __name__ == '__main__':
     print('loaded data')
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=RANDOM_STATE)
     print('Split data')
-    gamma_initial = gamma_estimate(X_train, 10000)
-    print('gamma estimate={}'.format(gamma_initial))
+    # gamma_initial = gamma_estimate(X_train, 10000)
+    # print('gamma estimate={}'.format(gamma_initial))
 
-    # Without RFF Linear SVC
-    svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param)
-    print('ROC AUC Score for {} model without RFF={}'.
-          format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
-
-    # Without RFF Linear SVC (scaled)
-    svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param, scale=True)
-    print('ROC AUC Score for {} model with scaling, without RFF={}'.
-          format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
+    # # Without RFF Linear SVC
+    # svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param)
+    # print('ROC AUC Score for {} model without RFF={}'.
+    #       format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
+    #
+    # # Without RFF Linear SVC (scaled)
+    # svc_model = train_rff_linear_svc(X_train, y_train, c=reg_param, scale=True)
+    # print('ROC AUC Score for {} model with scaling, without RFF={}'.
+    #       format('LinearSVC', evaluate_model(X_test, y_test, model=svc_model)))
 
     # Without RFF kernel SVC
     reg_param = 0.01
@@ -45,13 +45,14 @@ if __name__ == '__main__':
           format('SVC (kernel)', reg_param, kernel_type, evaluate_model(X_test, y_test, model=svc_model)))
 
     # Without RFF kernel SVC with custom svm kernel gamma
-    reg_param = 0.01
+    reg_param = 5
     svm_kernel_gamma = 0.001
     kernel_type = 'rbf'
     svc_model = train_rff_kernel_svm(X_train, y_train, c=reg_param, scale=True, svm_kernel_gamma=svm_kernel_gamma)
     print('For {} model without RFF, regParam={}, kernel={}, svm_kernel_gamma={} and scaling ROC_AUC={}'.
           format('SVC (kernel)', reg_param, kernel_type, svm_kernel_gamma,
                  evaluate_model(X_test, y_test, model=svc_model)))
+
 
 
 
