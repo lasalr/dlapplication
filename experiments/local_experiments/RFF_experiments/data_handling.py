@@ -83,5 +83,6 @@ def write_experiment(path, name: str, start_time, experiment_list: [dict]):
         f.write(out_string)
 
 
-if __name__ == '__main__':
-    split_dataset(file_path='../../../data/SUSY/SUSY.csv')
+def write_csv(path: str, name: str, start_time, results: dict, sortby_col: str, sort_ascending=True):
+    out_file = os.path.join(path, 'Results_' + str(name) + str(start_time).replace(':', '_').replace(' ', '_') + '.csv')
+    pd.DataFrame(results).sort_values(sortby_col).to_csv(out_file, index=False)
