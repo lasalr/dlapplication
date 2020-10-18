@@ -20,6 +20,11 @@ def split_dataset(file_path: str, validation_ratio=0.1, test_ratio=0.2, override
     train_file_path = os.path.join(os.path.dirname(file_path), 'split', 'TRAIN_' + os.path.basename(file_path))
     test_file_path = os.path.join(os.path.dirname(file_path), 'split', 'TEST_' + os.path.basename(file_path))
 
+    if not override and os.path.isfile(validation_file_path) and os.path.isfile(train_file_path)\
+            and os.path.isfile(test_file_path):
+        print('All files are already present. No splitting done.')
+        return
+
     # Checking length of dataset and allocating indices at random for split
     with open(file_path, 'r') as f:
         data = f.readlines()
@@ -41,21 +46,27 @@ def split_dataset(file_path: str, validation_ratio=0.1, test_ratio=0.2, override
     if not os.path.exists(os.path.join(os.path.dirname(file_path), 'split')):
         os.makedirs(os.path.join(os.path.dirname(file_path), 'split'))
 
-    # Removing old files if explicitly requested
-    elif override:
-        if os.path.isfile(validation_file_path):
-            os.remove(validation_file_path)
-        if os.path.isfile(train_file_path):
-            os.remove(train_file_path)
-        if os.path.isfile(test_file_path):
-            os.remove(test_file_path)
+    # Removing old files
+    if override:
+        with open(validation_file_path, 'w') as validation_file_writer:
+            validation_file_writer.writelines(val_data)
+        with open(test_file_path, 'w') as test_file_writer:
+            test_file_writer.writelines(test_data)
+        with open(train_file_path, 'w') as train_file_writer:
+            train_file_writer.writelines(train_data)
 
-    with open(validation_file_path, 'a') as validation_file_writer:
-        validation_file_writer.writelines(val_data)
-    with open(test_file_path, 'a') as test_file_writer:
-        test_file_writer.writelines(test_data)
-    with open(train_file_path, 'a') as train_file_writer:
-        train_file_writer.writelines(train_data)
+    # Saving only files not present
+    else:
+        if not os.path.isfile(validation_file_path):
+            with open(validation_file_path, 'w') as validation_file_writer:
+                validation_file_writer.writelines(val_data)
+        if not os.path.isfile(test_file_path):
+            with open(test_file_path, 'w') as test_file_writer:
+                test_file_writer.writelines(test_data)
+        if not os.path.isfile(train_file_path):
+            with open(train_file_path, 'w') as train_file_writer:
+                train_file_writer.writelines(train_data)
+
 
 
 def load_data(path: str, label_col: int, d: int):
