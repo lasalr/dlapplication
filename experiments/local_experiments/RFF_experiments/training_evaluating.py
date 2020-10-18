@@ -27,7 +27,7 @@ def train_rff_linear_svc(X, y, c, sampler: RBFSampler = None, scale=False):
 
 def train_rff_kernel_svm(X, y, c, scale=False, svm_kernel_gamma=None):
     model = SVC(kernel='rbf', gamma='scale' if (svm_kernel_gamma is None) else svm_kernel_gamma,
-                C=c, max_iter=1000, random_state=RANDOM_STATE)
+                C=c, max_iter=1000, random_state=RANDOM_STATE, cache_size=400)
 
     if scale:
         print('scaling data')
