@@ -68,13 +68,11 @@ def split_dataset(file_path: str, validation_ratio=0.1, test_ratio=0.2, override
                 train_file_writer.writelines(train_data)
 
 
-
 def load_data(path: str, label_col: int, d: int):
     df = pd.read_csv(filepath_or_buffer=path, names=[x for x in range(0, d + 1)])
     labels = df.iloc[:, label_col].to_numpy(dtype=np.int32)
-    features = df.drop(df.columns[label_col], axis=1).to_numpy()
+    features = df.drop(df.columns[label_col], axis=1).to_numpy(dtype=np.float64)
     return features, labels
-
 
 def write_experiment(path, name: str, start_time, experiment_list: [dict]):
     out_string = 'Experiments conducted: {}\n'.format(len(experiment_list))
