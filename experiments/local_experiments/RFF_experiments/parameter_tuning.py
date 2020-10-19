@@ -2,14 +2,13 @@ import os
 import sys
 from datetime import datetime
 
-from sklearn.kernel_approximation import RBFSampler
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import GridSearchCV
 
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.Results.LinearSVCSampledRFF import LinearSVCSampledRFF
+from experiments.local_experiments.RFF_experiments.LinearSVCSampledRFF import LinearSVCSampledRFF
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
 from experiments.local_experiments.RFF_experiments.training_evaluating import roc_auc_scorer
 
