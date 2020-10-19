@@ -1,14 +1,17 @@
 import os
 import sys
 from datetime import datetime
+
+from sklearn.kernel_approximation import RBFSampler
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import GridSearchCV
 
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
+from experiments.local_experiments.RFF_experiments.Results.LinearSVCSampledRFF import LinearSVCSampledRFF
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
-from experiments.local_experiments.RFF_experiments.training_evaluating import evaluate_model_roc_auc, roc_auc_scorer
+from experiments.local_experiments.RFF_experiments.training_evaluating import roc_auc_scorer
 
 RANDOM_STATE = 123
 
@@ -34,11 +37,15 @@ if __name__ == '__main__':
               results=gs_model.cv_results_, sortby_col='rank_test_score')
 
     # # Parameter tuning for Linear SVC with RFF
-    # print('Starting: Parameter tuning for Linear SVC with RFF...')
-    # param_grid_rff = {'C': [0.0001, 0.001, 0.01, 0.1, 1, 10, 100], 'dual': [True, False], 'random_state': [RANDOM_STATE]}
-    # gs_model_rff = GridSearchCV(SVC(), param_grid_rff)
-    # gs_model_rff.fit(X, y)
-    #
-    # sorted_results_rff = sorted(gs_model_rff.cv_results_)
-    # write_dictionary(path='./Results/', name='parameter_tuning_linearsvc_',
-    #                  start_time=start_time, experiment_list=list(sorted_results_rff))
+    gamma_initial = 0.005
+    param_grid_rff = {'C': [0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100],
+                  'dual': [True, False], 'random_state': [RANDOM_STATE],
+                  'rff_sampler_gamma': [gamma_initial, gamma_initial*0.90, gamma_initial*0.80, gamma_initial*0.60,
+                                        gamma_initial*0.30, gamma_initial*0.10, gamma_initial*0.05, gamma_initial*0.01],
+                  'rff_sampler_n_components': [29]}
+
+    gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=1, param_grid=param_grid_rff,
+                            scoring=roc_auc_scorer, n_jobs=-1)
+    gs_model_rff.fit(X, y)
+    write_csv(path='./Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
+              results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
