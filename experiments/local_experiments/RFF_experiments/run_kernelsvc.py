@@ -32,8 +32,9 @@ if __name__ == '__main__':
     #               reg_param_initial*10, reg_param_initial, reg_param_initial*0.30, reg_param_initial*0.10,
     #               reg_param_initial*0.05, reg_param_initial*0.01]
 
-    kernel_gamma_vals = [0.000001, 0.000005, 0.00001, 0.00005, 0.0001, 0.0005, 0.001]
-    df_shapes = ['ovo', 'ovr']
+    kernel_gamma_vals = [0.0000088, 0.0000089, 0.000009]
+    # kernel_gamma_vals = [0.00005, 0.0001, 0.0005, 0.001]
+    df_shapes = ['ovo']
 
     counter = 0
     total_count = len(list(product(reg_params, kernel_gamma_vals, df_shapes)))
