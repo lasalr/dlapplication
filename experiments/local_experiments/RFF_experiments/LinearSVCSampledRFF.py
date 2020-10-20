@@ -5,7 +5,7 @@ from sklearn.kernel_approximation import RBFSampler
 
 
 class LinearSVCSampledRFF(LinearSVC):
-    def __init__(self, penalty='l2', loss='squared_hinge', rff_sampler_gamma=1, rff_sampler_n_components=100,
+    def __init__(self, penalty='l2', loss='squared_hinge', rff_sampler_gamma=None, rff_sampler_n_components=None,
                  dual=True, tol=0.0001, C=1.0, multi_class='ovr', fit_intercept=True, intercept_scaling=1,
                  class_weight=None, verbose=0, random_state=None, max_iter=1000):
 
@@ -16,35 +16,31 @@ class LinearSVCSampledRFF(LinearSVC):
 
         self.rff_sampler_gamma = rff_sampler_gamma
         self.rff_sampler_n_components = rff_sampler_n_components
-        self.sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=self.rff_sampler_n_components,
-                                  random_state=self.random_state)
 
-        # print('rff_sampler_gamma=', self.rff_sampler_gamma)
-        # print('rff_sampler_n_components=', self.rff_sampler_n_components)
-        # print('dual=', self.dual)
-        # print('C=', self.C)
+        if (self.rff_sampler_gamma is not None) and (self.rff_sampler_n_components is not None):
+            self.sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=self.rff_sampler_n_components,
+                                      random_state=self.random_state)
+        else:
+            self.sampler = None
 
     def fit(self, X, y, sample_weight=None):
-        if self.sampler is not None:
-            X = self.sampler.fit_transform(X)
-            # print('RBF transform done before fit() with pid{} X.dtype={}'.format(os.getpid(), X.dtype))
-
+        X = self.transform_rff(X)
         super(LinearSVCSampledRFF, self).fit(X, y, sample_weight)
+        return self
 
     def predict(self, X):
-        if self.sampler is not None:
-            X = self.sampler.fit_transform(X)
-
-        super(LinearSVCSampledRFF, self).predict(X)
+        X = self.transform_rff(X)
+        return super(LinearSVCSampledRFF, self).predict(X)
 
     def score(self, X, y, sample_weight=None):
-        if self.sampler is not None:
-            X = self.sampler.fit_transform(X)
-
-        super(LinearSVCSampledRFF, self).score(X, y, sample_weight)
+        X = self.transform_rff(X)
+        return super(LinearSVCSampledRFF, self).score(X, y, sample_weight)
 
     def decision_function(self, X):
+        X = self.transform_rff(X)
+        return super(LinearSVCSampledRFF, self).decision_function(X)
+
+    def transform_rff(self, X):
         if self.sampler is not None:
             X = self.sampler.fit_transform(X)
-
-        super(LinearSVCSampledRFF, self).decision_function(X)
+        return X
