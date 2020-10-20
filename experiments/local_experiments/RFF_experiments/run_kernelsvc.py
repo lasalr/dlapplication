@@ -40,9 +40,9 @@ if __name__ == '__main__':
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
 
-    gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=1, scoring='roc_auc',
-                                      n_jobs=-1).fit(X, y)
-    gs_model_kernelsvm.fit(X)
+    gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=2, scoring='roc_auc',
+                                      n_jobs=-1)
+    gs_model_kernelsvm.fit(X, y)
 
     write_csv(path='./Results/', name='param_tune_kernelsvc_', start_time=start_time,
               results=gs_model_kernelsvm.cv_results_, sortby_col='rank_test_score')
