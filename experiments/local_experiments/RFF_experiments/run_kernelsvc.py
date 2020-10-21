@@ -5,6 +5,7 @@ from datetime import datetime
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
+import numpy as np
 
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
@@ -28,10 +29,9 @@ if __name__ == '__main__':
 
     pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
 
-    gamma_initial = 0.0001
     param_grid = {
-        'svc__C': [2 ** x for x in range(-3, 10)],
-        'svc__gamma': [2 ** x for x in range(-14, 5)],
+        'svc__C': [2 ** x for x in np.linspace(250, 260, 5)],
+        'svc__gamma': [2 ** x for x in range(-11, 2)],
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
 
