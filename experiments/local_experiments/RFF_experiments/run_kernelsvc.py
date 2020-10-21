@@ -28,19 +28,14 @@ if __name__ == '__main__':
 
     pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
 
-    reg_param_initial = 0.01
     gamma_initial = 0.0001
     param_grid = {
-        'svc__C': [reg_param_initial * 5000, reg_param_initial * 1000, reg_param_initial * 500, reg_param_initial * 100,
-                   reg_param_initial * 10, reg_param_initial, reg_param_initial * 0.30, reg_param_initial * 0.10,
-                   reg_param_initial * 0.05, reg_param_initial * 0.01],
-        'svc__gamma': ['scale', 'auto', gamma_initial * 5000, gamma_initial * 1000, gamma_initial * 500,
-                       gamma_initial * 100, gamma_initial * 10, gamma_initial, gamma_initial * 0.30,
-                       gamma_initial * 0.10, gamma_initial * 0.05, gamma_initial * 0.01],
+        'svc__C': [2 ** x for x in range(-3, 10)],
+        'svc__gamma': [2 ** x for x in range(-14, 5)],
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
 
-    gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=2, scoring='roc_auc',
+    gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=1, scoring='roc_auc',
                                       n_jobs=-1)
     gs_model_kernelsvm.fit(X, y)
 
