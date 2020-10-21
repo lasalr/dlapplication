@@ -73,7 +73,7 @@ if __name__ == "__main__":
                                                                             total_sub_exp_count),
                       'node_count =', node_count, 'coordinator_sleep_time =', coordinator_sleep_time, 'learner =',
                       learner, 'regParam =', regParam, 'aggregator =', aggregator, 'max_example_value =',
-                      max_example_value)
+                      max_example_value, 'rff_components =', n_components)
 
                 # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
                 # indices = 'roundRobin', shuffle = False)
