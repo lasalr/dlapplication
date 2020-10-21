@@ -44,7 +44,7 @@ if __name__ == "__main__":
     learners = [LinearSVCRandomFF]
     regParams = [0.01]
     aggregators = [RadonPoint()]
-    max_example_values = [2000]
+    max_example_values = [20000]
 
     sync = AggregationAtTheEnd()
 
