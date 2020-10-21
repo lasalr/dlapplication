@@ -49,11 +49,8 @@ if __name__ == "__main__":
     sync = AggregationAtTheEnd()
 
     # Get total experiment count
-    total_exp_count = 0
-    for ((node_count, coordinator_sleep_time), learner, regParam, aggregator, max_example_value) \
-            in product(zip(node_counts, coord_sleep_times), learners, regParams, aggregators, max_example_values):
-        total_exp_count += 1
-
+    total_exp_count = len(product(zip(node_counts, coord_sleep_times), learners, regParams, aggregators, max_example_values))
+    print('total_exp_count={}'.format(total_exp_count)
     try:
         exp_count = 0
         for ((node_count, coordinator_sleep_time), learner, regParam, aggregator, max_example_value)\
@@ -65,10 +62,11 @@ if __name__ == "__main__":
             #                                         max_example_value * node_count * 0.001, 30).astype(int)))
 
             # Default experiment (to be commented out)
-            rff_n_components = [1000]
+            rff_n_components = [100]
 
             total_sub_exp_count = len(rff_n_components)
             sub_exp_count = 0
+
             for n_components in rff_n_components:
                 sub_exp_count += 1
                 print('Experiment {} of {}\nSub experiment {} of {}\n'.format(exp_count, total_exp_count, sub_exp_count,
