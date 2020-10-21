@@ -29,7 +29,7 @@ if __name__ == '__main__':
     param_grid = {'C': [x for x in np.linspace(1, 10, 50)],
                   'dual': [True, False], 'random_state': [RANDOM_STATE]}
 
-    gs_model = GridSearchCV(estimator=LinearSVC(), verbose=2, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
+    gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
     gs_model.fit(X, y)
     print('writing results to file...')
     write_csv(path='./Results/', name='param_tune_linearsvc_', start_time=start_time,
@@ -42,7 +42,7 @@ if __name__ == '__main__':
                       'rff_sampler_gamma': [x for x in np.linspace(0.00005, 0.005, 100)],
                       'rff_sampler_n_components': [29]}
 
-    gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=2, param_grid=param_grid_rff,
+    gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=1, param_grid=param_grid_rff,
                                 scoring='roc_auc', n_jobs=-1)
     gs_model_rff.fit(X, y)
     print('writing results to file...')
