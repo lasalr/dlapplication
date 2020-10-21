@@ -39,5 +39,6 @@ if __name__ == '__main__':
                                       n_jobs=-1)
     gs_model_kernelsvm.fit(X, y)
 
+    print('writing results to file...')
     write_csv(path='./Results/', name='param_tune_kernelsvc_', start_time=start_time,
               results=gs_model_kernelsvm.cv_results_, sortby_col='rank_test_score')
