@@ -25,15 +25,15 @@ if __name__ == '__main__':
     print('Data loaded')
 
     # Parameter tuning for Linear SVC without RFF
-    print('Starting: Parameter tuning for Linear SVC without RFF...')
-    param_grid = {'C': [x for x in np.linspace(4, 7, 5)],
-                  'dual': [True, False], 'random_state': [RANDOM_STATE]}
-
-    gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
-    gs_model.fit(X, y)
-    print('writing results to file...')
-    write_csv(path='./Results/', name='param_tune_linearsvc_', start_time=start_time,
-              results=gs_model.cv_results_, sortby_col='rank_test_score')
+    # print('Starting: Parameter tuning for Linear SVC without RFF...')
+    # param_grid = {'C': [x for x in np.linspace(4, 7, 5)],
+    #               'dual': [True, False], 'random_state': [RANDOM_STATE]}
+    #
+    # gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
+    # gs_model.fit(X, y)
+    # print('writing results to file...')
+    # write_csv(path='./Results/', name='param_tune_linearsvc_', start_time=start_time,
+    #           results=gs_model.cv_results_, sortby_col='rank_test_score')
 
     # Parameter tuning for Linear SVC with RFF
     print('Starting: Parameter tuning for Linear SVC with RFF...')
