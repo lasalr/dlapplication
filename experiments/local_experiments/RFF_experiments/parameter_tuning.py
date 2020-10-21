@@ -37,9 +37,9 @@ if __name__ == '__main__':
 
     # Parameter tuning for Linear SVC with RFF
     print('Starting: Parameter tuning for Linear SVC with RFF...')
-    param_grid_rff = {'C': [2 ** x for x in range(-6, 5, 1)],
+    param_grid_rff = {'C': [2 ** x for x in np.linspace(3, 4, 5)],
                       'dual': (True, False), 'random_state': [RANDOM_STATE],
-                      'rff_sampler_gamma': [2 ** x for x in range(-7, -1, 1)],
+                      'rff_sampler_gamma': [x for x in np.linspace(0.001, 0.01, 10)],
                       'rff_sampler_n_components': [29]}
 
     gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=1, param_grid=param_grid_rff,
