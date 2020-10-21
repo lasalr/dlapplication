@@ -39,10 +39,10 @@ if __name__ == "__main__":
     # max_example_values = [x for x in range(10000, 100001, 10000)]
 
     # Default experiment parameters (to be commented out)
-    node_counts = [2]
+    node_counts = [21]
     coord_sleep_times = [node_counts[0]/25]
     learners = [LinearSVCRandomFF]
-    regParams = [0.01]
+    regParams = [4]
     aggregators = [RadonPoint()]
     max_example_values = [20000]
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
             #                                         max_example_value * node_count * 0.001, 30).astype(int)))
 
             # Default experiment (to be commented out)
-            rff_n_components = [100]
+            rff_n_components = [500]
 
             total_sub_exp_count = len(rff_n_components)
             sub_exp_count = 0
@@ -90,8 +90,7 @@ if __name__ == "__main__":
 
                 regParam = regParam
                 if learner.__name__ == LinearSVCRandomFF.__name__:
-                    learnerFactory = SklearnBatchLearnerFactory(learner, {'regParam': regParam, 'dim': dim, 'gamma': 1,
-                                                                          'n_components': n_components})
+                    learnerFactory = SklearnBatchLearnerFactory(learner, {'regParam': regParam, 'dim': dim, 'gamma': 0.0078125, 'n_components': n_components}
                 else:
                     learnerFactory = SklearnBatchLearnerFactory(learner, {'regParam': regParam, 'dim': dim})
 
