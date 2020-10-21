@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     gs_model = GridSearchCV(estimator=LinearSVC(), verbose=2, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
     gs_model.fit(X, y)
+    print('writing results to file...')
     write_csv(path='./Results/', name='param_tune_linearsvc_', start_time=start_time,
               results=gs_model.cv_results_, sortby_col='rank_test_score')
 
@@ -44,5 +45,6 @@ if __name__ == '__main__':
     gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=2, param_grid=param_grid_rff,
                                 scoring='roc_auc', n_jobs=-1)
     gs_model_rff.fit(X, y)
+    print('writing results to file...')
     write_csv(path='./Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
               results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
