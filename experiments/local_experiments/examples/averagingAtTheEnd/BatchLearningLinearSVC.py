@@ -49,7 +49,7 @@ if __name__ == "__main__":
     sync = AggregationAtTheEnd()
 
     # Get total experiment count
-    total_exp_count = len(product(zip(node_counts, coord_sleep_times), learners, regParams, aggregators, max_example_values))
+    total_exp_count = len(list(product(zip(node_counts, coord_sleep_times), learners, regParams, aggregators, max_example_values)))
     print('total_exp_count={}'.format(total_exp_count))
     try:
         exp_count = 0
