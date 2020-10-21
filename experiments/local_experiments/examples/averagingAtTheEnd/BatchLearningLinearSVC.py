@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # Get total experiment count
     total_exp_count = len(product(zip(node_counts, coord_sleep_times), learners, regParams, aggregators, max_example_values))
-    print('total_exp_count={}'.format(total_exp_count)
+    print('total_exp_count={}'.format(total_exp_count))
     try:
         exp_count = 0
         for ((node_count, coordinator_sleep_time), learner, regParam, aggregator, max_example_value)\
