@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     # Default experiment parameters (to be commented out)
     node_counts = [103]
-    coord_sleep_times = [node_counts[0]/25]
+    coord_sleep_times = [node_counts[0]/20]
     learners = [LinearSVCRandomFF]
     regParams = [4]
     aggregators = [RadonPoint()]
