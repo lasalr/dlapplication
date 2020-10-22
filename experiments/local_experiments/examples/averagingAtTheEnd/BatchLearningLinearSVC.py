@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # max_example_values = [x for x in range(10000, 100001, 10000)]
 
     # Default experiment parameters (to be commented out)
-    node_counts = [103]
+    node_counts = [205]
     coord_sleep_times = [node_counts[0]/20]
     learners = [LinearSVCRandomFF]
     regParams = [4]
@@ -62,7 +62,7 @@ if __name__ == "__main__":
             #                                         max_example_value * node_count * 0.001, 30).astype(int)))
 
             # Default experiment (to be commented out)
-            rff_n_components = [100]
+            rff_n_components = [200]
 
             total_sub_exp_count = len(rff_n_components)
             sub_exp_count = 0
