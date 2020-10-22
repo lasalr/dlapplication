@@ -43,7 +43,7 @@ if __name__ == '__main__':
     #     'svc__decision_function_shape': ['ovo']}
 
     gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=1, scoring='roc_auc',
-                                      n_jobs=5)
+                                      n_jobs=-1)
     gs_model_kernelsvm.fit(X_param, y_param)
 
     print('writing results to file...')

@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import numpy as np
 from sklearn.svm import LinearSVC
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, train_test_split
 
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
@@ -22,6 +22,8 @@ if __name__ == '__main__':
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
+    # Taking fraction of data for tuning
+    # X_other, X_param, y_other, y_param = train_test_split(X, y, test_size=tune_data_fraction, random_state=RANDOM_STATE)
     print('Data loaded')
 
     # Parameter tuning for Linear SVC without RFF
@@ -37,10 +39,10 @@ if __name__ == '__main__':
 
     # Parameter tuning for Linear SVC with RFF
     print('Starting: Parameter tuning for Linear SVC with RFF...')
-    param_grid_rff = {'C': [2 ** x for x in np.linspace(3, 4, 5)],
+    param_grid_rff = {'C': [2 ** x for x in range(0, 10)],
                       'dual': (True, False), 'random_state': [RANDOM_STATE],
-                      'rff_sampler_gamma': [x for x in np.linspace(0.001, 0.01, 10)],
-                      'rff_sampler_n_components': [29]}
+                      'rff_sampler_gamma': [2 ** x for x in range(-14, 5)],
+                      'rff_sampler_n_components': [x for x in range(2, 100, 5)]}
 
     gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=1, param_grid=param_grid_rff,
                                 scoring='roc_auc', n_jobs=-1)
