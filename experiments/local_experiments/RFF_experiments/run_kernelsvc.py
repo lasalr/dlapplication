@@ -30,17 +30,17 @@ if __name__ == '__main__':
     print('X_param={}\ny_param.shape={}'.format(X_param.shape, y_param.shape))
     pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
 
-    # param_grid = {
-    #     'svc__C': [2 ** x for x in np.linspace(250, 260, 5)],
-    #     'svc__gamma': [2 ** x for x in range(-11, 2)],
-    #     'svc__random_state': [RANDOM_STATE],
-    #     'svc__decision_function_shape': ['ovo']}
-
     param_grid = {
-        'svc__C': [252],
-        'svc__gamma': [0.00390625],
+        'svc__C': [x for x in np.linspace(250, 260, 5)],
+        'svc__gamma': [2 ** x for x in range(-11, 0)],
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
+
+    # param_grid = {
+    #     'svc__C': [252],
+    #     'svc__gamma': [0.00390625],
+    #     'svc__random_state': [RANDOM_STATE],
+    #     'svc__decision_function_shape': ['ovo']}
 
     gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=1, scoring='roc_auc',
                                       n_jobs=5)
