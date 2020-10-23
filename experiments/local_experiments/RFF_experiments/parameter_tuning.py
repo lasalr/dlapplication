@@ -18,12 +18,15 @@ if __name__ == '__main__':
     file_path = '../../../data/SUSY/SUSY.csv'
     dim = 18  # SUSY has 18 features
     data_label_col = 0
+    tune_data_fraction = 0.3
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
+
     # Taking fraction of data for tuning
-    # X_other, X_param, y_other, y_param = train_test_split(X, y, test_size=tune_data_fraction, random_state=RANDOM_STATE)
+    X_other, X_param, y_other, y_param = train_test_split(X, y, test_size=tune_data_fraction, random_state=RANDOM_STATE)
+    print('X_param={}\ny_param.shape={}'.format(X_param.shape, y_param.shape))
     print('Data loaded')
 
     # Parameter tuning for Linear SVC without RFF
@@ -46,7 +49,7 @@ if __name__ == '__main__':
 
     gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=1, param_grid=param_grid_rff,
                                 scoring='roc_auc', n_jobs=-1)
-    gs_model_rff.fit(X, y)
+    gs_model_rff.fit(X_param, y_param)
     print('writing results to file...')
     write_csv(path='./Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
               results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
