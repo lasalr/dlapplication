@@ -18,7 +18,7 @@ if __name__ == '__main__':
     file_path = '../../../data/SUSY/SUSY.csv'
     dim = 18  # SUSY has 18 features
     data_label_col = 0
-    tune_data_fraction = 0.3
+    tune_data_fraction = 0.1
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
@@ -26,6 +26,9 @@ if __name__ == '__main__':
 
     # Taking fraction of data for tuning
     X_other, X_param, y_other, y_param = train_test_split(X, y, test_size=tune_data_fraction, random_state=RANDOM_STATE)
+    # Clear memory
+    X_other = None
+    y_other = None
     print('X_param={}\ny_param.shape={}'.format(X_param.shape, y_param.shape))
     print('Data loaded')
 
