@@ -25,6 +25,8 @@ class LinearSVCSampledRFF(LinearSVC):
 
     def fit(self, X, y, sample_weight=None):
         X = self.transform_rff(X)
+        print('Fitting using class={} with shape={}, rff_sampler_n_components={}, rff_sampler_gamma={}'.
+              format('LinearSVCSampledRFF', X.shape, self.rff_sampler_n_components, self.rff_sampler_gamma))
         super(LinearSVCSampledRFF, self).fit(X, y, sample_weight)
         return self
 
