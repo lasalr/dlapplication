@@ -2,13 +2,14 @@ import os
 import sys
 from datetime import datetime
 import numpy as np
+from sklearn.kernel_approximation import RBFSampler
+from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import GridSearchCV, train_test_split
 
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.LinearSVCSampledRFF import LinearSVCSampledRFF
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
 
 RANDOM_STATE = 123
@@ -45,12 +46,15 @@ if __name__ == '__main__':
 
     # Parameter tuning for Linear SVC with RFF
     print('Starting: Parameter tuning for Linear SVC with RFF...')
-    param_grid_rff = {'C': [2 ** x for x in range(0, 10)],
-                      'dual': (True, False), 'random_state': [RANDOM_STATE],
-                      'rff_sampler_gamma': [2 ** x for x in range(-14, 5)],
-                      'rff_sampler_n_components': [x for x in range(2, 100, 5)]}
 
-    gs_model_rff = GridSearchCV(estimator=LinearSVCSampledRFF(), verbose=1, param_grid=param_grid_rff,
+    param_grid_rff = {'svc__C': [2 ** x for x in range(0, 10)],
+                      'svc__dual': [True, False], 'svc__random_state': [RANDOM_STATE],
+                      'rff__gamma': [2 ** x for x in range(-14, 5)], 'rff__random_state': [RANDOM_STATE],
+                      'rff__n_components': [x for x in range(2, 100, 5)]}
+
+    pipe = Pipeline([('rff', RBFSampler()), ('svc', LinearSVC())])
+
+    gs_model_rff = GridSearchCV(estimator=pipe, verbose=1, param_grid=param_grid_rff,
                                 scoring='roc_auc', n_jobs=-1)
     gs_model_rff.fit(X_param, y_param)
     print('writing results to file...')
