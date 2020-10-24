@@ -95,3 +95,20 @@ def write_experiment(path, name: str, start_time, experiment_list: [dict]):
 def write_csv(path: str, name: str, start_time, results: dict, sortby_col: str, sort_ascending=True):
     out_file = os.path.join(path, 'Results_' + str(name) + str(start_time).replace(':', '_').replace(' ', '_') + '.csv')
     pd.DataFrame(results).sort_values(sortby_col).to_csv(out_file, index=False)
+
+
+def create_get_ts_folder(script_file_path, start_time: datetime):
+    """
+    Creates directory with timestamp and returns path
+    """
+    ts = str(start_time)[:19]  # Strip date and time upto seconds
+    ts = re.sub(r'[\:-]', '_', ts)  # Replace unwanted chars
+    ts = re.sub(r'[\s]', '__', ts)  # Replace space
+    ts_directory = os.path.join(os.path.dirname(script_file_path), 'Results', ts)
+    if not os.path.exists(ts_directory):
+        print('Creating folder {}'.format(str(ts_directory)))
+        os.mkdir(path=ts_directory)
+
+    return ts_directory
+
+
