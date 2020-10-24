@@ -22,7 +22,7 @@ def split_dataset(file_path: str, validation_ratio=0.1, test_ratio=0.2, override
     train_file_path = os.path.join(os.path.dirname(file_path), 'split', 'TRAIN_' + os.path.basename(file_path))
     test_file_path = os.path.join(os.path.dirname(file_path), 'split', 'TEST_' + os.path.basename(file_path))
 
-    if not override and os.path.isfile(validation_file_path) and os.path.isfile(train_file_path)\
+    if not override and os.path.isfile(validation_file_path) and os.path.isfile(train_file_path) \
             and os.path.isfile(test_file_path):
         print('All files are already present. No splitting done.')
         return
@@ -75,6 +75,7 @@ def load_data(path: str, label_col: int, d: int):
     labels = df.iloc[:, label_col].to_numpy(dtype=np.int32)
     features = df.drop(df.columns[label_col], axis=1).to_numpy(dtype=np.float64)
     return features, labels
+
 
 def write_experiment(path, name: str, start_time, experiment_list: [dict]):
     out_string = 'Experiments conducted: {}\n'.format(len(experiment_list))

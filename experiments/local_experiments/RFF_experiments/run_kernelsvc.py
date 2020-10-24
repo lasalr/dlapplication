@@ -10,8 +10,7 @@ import numpy as np
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv, \
-    write_experiment
+from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
 
 RANDOM_STATE = 123
 
@@ -29,6 +28,7 @@ if __name__ == '__main__':
     X_other, X_param, y_other, y_param = train_test_split(X, y, test_size=tune_data_fraction, random_state=RANDOM_STATE)
     print('{}% of validation data loaded for GridSearchCV'.format(tune_data_fraction * 100))
     print('X_param={}\ny_param.shape={}'.format(X_param.shape, y_param.shape))
+
     pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
 
     param_grid = {
