@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 from datetime import datetime
 import numpy as np
@@ -10,7 +11,8 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 sys.path.append("../../../../dlapplication")
 sys.path.append("../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
+from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv, \
+    create_get_ts_folder
 
 RANDOM_STATE = 123
 
@@ -21,6 +23,12 @@ if __name__ == '__main__':
     data_label_col = 0
     tune_data_fraction = 0.1
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
+
+    # Creating timestamp folder
+    print('Creating timestamp folder...')
+    ts_folder = create_get_ts_folder(script_file_path=os.path.dirname(os.path.realpath(__file__)),
+                                     start_time=start_time)
+
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
@@ -49,8 +57,8 @@ if __name__ == '__main__':
 
     param_grid_rff = {'svc__C': [2 ** x for x in range(0, 10)],
                       'svc__dual': [True, False], 'svc__random_state': [RANDOM_STATE],
-                      'rff__gamma': [2 ** x for x in range(-14, 5)], 'rff__random_state': [RANDOM_STATE],
-                      'rff__n_components': [x for x in range(350, 500, 5)]}
+                      'rff__gamma': [2 ** x for x in range(-14, -4)], 'rff__random_state': [RANDOM_STATE],
+                      'rff__n_components': [x for x in range(350, 500, 20)]}
 
     pipe = Pipeline([('rff', RBFSampler()), ('svc', LinearSVC())])
 
@@ -60,3 +68,8 @@ if __name__ == '__main__':
     print('writing results to file...')
     write_csv(path='./Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
               results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
+
+    # Copying python script to new folder with timestamp
+    ts = os.path.basename(os.path.normpath(ts_folder))
+    # Saving timestamped copy of current script file
+    shutil.copy(src=__file__, dst=os.path.join(ts_folder, os.path.basename(__file__) + ts))
