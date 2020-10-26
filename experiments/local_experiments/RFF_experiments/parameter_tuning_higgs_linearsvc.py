@@ -21,7 +21,7 @@ if __name__ == '__main__':
     file_path = '../../../data/HIGGS/HIGGS.csv'
     dim = 28  # HIGGS has 28 features
     data_label_col = 0
-    tune_data_fraction = 0.05
+    tune_data_fraction = 0.1
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
 
     # # Creating timestamp folder
@@ -43,19 +43,19 @@ if __name__ == '__main__':
 
     # Parameter tuning for Linear SVC without RFF
     print('Starting: Parameter tuning for Linear SVC without RFF...')
-    param_grid = {'C': [2 ** x for x in range(0, 10)],
+    param_grid = {'C': [3 ** x for x in range(-8, 6)],
                   'dual': [True, False], 'random_state': [RANDOM_STATE]}
 
     gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
     gs_model.fit(X_param, y_param)
     print('writing results to file...')
-    write_csv(path='./Results/', name='param_tune_linearsvc_', start_time=start_time,
+    write_csv(path='./Results/', name='param_tune_linearsvc_higgs', start_time=start_time,
               results=gs_model.cv_results_, sortby_col='rank_test_score')
 
     # Parameter tuning for Linear SVC with RFF
     print('Starting: Parameter tuning for Linear SVC with RFF...')
 
-    param_grid_rff = {'svc__C': [2 ** x for x in range(0, 10)],
+    param_grid_rff = {'svc__C': [3 ** x for x in range(-8, 6)],
                       'svc__dual': [True, False], 'svc__random_state': [RANDOM_STATE],
                       'rff__gamma': [2 ** x for x in range(-14, 5)], 'rff__random_state': [RANDOM_STATE],
                       'rff__n_components': [x for x in range(2, 1000, 50)]}
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                                 scoring='roc_auc', n_jobs=-1)
     gs_model_rff.fit(X_param, y_param)
     print('writing results to file...')
-    write_csv(path='./Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
+    write_csv(path='./Results/', name='param_tune_linearsvc_rff_higgs_', start_time=start_time,
               results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
 
     # # Copying python script to new folder with timestamp
