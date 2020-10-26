@@ -31,8 +31,8 @@ if __name__ == '__main__':
     pipe = Pipeline([('svc', SVC())])
 
     param_grid = {
-        'svc__C': [2 ** x for x in range(-5, 9, 1)],
-        'svc__gamma': [2 ** x for x in range(-14, 3)],
+        'svc__C': [2 ** x for x in range(8, 12, 1)],
+        'svc__gamma': [0.0078125],
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
 
