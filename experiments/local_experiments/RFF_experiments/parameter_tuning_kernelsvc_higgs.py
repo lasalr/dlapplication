@@ -20,7 +20,7 @@ if __name__ == '__main__':
     file_path = '../../../data/HIGGS/HIGGS.csv'
     data_label_col = 0
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
-    tune_data_fraction = 0.025
+    tune_data_fraction = 0.05
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
