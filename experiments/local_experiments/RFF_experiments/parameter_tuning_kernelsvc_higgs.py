@@ -16,20 +16,19 @@ RANDOM_STATE = 123
 
 if __name__ == '__main__':
     start_time = datetime.now()
-    dim = 18  # SUSY has 18 features
-    reg_param = 0.01
+    dim = 28  # HIGGS has 28 features
     file_path = '../../../data/HIGGS/HIGGS.csv'
     data_label_col = 0
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
-    tune_data_fraction = 0.05
+    tune_data_fraction = 0.025
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
     X_other, X_param, y_other, y_param = train_test_split(X, y, test_size=tune_data_fraction, random_state=RANDOM_STATE)
     print('{}% of validation data loaded for GridSearchCV'.format(tune_data_fraction * 100))
     print('X_param={}\ny_param.shape={}'.format(X_param.shape, y_param.shape))
-
-    pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
+    # pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
+    pipe = Pipeline([('svc', SVC())])
 
     param_grid = {
         'svc__C': [2 ** x for x in range(-5, 9, 1)],
