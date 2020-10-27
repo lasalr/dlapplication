@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # Parameter tuning for Linear SVC without RFF
     print('Starting: Parameter tuning for Linear SVC without RFF...')
     param_grid = {'C': [3 ** x for x in range(-8, 6)],
-                  'dual': [True, False], 'random_state': [RANDOM_STATE]}
+                  'dual': [False], 'random_state': [RANDOM_STATE]}
 
     gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
     gs_model.fit(X_param, y_param)
