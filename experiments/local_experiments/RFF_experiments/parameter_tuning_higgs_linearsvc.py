@@ -42,23 +42,23 @@ if __name__ == '__main__':
     print('Data loaded')
 
     # Parameter tuning for Linear SVC without RFF
-    print('Starting: Parameter tuning for Linear SVC without RFF...')
-    param_grid = {'C': [3 ** x for x in range(2, 7)],
-                  'dual': [False], 'random_state': [RANDOM_STATE]}
-
-    gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
-    gs_model.fit(X_param, y_param)
-    print('writing results to file...')
-    write_csv(path='./Results/', name='param_tune_linearsvc_higgs', start_time=start_time,
-              results=gs_model.cv_results_, sortby_col='rank_test_score')
+    # print('Starting: Parameter tuning for Linear SVC without RFF...')
+    # param_grid = {'C': [3 ** x for x in range(2, 7)],
+    #               'dual': [False], 'random_state': [RANDOM_STATE]}
+    #
+    # gs_model = GridSearchCV(estimator=LinearSVC(), verbose=1, param_grid=param_grid, scoring='roc_auc', n_jobs=-1)
+    # gs_model.fit(X_param, y_param)
+    # print('writing results to file...')
+    # write_csv(path='./Results/', name='param_tune_linearsvc_higgs', start_time=start_time,
+    #           results=gs_model.cv_results_, sortby_col='rank_test_score')
 
     # Parameter tuning for Linear SVC with RFF
     print('Starting: Parameter tuning for Linear SVC with RFF...')
 
     param_grid_rff = {'svc__C': [2 ** x for x in np.linspace(7, 9, 5)],
                       'svc__dual': [False], 'svc__random_state': [RANDOM_STATE],
-                      'rff__gamma': [3 ** x for x in range(-7, -3)], 'rff__random_state': [RANDOM_STATE],
-                      'rff__n_components': [x for x in range(800, 1500, 100)]}
+                      'rff__gamma': [0.00411522633744856], 'rff__random_state': [RANDOM_STATE],
+                      'rff__n_components': [x for x in range(1500, 2500, 100)]}
 
     pipe = Pipeline([('rff', RBFSampler()), ('svc', LinearSVC())])
 
