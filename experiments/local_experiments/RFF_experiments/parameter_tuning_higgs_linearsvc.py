@@ -56,9 +56,9 @@ if __name__ == '__main__':
     print('Starting: Parameter tuning for Linear SVC with RFF...')
 
     param_grid_rff = {'svc__C': [3 ** x for x in range(-8, 6)],
-                      'svc__dual': [True, False], 'svc__random_state': [RANDOM_STATE],
-                      'rff__gamma': [2 ** x for x in range(-14, 5)], 'rff__random_state': [RANDOM_STATE],
-                      'rff__n_components': [x for x in range(2, 1000, 50)]}
+                      'svc__dual': [False], 'svc__random_state': [RANDOM_STATE],
+                      'rff__gamma': [3 ** x for x in range(-11, 3)], 'rff__random_state': [RANDOM_STATE],
+                      'rff__n_components': [x for x in range(2, 1000, 100)]}
 
     pipe = Pipeline([('rff', RBFSampler()), ('svc', LinearSVC())])
 
