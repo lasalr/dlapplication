@@ -1,7 +1,7 @@
 import sys
 import os
-sys.path.append("../../../../dlapplication")
-sys.path.append("../../../../dlplatform")
+sys.path.append("../../../..")
+sys.path.append("../../../../../dlplatform")
 
 from experiments.local_experiments.RFF_experiments.data_handling import split_dataset
 from environments.local_environment import Experiment
