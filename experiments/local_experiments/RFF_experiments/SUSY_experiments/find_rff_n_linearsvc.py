@@ -6,11 +6,11 @@ from sklearn.kernel_approximation import RBFSampler
 from itertools import product
 from datetime import datetime
 
-sys.path.append("../../../../dlapplication")
-sys.path.append("../../../../dlplatform")
+sys.path.append("../../../..")
+sys.path.append("../../../../../dlplatform")
 
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, write_experiment
-from experiments.local_experiments.RFF_experiments.training_evaluating import gamma_estimate, train_rff_linear_svc, \
+from experiments.local_experiments.RFF_experiments.MiscScripts.training_evaluating import train_rff_linear_svc, \
     evaluate_model_roc_auc
 
 RANDOM_STATE = 123
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     start_time = datetime.now()
     dim = 18  # SUSY_experiments has 18 features
     reg_param = 0.01
-    file_path = '../../../data/SUSY/SUSY.csv'
+    file_path = '../../../../data/SUSY/SUSY.csv'
 
     X, y = load_data(path=file_path, label_col=0, d=dim)
     print('loaded data')
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         # Sorting the list based on ROC_AUC
 
     # Writing results to file before ordering on ROC_AUC
-    write_experiment(path='./Results/', name='find_rff_linearsvc_sequenced_',
+    write_experiment(path='../Results/', name='find_rff_linearsvc_sequenced_',
                      start_time=start_time, experiment_list=all_model_params)
 
     # Sorting results in descending order based on ROC_AUC
@@ -69,5 +69,5 @@ if __name__ == '__main__':
     print('Best model parameters:', all_model_params[0])
 
     # Writing results to file after ordering on ROC_AUC
-    write_experiment(path=os.path.join(os.getcwd(), 'Results'), name='find_rff_linearsvc_ranked_',
+    write_experiment(path=os.path.join(os.getcwd(), '../Results'), name='find_rff_linearsvc_ranked_',
                      start_time=start_time, experiment_list=all_model_params)

@@ -8,8 +8,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import GridSearchCV, train_test_split
 
-sys.path.append("../../../../dlapplication")
-sys.path.append("../../../../dlplatform")
+sys.path.append("../../../..")
+sys.path.append("../../../../../dlplatform")
 
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv, \
     create_get_ts_folder
@@ -18,7 +18,7 @@ RANDOM_STATE = 123
 
 if __name__ == '__main__':
     start_time = datetime.now()
-    file_path = '../../../data/SUSY/SUSY.csv'
+    file_path = '../../../../data/SUSY/SUSY.csv'
     dim = 18  # SUSY_experiments has 18 features
     data_label_col = 0
     tune_data_fraction = 0.1
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                                 scoring='roc_auc', n_jobs=-1)
     gs_model_rff.fit(X_param, y_param)
     print('writing results to file...')
-    write_csv(path='./Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
+    write_csv(path='../Results/', name='param_tune_linearsvc_rff_', start_time=start_time,
               results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
 
     # # Copying python script to new folder with timestamp
