@@ -2,26 +2,23 @@ import os
 import shutil
 import sys
 from datetime import datetime
-import numpy as np
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import LinearSVC, SVC
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score
 
-sys.path.append("../../../../dlapplication")
-sys.path.append("../../../../dlplatform")
+sys.path.append("../../../..")
+sys.path.append("../../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.LinearSVCSampledRFF import LinearSVCSampledRFF
-from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv, \
-    create_get_ts_folder
+from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, create_get_ts_folder
 
 RANDOM_STATE = 123
 
 if __name__ == '__main__':
     start_time = datetime.now()
 
-    file_path = '../../../data/SUSY/SUSY.csv'
+    file_path = '../../../../data/SUSY/SUSY.csv'
     dim = 18  # SUSY_experiments has 18 features
     data_label_col = 0
     keep_fraction = 0.4
