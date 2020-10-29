@@ -16,12 +16,12 @@ RANDOM_STATE = 123
 
 if __name__ == '__main__':
     start_time = datetime.now()
-    dim = 18  # SUSY has 18 features
+    dim = 18  # SUSY_experiments has 18 features
     reg_param = 0.01
     file_path = '../../../data/SUSY/SUSY.csv'
     data_label_col = 0
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
-    tune_data_fraction = 0.10
+    tune_data_fraction = 0.1
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
@@ -32,8 +32,8 @@ if __name__ == '__main__':
     pipe = Pipeline([('scaler', StandardScaler()), ('svc', SVC())])
 
     param_grid = {
-        'svc__C': [x for x in np.linspace(250, 260, 5)],
-        'svc__gamma': [2 ** x for x in range(-11, 0)],
+        'svc__C': [2 ** x for x in range(5, 8)],
+        'svc__gamma': [x for x in np.linspace(0.000976563, 0.0078125, 10)],
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
 

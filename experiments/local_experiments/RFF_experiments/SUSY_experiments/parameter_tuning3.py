@@ -19,7 +19,7 @@ RANDOM_STATE = 123
 if __name__ == '__main__':
     start_time = datetime.now()
     file_path = '../../../data/SUSY/SUSY.csv'
-    dim = 18  # SUSY has 18 features
+    dim = 18  # SUSY_experiments has 18 features
     data_label_col = 0
     tune_data_fraction = 0.1
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
@@ -57,8 +57,8 @@ if __name__ == '__main__':
 
     param_grid_rff = {'svc__C': [2 ** x for x in range(0, 10)],
                       'svc__dual': [True, False], 'svc__random_state': [RANDOM_STATE],
-                      'rff__gamma': [2 ** x for x in range(-14, -4)], 'rff__random_state': [RANDOM_STATE],
-                      'rff__n_components': [x for x in range(700, 1500, 50)]}
+                      'rff__gamma': [x for x in np.linspace(0.001, 0.004, 5)], 'rff__random_state': [RANDOM_STATE],
+                      'rff__n_components': [x for x in range(1500, 2500, 50)]}
 
     pipe = Pipeline([('rff', RBFSampler()), ('svc', LinearSVC())])
 

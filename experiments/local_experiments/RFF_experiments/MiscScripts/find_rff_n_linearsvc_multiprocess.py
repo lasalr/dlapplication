@@ -35,7 +35,7 @@ def train_eval_multiprocess(counter: int, total_count: int, X_train, y_train, X_
 
 if __name__ == '__main__':
     start_time = datetime.now()
-    dim = 18  # SUSY has 18 features
+    dim = 18  # SUSY_experiments has 18 features
     reg_param = 0.01
     file_path = '../../../data/SUSY/SUSY.csv'
 
