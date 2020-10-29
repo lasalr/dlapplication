@@ -7,8 +7,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 import numpy as np
 
-sys.path.append("../../../../dlapplication")
-sys.path.append("../../../../dlplatform")
+sys.path.append("../../../..")
+sys.path.append("../../../../../dlplatform")
 
 from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
 
@@ -17,7 +17,7 @@ RANDOM_STATE = 123
 if __name__ == '__main__':
     start_time = datetime.now()
     dim = 28  # HIGGS has 28 features
-    file_path = '../../../data/HIGGS/HIGGS.csv'
+    file_path = '../../../../data/HIGGS/HIGGS.csv'
     data_label_col = 0
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
     tune_data_fraction = 0.05
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     gs_model_kernelsvm.fit(X_param, y_param)
     end_time = datetime.now()
     print('writing results to file...')
-    write_csv(path='./Results/', name='param_tune_kernelsvc_higgs', start_time=start_time,
+    write_csv(path='../Results/', name='param_tune_kernelsvc_higgs', start_time=start_time,
               results=gs_model_kernelsvm.cv_results_, sortby_col='rank_test_score')
