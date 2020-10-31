@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     numberOfNodes = 205
     n_components = 200
-    coord_sleep_time = numberOfNodes/20
+    coord_sleep_time = numberOfNodes/15
     learner = LinearSVCRandomFF
     regParam = 243
     max_example_value = 11000
