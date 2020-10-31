@@ -29,9 +29,10 @@ if __name__ == "__main__":
 
     numberOfNodes = 205
     n_components = 200
-    coord_sleep_time = numberOfNodes/15
+    coord_sleep_time = numberOfNodes/25
     learner = LinearSVCRandomFF
     regParam = 243
+    gamma = 0.001371742
     max_example_value = 11000
 
     aggregator = RadonPoint()
@@ -41,9 +42,11 @@ if __name__ == "__main__":
                                       numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False)
 
     if learner.__name__ == LinearSVCRandomFF.__name__:
-        learnerFactory = SklearnBatchLearnerFactory(learner, {'regParam': regParam, 'dim': dim, 'gamma': 0.001371742,
+        print('Using {} random fourier features with gamma of {}'.format(n_components, gamma))
+        learnerFactory = SklearnBatchLearnerFactory(learner, {'regParam': regParam, 'dim': dim, 'gamma': gamma,
                                                               'n_components': n_components})
     else:
+        print('Not using RFF')
         learnerFactory = SklearnBatchLearnerFactory(learner, {'regParam': regParam, 'dim': dim})
 
     stoppingCriterion = MaxAmountExamples(max_example_value)
@@ -51,7 +54,7 @@ if __name__ == "__main__":
         exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
                          numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator,
                          learnerFactory=learnerFactory, dataSourceFactory=dsFactory,
-                         stoppingCriterion=stoppingCriterion, sleepTime=0.2, dataScheduler=BatchDataScheduler,
+                         stoppingCriterion=stoppingCriterion, sleepTime=1, dataScheduler=BatchDataScheduler,
                          minStartNodes=numberOfNodes, minStopNodes=numberOfNodes,
                          coordinatorSleepTime=coord_sleep_time)
 
