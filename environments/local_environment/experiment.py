@@ -1,3 +1,4 @@
+import random
 from multiprocessing import Process
 from DLplatform.coordinator import Coordinator, InitializationHandler
 from DLplatform.worker import Worker
@@ -55,7 +56,8 @@ class Experiment():
         exp_path = './Results/' + name + "_" + self.getTimestamp()
         os.mkdir(exp_path)
         self.writeExperimentSummary(exp_path, name)
-        t = Process(target = self.createCoordinator, args=(exp_path, self.minStartNodes, self.minStopNodes), name = 'coordinator')    
+        t = Process(target = self.createCoordinator, args=(exp_path, self.minStartNodes, self.minStopNodes),
+                    name = 'coordinator')
         #t.daemon = True
         t.start()
         jobs = [t]
@@ -69,7 +71,9 @@ class Experiment():
             # print("Running t.start() for job:", t)
             t.start()
             jobs.append(t)
-            time.sleep(self.sleepTime)
+            print('Sleeping for {}s to let worker {} run...'.format(self.sleepTime, taskid))
+            # Sleep time reduces as more worker threads are started
+            time.sleep(5 + ((self.sleepTime / self.numberOfNodes) * (self.numberOfNodes - len(jobs))))
         for job in jobs:
             # print("Running job.join() for:", job)
             job.join()
@@ -81,6 +85,7 @@ class Experiment():
         print("create coordinator with minStart", minStartNodes, "and minStop", minStopNodes)
         coordinator = Coordinator(minStartNodes, minStopNodes, self.coordinatorSleepTime)
         coordinator.setInitHandler(self.initHandler)
+        print('Creating RabbitMQComm within createCoordinator()...')
         comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
                             uniqueId=self._uniqueId)
         os.mkdir(os.path.join(exp_path, 'coordinator'))
@@ -92,7 +97,6 @@ class Experiment():
         logger = LearningLogger(path=exp_path, id="coordinator", level='INFO')
         coordinator.setLearningLogger(logger)
         print("Starting coordinator...\n")
-
         coordinator.run()
 
     def createWorker(self, id, exp_path, executionMode, devices, modelsPer):
@@ -105,10 +109,17 @@ class Experiment():
             device = devices[id // modelsPer]
         nodeId = str(id)
         w = Worker(nodeId)
+        # print('Sleeping before getting datasource within createWorker()')
+        # time.sleep(random.uniform(1, 8))
         dataScheduler = self.dataScheduler()
+        print('Getting datasource within createWorker()')
         dataSource = self.dataSourceFactory.getDataSource(nodeId=id)
         dataScheduler.setDataSource(source=dataSource)
+        print('Finished getting and setting datasource within createWorker()')
+        #       'Now sleeping Worker with PID={} for {}s'.format(self._uniqueId, self.sleepTime))
+        time.sleep(random.uniform(2, 6))
         w.setDataScheduler(dataScheduler)
+        print('Creating RabbitMQComm within createWorker()...')
         comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
                             uniqueId=self._uniqueId)
         os.mkdir(os.path.join(exp_path, "worker" + str(id)))
