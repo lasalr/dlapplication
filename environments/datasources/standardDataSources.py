@@ -1,3 +1,6 @@
+import gc
+import os
+
 from DLplatform.dataprovisioning import DataSource
 
 import numpy as np
@@ -9,13 +12,18 @@ The function that creates examples with labels is passed as a parameter
 
 '''
 class FileDataSource(DataSource):
-    def __init__(self, filename, decodeLine, name, indices, nodeId, numberOfNodes, shuffle=False, cache=False):
+    def __init__(self, filename, decodeLine, name, indices, nodeId, numberOfNodes, shuffle=False, cache=False,
+                 maxAmount=None):
         DataSource.__init__(self, name=name)
 
         self._filename = filename
         self._cache = cache
         self._decode_example = decodeLine
+        # print('getting indices within FileDataSource constructor')
+        # print('getattr(self, indices)={}'.format(getattr(self, indices)))
+        self.maxAmount = maxAmount
         self._indices = getattr(self, indices)(nodeId, numberOfNodes)
+        # print('Finished getting indices within FileDataSource constructor')
         self._shuffle = shuffle
         if self._shuffle:
             np.random.shuffle(self._indices)
@@ -64,11 +72,18 @@ class FileDataSource(DataSource):
         indices = []
         counter = 0
         fp = open(self._filename, "r")
+        # print('self.maxAmount={}'.format(self.maxAmount))
         for l in fp:
             if len(l) > 2 and counter % numberOfNodes == nodeIndexNumber:
                 indices.append(counter)
             counter += 1
+            # Ensure excess data is not read
+            if self.maxAmount is not None and len(indices) >= self.maxAmount:
+                print('breaking roundRobin loop')
+                break
+
         fp.close()
+        print('self.maxAmount={} length of indices={} for PID={}'.format(self.maxAmount, len(indices), os.getpid()))
         return indices
     
     def parallelRun(self, nodeIndexNumber, numberOfNodes):

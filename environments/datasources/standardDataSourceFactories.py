@@ -2,24 +2,36 @@ from environments.datasources.standardDataSources import FileDataSource, SVMLigh
 import os
 
 from DLplatform.dataprovisioning.dataSourceFactory import DataSourceFactory
+from DLplatform.stopping import MaxAmountExamples
 
 
 class FileDataSourceFactory(DataSourceFactory):
-    def __init__(self, filename, decoder, numberOfNodes, indices = 'roundRobin', shuffle = False, cache = False):
+    def __init__(self, filename, decoder, numberOfNodes, indices = 'roundRobin', shuffle = False, cache = False,
+                 stoppingCriterion = None):
         self.filename       = filename
         self.decoder        = decoder
         self.numberOfNodes  = numberOfNodes
         self.indices        = indices
         self.shuffle        = shuffle
         self.cache          = cache
-        
+        self.stoppingCriterion = stoppingCriterion
+        self.maxAmount = None
+
     def getDataSource(self, nodeId):
-
+        # print('Getting datasource for node {}'.format(nodeId))
         name = os.path.basename(self.filename).split('.')[0]
-        dataSource = FileDataSource(filename = self.filename, decodeLine = self.decoder, name = name, 
-                                    indices = self.indices, nodeId=nodeId, numberOfNodes=self.numberOfNodes, 
-                                    shuffle = self.shuffle, cache = self.cache)
+        # print('name={}'.format(name))
 
+        # print('type(self.stoppingCriterion)={}'.format(type(self.stoppingCriterion)))
+        # print('MaxAmountExamples={}'.format(MaxAmountExamples))
+        if isinstance(self.stoppingCriterion, MaxAmountExamples):
+            # print('isinstance-TRUE')
+            self.maxAmount = self.stoppingCriterion.maxAmount
+
+        dataSource = FileDataSource(filename = self.filename, decodeLine = self.decoder, name = name,
+                                    indices = self.indices, nodeId=nodeId, numberOfNodes=self.numberOfNodes, 
+                                    shuffle = self.shuffle, cache = self.cache, maxAmount=self.maxAmount)
+        # print('Finished getting datasource for node {}'.format(nodeId))
         return dataSource
 
     def __str__(self):
