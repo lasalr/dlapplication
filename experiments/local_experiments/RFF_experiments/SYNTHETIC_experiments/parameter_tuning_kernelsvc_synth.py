@@ -16,8 +16,8 @@ RANDOM_STATE = 123
 
 if __name__ == '__main__':
     start_time = datetime.now()
-    dim = 28  # HIGGS has 28 features
-    file_path = '../../../../data/HIGGS/HIGGS.csv'
+    dim = 5  # SYNTHETIC DATA has 5 features
+    file_path = '../../../../data/SYNTHETIC1/SYNTHETIC_DATA.csv'
     data_label_col = 0
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
     tune_data_fraction = 0.05
@@ -31,8 +31,8 @@ if __name__ == '__main__':
     pipe = Pipeline([('svc', SVC())])
 
     param_grid = {
-        'svc__C': [2 ** x for x in range(8, 12, 1)],
-        'svc__gamma': [0.0078125],
+        'svc__C': [2 ** x for x in range(-12, 14)],
+        'svc__gamma': [2 ** x for x in range(-12, 14)],
         'svc__random_state': [RANDOM_STATE],
         'svc__decision_function_shape': ['ovo']}
 
@@ -43,9 +43,9 @@ if __name__ == '__main__':
     #     'svc__decision_function_shape': ['ovo']}
 
     gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=1, scoring='roc_auc',
-                                      n_jobs=-1)
+                                      n_jobs=4)
     gs_model_kernelsvm.fit(X_param, y_param)
     end_time = datetime.now()
     print('writing results to file...')
-    write_csv(path='../Results/', name='param_tune_kernelsvc_higgs', start_time=start_time,
+    write_csv(path='../Results/', name='param_tune_kernelsvc_synthetic1', start_time=start_time,
               results=gs_model_kernelsvm.cv_results_, sortby_col='rank_test_score')
