@@ -67,7 +67,7 @@ if __name__ == '__main__':
                                 scoring='roc_auc', n_jobs=-1)
     gs_model_rff.fit(X_param, y_param)
     print('writing results to file...')
-    write_csv(path='../Results/', name='param_tune_linearsvc_rff_' + ds_name, start_time=start_time,
+    write_csv(path='./Results/', name='param_tune_linearsvc_rff_' + ds_name, start_time=start_time,
               results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
 
     # # Copying python script to new folder with timestamp
