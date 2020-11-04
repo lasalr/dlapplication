@@ -47,5 +47,5 @@ if __name__ == '__main__':
     gs_model_kernelsvm.fit(X_param, y_param)
     end_time = datetime.now()
     print('writing results to file...')
-    write_csv(path='../Results/', name='param_tune_kernelsvc_synthetic1', start_time=start_time,
+    write_csv(path='./Results/', name='param_tune_kernelsvc_synthetic1', start_time=start_time,
               results=gs_model_kernelsvm.cv_results_, sortby_col='rank_test_score')
