@@ -20,21 +20,21 @@ if __name__ == "__main__":
     messengerHost = 'localhost'
     messengerPort = 5672
 
-    dim = 28  # HIGGS has 28 features
-    numberOfNodes = 200
-    n_components = 2
-    coord_sleep_time = numberOfNodes/25
-    learner = LinearSVC
-    regParam = 243
-    gamma = 0.001371742
-    max_example_value = 110000
-    exp_sleep_time = 25
+    dim = 5  # SYNTHETIC1 has 5 features
+    numberOfNodes = 205
+    n_components = 202
+    coord_sleep_time = numberOfNodes/15
+    learner = LinearSVCRandomFF
+    regParam = 512
+    gamma = 0.0078125
+    max_example_value = 105000
+    exp_sleep_time = 0.3  # 25  # 1.5
 
     aggregator = RadonPoint()
     sync = AggregationAtTheEnd()
     stoppingCriterion = MaxAmountExamples(max_example_value)
 
-    dsFactory = FileDataSourceFactory(filename="../../../../data/HIGGS/HIGGS.csv",
+    dsFactory = FileDataSourceFactory(filename="../../../../data/SYNTHETIC1/SYNTHETIC_DATA.csv",
                                       decoder=CSVDecoder(delimiter=',', labelCol=0),
                                       numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False, cache=False,
                                       stoppingCriterion=stoppingCriterion)
