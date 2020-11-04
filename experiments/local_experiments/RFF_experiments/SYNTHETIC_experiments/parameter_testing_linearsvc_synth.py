@@ -84,8 +84,8 @@ if __name__ == '__main__':
     out_string = 'Start time: {}\n'.format(str(start_time))
     out_string += 'End time: {}\n'.format(str(datetime.now()))
     out_string += 'Parameters:\n{}\n{}\n'.format(
-        'RBFSampler(gamma=0.000244141, n_components=905, random_state=RANDOM_STATE)',
-        'LinearSVC(C=256, dual=False, random_state=RANDOM_STATE)')
+        'RBFSampler(gamma=0.0078125, n_components=202, random_state=RANDOM_STATE)',
+        'LinearSVC(C=512, dual=False, random_state=RANDOM_STATE))')
     print(out_string)
 
     out_string += 'Accuracy={}\nROCAUC={}'.format(accuracy_score(y_true=y_test, y_pred=y_pred),
