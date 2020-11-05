@@ -71,9 +71,10 @@ class Experiment():
             # print("Running t.start() for job:", t)
             t.start()
             jobs.append(t)
-            print('Sleeping for {}s to let worker {} run...'.format(self.sleepTime, taskid))
+            # print('Sleeping for {}s to let worker {} run...'.format(self.sleepTime, taskid))
             # Sleep time reduces as more worker threads are started
-            time.sleep(5 + ((self.sleepTime / self.numberOfNodes) * (self.numberOfNodes - len(jobs))))
+            # time.sleep(5 + ((self.sleepTime / self.numberOfNodes) * (self.numberOfNodes - len(jobs))))
+            time.sleep(self.sleepTime)
         for job in jobs:
             # print("Running job.join() for:", job)
             job.join()
@@ -117,7 +118,7 @@ class Experiment():
         dataScheduler.setDataSource(source=dataSource)
         print('Finished getting and setting datasource within createWorker()')
         #       'Now sleeping Worker with PID={} for {}s'.format(self._uniqueId, self.sleepTime))
-        time.sleep(random.uniform(2, 6))
+        # time.sleep(random.uniform(2, 6))
         w.setDataScheduler(dataScheduler)
         print('Creating RabbitMQComm within createWorker()...')
         comm = RabbitMQComm(hostname=self.messengerHost, port=self.messengerPort, user='guest', password='guest',
