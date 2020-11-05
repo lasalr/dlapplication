@@ -27,8 +27,8 @@ if __name__ == "__main__":
     learner = LinearSVCRandomFF
     regParam = 512
     gamma = 0.0078125
-    max_example_value = 105000
-    exp_sleep_time = 0.3  # 25  # 1.5
+    max_example_value = 2000 # 105000
+    exp_sleep_time = 0.1  # 25  # 1.5
 
     aggregator = RadonPoint()
     sync = AggregationAtTheEnd()

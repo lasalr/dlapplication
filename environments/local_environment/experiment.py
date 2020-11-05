@@ -112,7 +112,7 @@ class Experiment():
         w = Worker(nodeId)
         # print('Sleeping before getting datasource within createWorker()')
         # time.sleep(random.uniform(1, 8))
-        dataScheduler = self.dataScheduler()
+        dataScheduler = self.dataScheduler(self.stoppingCriterion.maxAmount) # Only when stopping criterion is of class MaxAmountExamples #TODO
         print('Getting datasource within createWorker()')
         dataSource = self.dataSourceFactory.getDataSource(nodeId=id)
         dataScheduler.setDataSource(source=dataSource)
