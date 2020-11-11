@@ -18,18 +18,18 @@ from DLplatform.stopping import MaxAmountExamples
 if __name__ == "__main__":
     messengerHost = 'localhost'
     messengerPort = 5672
-    numberOfNodes = 6
+    numberOfNodes = 50
 
     regParam = 0.01
     # dim = 4  # skin_segmentation has 4 attributes
-    dim = 18  # SUSY has 18 features
+    dim = 28  # HIGGS has 28 features
     learnerFactory = SklearnBatchLearnerFactory(LogisticRegression, {'regParam': regParam, 'dim': dim})
 
     # dsFactory = SVMLightDataSourceFactory("../../../../data/classification/skin_segmentation.dat", numberOfNodes,
     #                                       indices='roundRobin', shuffle=False)
 
     dsFactory = FileDataSourceFactory(
-        filename="../../../../data/SUSY/SUSY.csv",
+        filename="../../../../data/HIGGS/HIGGS.csv",
         decoder=CSVDecoder(delimiter=',', labelCol=0), numberOfNodes=numberOfNodes, indices='roundRobin',
         shuffle=False, cache=False)
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     sync = AggregationAtTheEnd()
 
     exp = Experiment(executionMode='cpu', messengerHost=messengerHost, messengerPort=messengerPort,
-                     numberOfNodes=numberOfNodes, sync=sync,
+                     numberOfNodes=numberOfNodes, sync=sync, minStartNodes=numberOfNodes, minStopNodes=numberOfNodes,
                      aggregator=aggregator, learnerFactory=learnerFactory,
                      dataSourceFactory=dsFactory, stoppingCriterion=stoppingCriterion, sleepTime=0)
 

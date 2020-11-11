@@ -6,10 +6,10 @@ sys.path.append("../../../../../dlplatform")
 from environments.local_environment import Experiment
 from environments.datasources.standardDataSourceFactories import FileDataSourceFactory
 from environments.datasources.dataDecoders.otherDataDecoders import CSVDecoder
-from DLplatform.aggregating import RadonPoint
+from DLplatform.aggregating import RadonPoint, Average
 from DLplatform.synchronizing.aggAtTheEnd import AggregationAtTheEnd
 from DLplatform.learning.factories.sklearnBatchLearnerFactory import SklearnBatchLearnerFactory
-from DLplatform.learning.batch.sklearnClassifiers import LinearSVC, LinearSVCRandomFF
+from DLplatform.learning.batch.sklearnClassifiers import LinearSVC, LinearSVCRandomFF, LogisticRegression
 from DLplatform.stopping import MaxAmountExamples
 from DLplatform.dataprovisioning import BatchDataScheduler
 
@@ -21,9 +21,9 @@ if __name__ == "__main__":
     messengerPort = 5672
 
     dim = 5  # SYNTHETIC1 has 5 features
-    numberOfNodes = 205
-    n_components = 202
-    coord_sleep_time = 5
+    numberOfNodes = 15
+    n_components = 12
+    coord_sleep_time = 3
     learner = LinearSVCRandomFF
     regParam = 512
     gamma = 0.0078125
@@ -51,8 +51,7 @@ if __name__ == "__main__":
                      numberOfNodes=numberOfNodes, sync=sync, aggregator=aggregator,
                      learnerFactory=learnerFactory, dataSourceFactory=dsFactory,
                      stoppingCriterion=stoppingCriterion, sleepTime=exp_sleep_time, dataScheduler=BatchDataScheduler,
-                     minStartNodes=0, minStopNodes=numberOfNodes,
-                     coordinatorSleepTime=coord_sleep_time)
+                     minStartNodes=numberOfNodes, minStopNodes=0, coordinatorSleepTime=coord_sleep_time)
 
     exp_name = learner.__name__ + '_' + aggregator.__str__()
     print('Running experiment:{}'.format(exp_name))
