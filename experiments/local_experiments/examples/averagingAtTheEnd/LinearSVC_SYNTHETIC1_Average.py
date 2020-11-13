@@ -23,12 +23,12 @@ if __name__ == "__main__":
     dim = 5  # SYNTHETIC1 has 5 features
     numberOfNodes = 205
     n_components = 202
-    coord_sleep_time = 7
+    coord_sleep_time = 0.01 # 7
     learner = LinearSVCRandomFF
     regParam = 512
     gamma = 0.0078125
-    max_example_value = 2000 # 105000
-    exp_sleep_time = 2  # 1.5
+    max_example_value = 50 # 105000
+    exp_sleep_time = 0.01  # 2
 
     aggregator = Average()
     sync = AggregationAtTheEnd()
