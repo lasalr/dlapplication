@@ -36,9 +36,6 @@ if __name__ == "__main__":
     exp_count = 0
     for aggregator_name in aggregator_list:
         exp_count += 1
-        f_name = './Results/{}_{}.txt'.format(exp_name, max_example_value)
-        with open(f_name, 'w') as fw:
-            fw.write('Starting experiment {} at {}'.format(exp_count, datetime.now()))
 
         for max_example_value in max_example_list:
             if aggregator_name == 'RadonPoint':
@@ -48,6 +45,12 @@ if __name__ == "__main__":
             else:
                 print('Incorrect aggregator! Continuing to next experiment')
                 continue
+
+            exp_name = learner.__name__ + '_' + aggregator.__str__() + '_' + str(max_example_value)
+
+            f_name = './Results/{}.txt'.format(exp_name)
+            with open(f_name, 'w') as fw:
+                fw.write('Starting experiment {} at {}'.format(exp_count, datetime.now()))
 
             sync = AggregationAtTheEnd()
             stoppingCriterion = MaxAmountExamples(max_example_value)
@@ -72,7 +75,6 @@ if __name__ == "__main__":
                              dataScheduler=BatchDataScheduler,
                              minStartNodes=numberOfNodes, minStopNodes=0, coordinatorSleepTime=coord_sleep_time)
 
-            exp_name = learner.__name__ + '_' + aggregator.__str__()
             print('Running experiment:{} with max_example_value={}'.format(exp_name, max_example_value))
             try:
                 exp.run(exp_name)
