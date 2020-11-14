@@ -13,6 +13,7 @@ from DLplatform.learning.factories.sklearnBatchLearnerFactory import SklearnBatc
 from DLplatform.learning.batch.sklearnClassifiers import LinearSVC, LinearSVCRandomFF, LogisticRegression
 from DLplatform.stopping import MaxAmountExamples
 from DLplatform.dataprovisioning import BatchDataScheduler
+import gc
 
 LOG_CONSOLE = True
 
@@ -96,3 +97,5 @@ if __name__ == "__main__":
                                                                                                          n_components))
 
                 fw.write('coord_sleep_time={}\nexp_sleep_time={}\n'.format(coord_sleep_time, exp_sleep_time))
+
+                gc.collect()
