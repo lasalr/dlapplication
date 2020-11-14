@@ -1,3 +1,4 @@
+from datetime import datetime
 import sys
 
 sys.path.append("../../../../../dlapplication")
@@ -32,7 +33,13 @@ if __name__ == "__main__":
     gamma = 0.0078125
     exp_sleep_time = 0.01  # 2
 
+    exp_count = 0
     for aggregator_name in aggregator_list:
+        exp_count += 1
+        f_name = './Results/{}_{}.txt'.format(exp_name, max_example_value)
+        with open(f_name, 'w') as fw:
+            fw.write('Starting experiment {} at {}'.format(exp_count, datetime.now()))
+
         for max_example_value in max_example_list:
             if aggregator_name == 'RadonPoint':
                 aggregator = RadonPoint()
@@ -67,9 +74,23 @@ if __name__ == "__main__":
 
             exp_name = learner.__name__ + '_' + aggregator.__str__()
             print('Running experiment:{} with max_example_value={}'.format(exp_name, max_example_value))
-            exp.run(exp_name)
-            with open('./Results/{}_{}.txt'.format(exp_name, max_example_value), 'w') as fw:
-                fw.write(
-                    'dim={}\naggregator={}\nmax_example_value={}\nregParam={}\ngamma={}\nlearner={}\nnumberOfNodes={}\nn_components={}\ncoord_sleep_time={}\nexp_sleep_time={}\n'.format(
-                        dim, aggregator_name, max_example_value, regParam, gamma, learner.__name__, numberOfNodes,
-                        n_components, coord_sleep_time, exp_sleep_time))
+            try:
+                exp.run(exp_name)
+            except Exception as ex:
+                print(type(ex).__name__, 'in experiment {}'.format(exp_count))
+                continue
+
+            with open(f_name, 'a') as fw:
+                fw.write('Ending experiment {} at {}\ndim={}\naggregator={}\nmax_example_value={}\n'.format(exp_count,
+                                                                                                            datetime.now(),
+                                                                                                            dim,
+                                                                                                            aggregator_name,
+                                                                                                            max_example_value))
+
+                fw.write('regParam={}\ngamma={}\nlearner={}\nnumberOfNodes={}\nn_components={}\n'.format(regParam,
+                                                                                                         gamma,
+                                                                                                         learner.__name__,
+                                                                                                         numberOfNodes,
+                                                                                                         n_components))
+
+                fw.write('coord_sleep_time={}\nexp_sleep_time={}\n'.format(coord_sleep_time, exp_sleep_time))
