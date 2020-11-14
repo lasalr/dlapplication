@@ -84,7 +84,7 @@ if __name__ == "__main__":
                 continue
 
             with open(f_name, 'a') as fw:
-                fw.write('Ending experiment {} at {}\ndim={}\naggregator={}\nmax_example_value={}\n'.format(exp_count,
+                fw.write('\nEnding experiment {} at {}\ndim={}\naggregator={}\nmax_example_value={}\n'.format(exp_count,
                                                                                                             datetime.now(),
                                                                                                             dim,
                                                                                                             aggregator_name,
