@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
             sync = AggregationAtTheEnd()
             stoppingCriterion = MaxAmountExamples(max_example_value)
-            dsFactory = FileDataSourceFactory(filename="../../../../data/SYNTHETIC1/split/TRAIN_SYNTHETIC_DATA.csv",
+            dsFactory = FileDataSourceFactory(filename="../../../../data/HIGGS/split/TRAIN_SYNTHETIC_DATA.csv",
                                               decoder=CSVDecoder(delimiter=',', labelCol=0),
                                               numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False,
                                               cache=False,
