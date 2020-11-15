@@ -31,7 +31,7 @@ if __name__ == "__main__":
     regParam = 512.0
     gamma = 0.00411522633744856
     exp_sleep_time = 0.01  # 2
-    data_file_path = '../../../../data/HIGGS/split/TRAIN_SYNTHETIC_DATA.csv'
+    data_file_path = '../../../../data/HIGGS/split/TRAIN_HIGGS.csv'
 
     exp_count = 0
     for aggregator_name in aggregator_list:
