@@ -26,11 +26,11 @@ if __name__ == "__main__":
     dim = 18  # HIGGS has 5 features
     numberOfNodes = 205
     n_components = 202
-    coord_sleep_time = 0.01  # 7
+    coord_sleep_time = 0.1  # 7
     learner = LinearSVCRandomFF
     regParam = 512
     gamma = 0.00390625
-    exp_sleep_time = 0.01  # 2
+    exp_sleep_time = 0.1  # 2
     data_file_path = '../../../../data/SUSY/split/TRAIN_SUSY.csv'
 
     exp_count = 0
