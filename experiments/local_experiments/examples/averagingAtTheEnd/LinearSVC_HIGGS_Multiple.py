@@ -31,6 +31,7 @@ if __name__ == "__main__":
     regParam = 512.0
     gamma = 0.00411522633744856
     exp_sleep_time = 0.01  # 2
+    data_file_path = '../../../../data/HIGGS/split/TRAIN_SYNTHETIC_DATA.csv'
 
     exp_count = 0
     for aggregator_name in aggregator_list:
@@ -53,7 +54,7 @@ if __name__ == "__main__":
 
             sync = AggregationAtTheEnd()
             stoppingCriterion = MaxAmountExamples(max_example_value)
-            dsFactory = FileDataSourceFactory(filename="../../../../data/HIGGS/split/TRAIN_SYNTHETIC_DATA.csv",
+            dsFactory = FileDataSourceFactory(filename=data_file_path,
                                               decoder=CSVDecoder(delimiter=',', labelCol=0),
                                               numberOfNodes=numberOfNodes, indices='roundRobin', shuffle=False,
                                               cache=False,
