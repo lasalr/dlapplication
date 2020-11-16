@@ -24,8 +24,8 @@ if __name__ == "__main__":
     max_example_list = [2000, 1000, 500, 200, 100, 50, 25]
 
     dim = 28  # HIGGS has 5 features
-    numberOfNodes = 205
-    n_components = 202
+    numberOfNodes = 196  # 205
+    n_components = 11  # 202
     coord_sleep_time = 3  # 7
     learner = LinearSVCRandomFF
     regParam = 512.0
