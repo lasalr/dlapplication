@@ -23,7 +23,7 @@ if __name__ == "__main__":
     messengerPort = 5672
 
     aggregator_list = ['RadonPoint', 'Average']
-    max_example_list = [2000, 1000, 500, 200, 100, 50, 25]
+    max_example_list = [5]  # [2000, 1000, 500, 200, 100, 50, 25]
 
     dim = 5  # SYNTHETIC1 has 5 features
     numberOfNodes = 196  # 205
