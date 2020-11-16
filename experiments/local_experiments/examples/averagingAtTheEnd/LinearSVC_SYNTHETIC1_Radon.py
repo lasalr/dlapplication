@@ -21,14 +21,14 @@ if __name__ == "__main__":
     messengerPort = 5672
 
     dim = 5  # SYNTHETIC1 has 5 features
-    numberOfNodes = 205
-    n_components = 202
-    coord_sleep_time = 0.01 # 7
+    numberOfNodes = 196  # 205
+    n_components = 11  # 202
+    coord_sleep_time = 0.1 # 7
     learner = LinearSVCRandomFF
     regParam = 512
     gamma = 0.0078125
-    max_example_value = 50 # 105000
-    exp_sleep_time = 0.01  # 2
+    max_example_value = 25 # 105000
+    exp_sleep_time = 0.1  # 2
 
     aggregator = RadonPoint()
     sync = AggregationAtTheEnd()
