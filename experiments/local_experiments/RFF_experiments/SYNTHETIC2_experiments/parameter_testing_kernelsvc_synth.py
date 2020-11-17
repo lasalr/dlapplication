@@ -41,7 +41,9 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X_keep, y_keep, test_size=0.3, random_state=RANDOM_STATE)
     print('X_train={}\ny_train.shape={}'.format(X_train.shape, y_train.shape))
     # Linear SVC without RFF
-    model = SVC(C=8192, gamma=0.0078125, decision_function_shape='ovo', random_state=RANDOM_STATE)
+    k_svc = 8192
+    k_svc_gamma = 0.0078125
+    model = SVC(C=k_svc, gamma=k_svc_gamma, decision_function_shape='ovo', random_state=RANDOM_STATE)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
@@ -54,7 +56,7 @@ if __name__ == '__main__':
 
     out_string = 'Start time: {}\n'.format(str(start_time))
     out_string += 'End time: {}\n'.format(str(datetime.now()))
-    out_string += 'Parameters:\n{}\n'.format("SVC(C=8192, gamma=0.0078125, decision_function_shape='ovo', random_state=RANDOM_STATE)")
+    out_string += 'Parameters:\n{}\n'.format("SVC(C={}, gamma={}, decision_function_shape='ovo', random_state={})".format(k_svc, k_svc_gamma, RANDOM_STATE))
     out_string += 'Accuracy={}\nROCAUC={}'.format(accuracy_score(y_true=y_test, y_pred=y_pred),
                                                   roc_auc_score(y_true=y_test, y_score=y_decisions))
     print('Kernel SVC:\n', out_string)

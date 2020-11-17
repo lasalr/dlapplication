@@ -20,7 +20,7 @@ if __name__ == '__main__':
     file_path = '../../../../data/SYNTHETIC2/SYNTHETIC_DATA.csv'
     data_label_col = 0
     validation_file_path = os.path.join(os.path.dirname(file_path), 'split', 'VAL_' + os.path.basename(file_path))
-    tune_data_fraction = 0.03
+    tune_data_fraction = 0.01
     print('Splitting dataset...')
     split_dataset(file_path=file_path)  # Does not save if file is present
     X, y = load_data(path=validation_file_path, label_col=data_label_col, d=dim)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     #     'svc__decision_function_shape': ['ovo']}
 
     gs_model_kernelsvm = GridSearchCV(estimator=pipe, param_grid=param_grid, cv=5, verbose=1, scoring='roc_auc',
-                                      n_jobs=4)
+                                      n_jobs=3)
     gs_model_kernelsvm.fit(X_param, y_param)
     end_time = datetime.now()
     print('writing results to file...')

@@ -46,7 +46,9 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X_keep, y_keep, test_size=0.3, random_state=RANDOM_STATE)
     print('X_train={}\ny_train.shape={}'.format(X_train.shape, y_train.shape))
     # Linear SVC without RFF
-    model = LinearSVC(C=0.015625, dual=False, random_state=RANDOM_STATE)
+    svc_C = 0.0625
+    svc_dual = False
+    model = LinearSVC(C=svc_C, dual=svc_dual, random_state=RANDOM_STATE)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
@@ -59,7 +61,8 @@ if __name__ == '__main__':
 
     out_string = 'Start time: {}\n'.format(str(start_time))
     out_string += 'End time: {}\n'.format(str(datetime.now()))
-    out_string += 'Parameters:\n{}\n'.format('LinearSVC(C=0.5, dual=False, random_state=RANDOM_STATE)')
+    out_string += 'Parameters:\n{}\n'.format('LinearSVC(C={}, dual={}, random_state={})'.format(svc_C, svc_dual,
+                                                                                                 RANDOM_STATE))
     out_string += 'Accuracy={}\nROCAUC={}'.format(accuracy_score(y_true=y_test, y_pred=y_pred),
                                                   roc_auc_score(y_true=y_test, y_score=y_decisions))
     print('Linear SVC without RFF:\n', out_string)
@@ -68,8 +71,12 @@ if __name__ == '__main__':
         f.write(out_string)
 
     # Linear SVC with RFF
-    model_rff = make_pipeline(RBFSampler(gamma=0.0078125, n_components=202, random_state=RANDOM_STATE),
-                          LinearSVC(C=512, dual=False, random_state=RANDOM_STATE))
+    rff_svc_gamma = 0.0078125
+    rff_svc_n_components = 202
+    rff_svc_C = 512
+    rff_svc_dual = False
+    model_rff = make_pipeline(RBFSampler(gamma=rff_svc_gamma, n_components=rff_svc_n_components, random_state=RANDOM_STATE),
+                          LinearSVC(C=rff_svc_C, dual=rff_svc_dual, random_state=RANDOM_STATE))
 
     model_rff.fit(X_train, y_train)
 
@@ -84,8 +91,8 @@ if __name__ == '__main__':
     out_string = 'Start time: {}\n'.format(str(start_time))
     out_string += 'End time: {}\n'.format(str(datetime.now()))
     out_string += 'Parameters:\n{}\n{}\n'.format(
-        'RBFSampler(gamma=0.0078125, n_components=202, random_state=RANDOM_STATE)',
-        'LinearSVC(C=512, dual=False, random_state=RANDOM_STATE))')
+        'RBFSampler(gamma={}, n_components={}, random_state={})'.format(rff_svc_gamma, rff_svc_n_components, RANDOM_STATE),
+        'LinearSVC(C={}, dual={}, random_state={}))'.format(rff_svc_C, rff_svc_dual, RANDOM_STATE))
     print(out_string)
 
     out_string += 'Accuracy={}\nROCAUC={}'.format(accuracy_score(y_true=y_test, y_pred=y_pred),
