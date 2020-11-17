@@ -41,7 +41,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X_keep, y_keep, test_size=0.3, random_state=RANDOM_STATE)
     print('X_train={}\ny_train.shape={}'.format(X_train.shape, y_train.shape))
     # Linear SVC without RFF
-    k_svc = 8192
+    k_svc = 4096
     k_svc_gamma = 0.0078125
     model = SVC(C=k_svc, gamma=k_svc_gamma, decision_function_shape='ovo', random_state=RANDOM_STATE)
     model.fit(X_train, y_train)

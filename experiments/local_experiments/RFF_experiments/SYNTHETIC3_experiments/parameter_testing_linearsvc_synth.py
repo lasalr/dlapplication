@@ -46,7 +46,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X_keep, y_keep, test_size=0.3, random_state=RANDOM_STATE)
     print('X_train={}\ny_train.shape={}'.format(X_train.shape, y_train.shape))
     # Linear SVC without RFF
-    svc_C = 0.0625
+    svc_C = 0.0009765625
     svc_dual = False
     model = LinearSVC(C=svc_C, dual=svc_dual, random_state=RANDOM_STATE)
     model.fit(X_train, y_train)
