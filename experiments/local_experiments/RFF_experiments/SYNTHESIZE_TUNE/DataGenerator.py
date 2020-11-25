@@ -47,22 +47,23 @@ class DataGenerator:
         bias = np.random.uniform(low=-1, high=1)
         size = self.size
 
-        X, Yval = [], []
+        X, Y_values = [], []
         for i in range(size):
             x, y_val = self.generate_datapoint(coeffs, bias)
             X.append(x)
-            Yval.append(y_val)
+            Y_values.append(y_val)
 
         # Scaling y
         scaler = StandardScaler()
-        y_val = scaler.fit_transform(y_val.reshape(-1, 1))
+        Y_values = np.array(Y_values)
+        Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
 
         # Adding Gaussian noise to result
-        epsy = np.random.normal(loc=0.0, scale=0.3, size=y_val.shape)
-        y_val = y_val + epsy
+        epsy = np.random.normal(loc=0.0, scale=0.3, size=Y_values.shape)
+        Y_values = Y_values + epsy
 
-        theta = statistics.median(Yval)
-        Y = [1 if y_val >= theta else -1 for y_val in Yval]
+        theta = statistics.median(Y_values)
+        Y = [1 if y_val >= theta else -1 for y_val in Y_values]
         print(np.average(Y))
 
         X = np.array(X)
@@ -74,8 +75,8 @@ class DataGenerator:
         X = X + epsX
 
         Y = np.array(Y)
-        Yval = np.array(Yval)
-        print(X.shape, Y.shape, Yval.shape)
+        Y_values = np.array(Y_values)
+        print(X.shape, Y.shape, Y_values.shape)
 
         data = np.hstack((Y.reshape((Y.shape[0], 1)), X))
         print(data.shape)
@@ -115,3 +116,8 @@ class DataGenerator:
 
         # Creating randomly sampled coefficients
         return np.random.uniform(low=self.min_coef, high=self.max_coef, size=int(n_coeff))
+
+
+if __name__ == '__main__':
+    gen = DataGenerator(poly_deg=3, size=500, dim=5, data_folder='./Data/')
+    gen()
