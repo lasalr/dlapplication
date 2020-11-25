@@ -29,3 +29,9 @@ experiments/local_experiments/RFF_experiments/SYNTHETIC2_experiments/Results/
 experiments/local_experiments/RFF_experiments/SYNTHETIC3_experiments/Results/
 
 experiments/local_experiments/RFF_experiments/SYNTHETIC5_experiments/Results/
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/Results/
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/split/
+
+*.csv
