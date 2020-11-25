@@ -22,13 +22,25 @@ class DataGenerator:
     """
     RANDOM_STATE = 123
 
-    def __init__(self, poly_deg, size, dim, data_folder):
+    def __init__(self, poly_deg, size, dim, data_folder, xy_noise_scale=None, x_range=None, bias_range=None):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
         self.min_coef = -10
         self.max_coef = 10
         self.data_folder = data_folder
+        if xy_noise_scale is None:
+            self.xy_noise_scale = [0.1, 0.1]
+        else:
+            self.xy_noise_scale = xy_noise_scale
+        if x_range is None:
+            self.x_range = [-10, 10]
+        else:
+            self.x_range = x_range
+        if bias_range is None:
+            self.bias_range = [-1, 1]
+        else:
+            self.bias_range = bias_range
 
     def __call__(self):
         if not os.path.exists(self.data_folder):
@@ -44,7 +56,7 @@ class DataGenerator:
 
         np.random.seed = DataGenerator.RANDOM_STATE
         coeffs = self.generate_coeffs()
-        bias = np.random.uniform(low=-1, high=1)
+        bias = np.random.uniform(low=self.bias_range[0], high=self.bias_range[1])
         size = self.size
 
         X, Y_values = [], []
@@ -59,7 +71,7 @@ class DataGenerator:
         Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
 
         # Adding Gaussian noise to result
-        eps_y = np.random.normal(loc=0.0, scale=0.2, size=Y_values.shape)
+        eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
         # Add multiplicative noise to y
         Y_values = Y_values * eps_y
 
@@ -72,7 +84,7 @@ class DataGenerator:
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
         # adding Gaussian noise to features
-        eps_X = np.random.normal(loc=0.0, scale=0.2, size=X.shape)
+        eps_X = np.random.normal(loc=0.0, scale=self.xy_noise_scale[0], size=X.shape)
         # Add multiplicative noise to X
         X = X * eps_X
 
@@ -90,7 +102,7 @@ class DataGenerator:
 
     def generate_datapoint(self, coeffs, bias):
         # Sample X (vector of DIM dimensions)
-        X = np.random.uniform(low=-10, high=10, size=self.dim)
+        X = np.random.uniform(low=self.x_range[0], high=self.x_range[1], size=self.dim)
 
         # Create polynomial combinations e.g. (x1^3, x2^3, x1^2 * x2, ...)
         #     (x1^2, x2^2, x3^2, x1*x2, ...) ... (...)

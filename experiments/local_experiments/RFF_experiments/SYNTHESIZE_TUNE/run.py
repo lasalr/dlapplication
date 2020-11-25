@@ -25,13 +25,14 @@ if __name__ == '__main__':
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-3, 8)]
-    n_jobs = 4
-    rff_gamma_list = [2 ** x for x in range(-3, 8)]
+    C_list = [2 ** x for x in range(-3, 10)]
+    n_jobs = -1
+    rff_gamma_list = [2 ** x for x in range(-3, 10)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
-    data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER)
+    data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
+                                   xy_noise_scale=[0.15, 0.15], x_range=[-10, 10], bias_range=[-10, 10])
     data_saved_path = data_generator()
 
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -43,7 +44,7 @@ if __name__ == '__main__':
 
     print('Generated dataset {}'.format(data_saved_path))
     param_tuner = ParameterTuner(C_list=C_list, rff_gamma_list=rff_gamma_list, n_components_list=n_components_list,
-                                 n_jobs=4, dataset_name=DATASET_NAME, val_file_path=val_data_path,
+                                 n_jobs=n_jobs, dataset_name=DATASET_NAME, val_file_path=val_data_path,
                                  results_folder_path=RESULTS_FOLDER, tune_data_fraction=TUNE_DATA_FRACTION, dim=DIM,
                                  data_label_col=DATA_LABEL_COL, score_method='roc_auc')
 
