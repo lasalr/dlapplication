@@ -10,10 +10,10 @@ import numpy as np
 import scipy.special
 from sklearn.preprocessing import StandardScaler
 
+from experiments.local_experiments.RFF_experiments.data_handling import split_dataset
+
 sys.path.append("../../../..")
 sys.path.append("../../../../../dlplatform")
-
-
 
 
 class DataGenerator:
@@ -22,21 +22,26 @@ class DataGenerator:
     """
     RANDOM_STATE = 123
 
-    def __init__(self, poly_deg, size, dim):
+    def __init__(self, poly_deg, size, dim, data_folder):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
         self.min_coef = -10
         self.max_coef = 10
-        self.data_file_path = 'SYNTHETIC_DATA_' + str(datetime.now()).replace(':', '_').replace(' ', '_')[:19] + '.csv'
-        self.val_file_path = os.path.join(os.path.dirname(self.data_file_path), 'split',
-                                          'VAL_' + os.path.basename(self.data_file_path))
-        self.train_data_path = os.path.join(os.path.dirname(self.data_file_path), 'split',
-                                            'TRAIN_' + os.path.basename(self.data_file_path))
-        self.test_data_path = os.path.join(os.path.dirname(self.data_file_path), 'split',
-                                           'TEST_' + os.path.basename(self.data_file_path))
+        self.data_folder = data_folder
 
     def __call__(self):
+        if not os.path.exists(self.data_folder):
+            os.mkdir(self.data_folder)
+        self.data_file_path = os.path.join(self.data_folder, 'SYNTHETIC_DATA_' +
+                                           str(datetime.now()).replace(':', '_').replace(' ', '_')[:19] + '.csv')
+        self.val_file_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',
+                                          'VAL_' + os.path.basename(self.data_file_path))
+        self.train_data_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',
+                                            'TRAIN_' + os.path.basename(self.data_file_path))
+        self.test_data_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',
+                                           'TEST_' + os.path.basename(self.data_file_path))
+
         np.random.seed = DataGenerator.RANDOM_STATE
         coeffs = self.generate_coeffs()
         bias = np.random.uniform(low=-1, high=1)
@@ -53,7 +58,7 @@ class DataGenerator:
         y_val = scaler.fit_transform(y_val.reshape(-1, 1))
 
         # Adding Gaussian noise to result
-        epsy = np.random.normal(loc=0.0, scale=0.2, size=y_val.shape)
+        epsy = np.random.normal(loc=0.0, scale=0.3, size=y_val.shape)
         y_val = y_val + epsy
 
         theta = statistics.median(Yval)
@@ -65,7 +70,7 @@ class DataGenerator:
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
         # adding Gaussian noise to features
-        epsX = np.random.normal(loc=0.0, scale=0.2, size=X.shape)
+        epsX = np.random.normal(loc=0.0, scale=0.3, size=X.shape)
         X = X + epsX
 
         Y = np.array(Y)
@@ -76,6 +81,8 @@ class DataGenerator:
         print(data.shape)
 
         np.savetxt(fname=self.data_file_path, X=data, comments='', delimiter=',')
+        print('Splitting dataset...')
+        split_dataset(file_path=os.path.abspath(self.data_file_path))  # Does not save if file is present
         return os.path.abspath(self.data_file_path)
 
     def generate_datapoint(self, coeffs, bias):

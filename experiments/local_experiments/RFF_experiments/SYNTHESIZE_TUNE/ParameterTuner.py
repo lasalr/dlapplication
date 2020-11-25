@@ -16,7 +16,7 @@ class ParameterTuner:
     RANDOM_STATE = 123
 
     def __init__(self, C_list: list, rff_gamma_list: list, n_components_list: list, n_jobs: int, dataset_name,
-                 data_file_path, results_folder_path, tune_data_fraction, dim, data_label_col, score_method='roc_auc'):
+                 val_file_path, results_folder_path, tune_data_fraction, dim, data_label_col, score_method='roc_auc'):
         self.C_list = C_list
         self.rff_gamma_list = rff_gamma_list
         self.n_components_list = n_components_list
@@ -27,9 +27,7 @@ class ParameterTuner:
                                'rff__random_state': [ParameterTuner.RANDOM_STATE],
                                'rff__n_components': self.n_components_list}
         self.results_folder_path = results_folder_path
-        self.data_file_path = data_file_path
-        self.val_file_path = os.path.join(os.path.dirname(self.data_file_path), 'split', 'VAL_' +
-                                          os.path.basename(self.data_file_path))
+        self.val_file_path = val_file_path
         self.dataset_name = dataset_name
         self.tune_data_fraction = tune_data_fraction
         self.dim = dim
@@ -38,9 +36,6 @@ class ParameterTuner:
     def __call__(self):
         # Tune parameters
         tune_start_time = datetime.now()
-
-        print('Splitting dataset...')
-        split_dataset(file_path=self.data_file_path)  # Does not save if file is present
         X, y = load_data(path=self.val_file_path, label_col=self.data_label_col, d=self.dim)
 
         # Taking fraction of data for tuning

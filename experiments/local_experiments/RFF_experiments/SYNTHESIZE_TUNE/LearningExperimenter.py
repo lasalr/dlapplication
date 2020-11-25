@@ -22,12 +22,10 @@ class LearningExperimenter:
     RANDOM_STATE = 123
 
     def __init__(self, rff_sampler_gamma, reg_param, train_data_path, test_data_path, dim, data_label_col, dataset_name,
-                 results_folder_path, model_type='LinearSVCRFF', test_fraction=0.1):
+                 results_folder_path, n_nodes_list, n_components_list, model_type='LinearSVCRFF', test_fraction=0.1):
 
-        n_comps1 = list(reversed([i for i in range(2, 1100, 50)]))
-        n_comps2 = list(reversed([i for i in range(2, 200, 50)]))
-        self.n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
-        self.n_components_list = n_comps2 + n_comps1
+        self.n_nodes_list = n_nodes_list
+        self.n_components_list = n_components_list
         self.max_node_samples_list = list(reversed([25, 50, 100, 200, 500]))
         self.agg_types_list = ['Radon point', 'Averaging']
         self.test_fraction = test_fraction
@@ -44,7 +42,7 @@ class LearningExperimenter:
     def __call__(self):
 
         # Load full train data to dataframe
-        full_train_data_df = self.data_to_memory(path=self.train_data_path, dim=self.dim, data_label_col=self.data_label_col)
+        full_train_data_df = self.data_to_memory()
 
         # Load test data
         X, y = load_data(path=self.test_data_path, label_col=self.data_label_col, d=self.dim)
@@ -77,14 +75,12 @@ class LearningExperimenter:
             for max_smp in self.max_node_samples_list:
                 # Save to dictionary of models
                 trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c, full_df=full_train_data_df,
-                                                          max_samples=max_smp, print_every=300,
-                                                          gamma=self.rff_sampler_gamma, reg_param=self.reg_param,
-                                                          model_type=self.model_type)
+                                                          max_samples=max_smp, print_every=300)
 
                 for agg_type in self.agg_types_list:
                     details = {}
                     details['MODEL_TYPE'] = self.model_type
-                    details['DATASET_NAME'] = DATASET_NAME
+                    details['DATASET_NAME'] = self.dataset_name
                     details['N_NODES'] = n_nd
                     details['N_COMPONENTS'] = n_c
                     details['MAX_NODE_SAMPLES'] = max_smp
@@ -104,9 +100,11 @@ class LearningExperimenter:
 
                 # Log interim df
                 pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(sub_root_folder, 'interim_results.csv'))
+                print('Logged interim results after completion of experiment {}'.format(exp_indx))
 
         # Log final df
         pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(sub_root_folder, 'final_results.csv'))
+        print('Logged final results')
 
     def get_calc_metrics(self, X_test, y_test, experiment_info_dict, aggregation_type, model):
         # Calculating metrics and storing in dict
