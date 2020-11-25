@@ -17,7 +17,7 @@ DATASET_SIZE = 500_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 0.002
+TUNE_DATA_FRACTION = 0.005
 TEST_DATA_FRACTION = 0.05
 
 if __name__ == '__main__':
@@ -25,9 +25,9 @@ if __name__ == '__main__':
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-4, 6)]
+    C_list = [2 ** x for x in range(-3, 8)]
     n_jobs = 4
-    rff_gamma_list = [2 ** x for x in range(-4, 6)]
+    rff_gamma_list = [2 ** x for x in range(-3, 8)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))

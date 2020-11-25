@@ -49,9 +49,9 @@ class DataGenerator:
 
         X, Y_values = [], []
         for i in range(size):
-            x, y_val = self.generate_datapoint(coeffs, bias)
-            X.append(x)
-            Y_values.append(y_val)
+            x_point, y_point = self.generate_datapoint(coeffs, bias)
+            X.append(x_point)
+            Y_values.append(y_point)
 
         # Scaling y
         scaler = StandardScaler()
@@ -59,8 +59,9 @@ class DataGenerator:
         Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
 
         # Adding Gaussian noise to result
-        epsy = np.random.normal(loc=0.0, scale=0.3, size=Y_values.shape)
-        Y_values = Y_values + epsy
+        eps_y = np.random.normal(loc=0.0, scale=0.2, size=Y_values.shape)
+        # Add multiplicative noise to y
+        Y_values = Y_values * eps_y
 
         theta = statistics.median(Y_values)
         Y = [1 if y_val >= theta else -1 for y_val in Y_values]
@@ -71,8 +72,9 @@ class DataGenerator:
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
         # adding Gaussian noise to features
-        epsX = np.random.normal(loc=0.0, scale=0.3, size=X.shape)
-        X = X + epsX
+        eps_X = np.random.normal(loc=0.0, scale=0.2, size=X.shape)
+        # Add multiplicative noise to X
+        X = X * eps_X
 
         Y = np.array(Y)
         Y_values = np.array(Y_values)
