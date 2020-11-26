@@ -75,4 +75,4 @@ if __name__ == '__main__':
                                                  test_fraction=TEST_DATA_FRACTION, results_folder_path=RESULTS_FOLDER,
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list)
 
-    # learning_experimenter()
+    learning_experimenter()
