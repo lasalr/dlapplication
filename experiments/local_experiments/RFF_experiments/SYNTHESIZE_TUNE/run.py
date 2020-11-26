@@ -7,32 +7,33 @@ from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.DataGenerator
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.ParameterTuner import ParameterTuner
 
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.LearningExperimenter import LearningExperimenter
+from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE import RadonAggregation
 
 RANDOM_STATE = 123
 DATA_FOLDER = './Data/'
 RESULTS_FOLDER = './Results/'
 
 DATASET_NAME = 'SYNTHETIC-AUTO1'
-DATASET_SIZE = 5_000_000
+DATASET_SIZE = 500_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 0.005
-TEST_DATA_FRACTION = 0.05
+TUNE_DATA_FRACTION = 0.05
+TEST_DATA_FRACTION = 0.5
 
 if __name__ == '__main__':
     # C_list = [2 ** x for x in range(-12, 14)]
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-3, 10)]
+    C_list = [2 ** x for x in range(-10, 10)]
     n_jobs = -1
-    rff_gamma_list = [2 ** x for x in range(-3, 10)]
+    rff_gamma_list = [2 ** x for x in range(-10, 10)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.15, 0.15], x_range=[-10, 10], bias_range=[-10, 10])
+                                   xy_noise_scale=[0.1, 0.1], x_range=[-10, 10], bias_range=[-10, 10])
     data_saved_path = data_generator()
 
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -47,14 +48,22 @@ if __name__ == '__main__':
                                  n_jobs=n_jobs, dataset_name=DATASET_NAME, val_file_path=val_data_path,
                                  results_folder_path=RESULTS_FOLDER, tune_data_fraction=TUNE_DATA_FRACTION, dim=DIM,
                                  data_label_col=DATA_LABEL_COL, score_method='roc_auc')
+    gs_model_svc, gs_model_rff_svc = param_tuner()
+    svc_best_params = gs_model_svc.best_params_
+    svc_best_score = gs_model_svc.best_score_
 
-    svc_best_params, svc_rff_best_params = param_tuner()
-    print('Tuned parameters\nsvc_best_params={}\nsvc_rff_best_params={}'.format(svc_best_params, svc_rff_best_params))
+    svc_rff_best_params = gs_model_rff_svc.best_params_
+    svc_rff_best_score = gs_model_rff_svc.best_score_
+
+    print('Tuned parameters\nsvc_best_params={} score={}\nsvc_rff_best_params={} score={}'.format(svc_best_params,
+                                                                                                  svc_best_score,
+                                                                                                  svc_rff_best_params,
+                                                                                                  svc_rff_best_score))
 
     n_comps1 = list(reversed([i for i in range(2, 1100, 500)]))
     # n_comps2 = list(reversed([i for i in range(2, 200, 80)]))
     # n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
-    n_nodes_list =[(x + 3) for x in n_comps1]
+    n_nodes_list = [(x + 3) for x in n_comps1]
     # n_components_list = n_comps2 + n_comps1
     n_components_list = n_comps1
 
@@ -66,4 +75,4 @@ if __name__ == '__main__':
                                                  test_fraction=TEST_DATA_FRACTION, results_folder_path=RESULTS_FOLDER,
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list)
 
-    learning_experimenter()
+    # learning_experimenter()

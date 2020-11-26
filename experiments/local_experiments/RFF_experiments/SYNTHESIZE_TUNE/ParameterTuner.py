@@ -72,4 +72,4 @@ class ParameterTuner:
         write_csv(path=self.results_folder_path, name='param_tune_linearsvc_rff_' + self.dataset_name,
                   start_time=tune_start_time, results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
 
-        return gs_model.best_params_, gs_model_rff.best_params_
+        return gs_model, gs_model_rff

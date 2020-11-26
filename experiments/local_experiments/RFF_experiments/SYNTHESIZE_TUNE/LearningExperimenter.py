@@ -9,6 +9,8 @@ from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
 
+from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE import RadonAggregation
+
 sys.path.append("../../../..")
 sys.path.append("../../../../../dlplatform")
 
@@ -125,6 +127,7 @@ class LearningExperimenter:
             raise TypeError
 
         return aggtr(self.create_vector_param_list(model_dict.values()))
+        # return RadonAggregation.getRadonPointHierarchical(self.create_param_array(model_dict.values()))
 
     def data_to_memory(self):
         """
@@ -253,6 +256,14 @@ class LearningExperimenter:
             wb = np.concatenate((mod.coef_.flatten(), mod.intercept_))
             vp_list.append(VectorParameter(wb))
         return vp_list
+
+    @staticmethod
+    def create_param_array(models):
+        param_list = []
+        for mod in models:
+            wb = np.concatenate((mod.coef_.flatten(), mod.intercept_))
+            param_list.append(wb)
+        return np.array(param_list)
 
     def set_model(self, model):
         # Creating LinearSVC

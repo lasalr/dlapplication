@@ -73,7 +73,7 @@ class DataGenerator:
         # Adding Gaussian noise to result
         eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
         # Add multiplicative noise to y
-        Y_values = Y_values * eps_y
+        Y_values = Y_values * (1 + eps_y)
 
         theta = statistics.median(Y_values)
         Y = [1 if y_val >= theta else -1 for y_val in Y_values]
@@ -86,7 +86,7 @@ class DataGenerator:
         # adding Gaussian noise to features
         eps_X = np.random.normal(loc=0.0, scale=self.xy_noise_scale[0], size=X.shape)
         # Add multiplicative noise to X
-        X = X * eps_X
+        X = X * (1 + eps_X)
 
         Y = np.array(Y)
         Y_values = np.array(Y_values)
