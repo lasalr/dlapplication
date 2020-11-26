@@ -14,12 +14,12 @@ DATA_FOLDER = './Data/'
 RESULTS_FOLDER = './Results/'
 
 DATASET_NAME = 'SYNTHETIC-AUTO1'
-DATASET_SIZE = 500_000
+DATASET_SIZE = 5_000_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 0.05
-TEST_DATA_FRACTION = 0.5
+TUNE_DATA_FRACTION = 0.005
+TEST_DATA_FRACTION = 0.01
 
 if __name__ == '__main__':
     # C_list = [2 ** x for x in range(-12, 14)]
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.02, 0.02], x_range=[-10, 10], bias_range=[-10, 10])
+                                   xy_noise_scale=[0.6, 0.0], x_range=[-10, 10], bias_range=[-10, 10])
     data_saved_path = data_generator()
 
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                                                                                                   svc_rff_best_params,
                                                                                                   svc_rff_best_score))
 
-    n_comps1 = list(reversed([i for i in range(2, 1100, 500)]))
+    n_comps1 = list(reversed([i for i in range(2, 1100, 300)]))
     # n_comps2 = list(reversed([i for i in range(2, 200, 80)]))
     # n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
     n_nodes_list = [(x + 3) for x in n_comps1]
