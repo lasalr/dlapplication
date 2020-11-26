@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.1, 0.1], x_range=[-10, 10], bias_range=[-10, 10])
+                                   xy_noise_scale=[0.02, 0.02], x_range=[-10, 10], bias_range=[-10, 10])
     data_saved_path = data_generator()
 
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
