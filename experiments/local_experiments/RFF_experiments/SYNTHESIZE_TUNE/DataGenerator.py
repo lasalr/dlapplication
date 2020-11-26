@@ -73,9 +73,14 @@ class DataGenerator:
         # Adding Gaussian noise to result
         eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
         # Add multiplicative noise to y
+
+        before_Y_values_shape = Y_values.shape
         Y_values = Y_values * (1 + eps_y)
+        after_Y_values_shape = Y_values.shape
+        assert before_Y_values_shape == after_Y_values_shape
 
         theta = statistics.median(Y_values)
+
         Y = [1 if y_val >= theta else -1 for y_val in Y_values]
         print(np.average(Y))
 
@@ -85,15 +90,18 @@ class DataGenerator:
         X = scaler.fit_transform(X)
         # adding Gaussian noise to features
         eps_X = np.random.normal(loc=0.0, scale=self.xy_noise_scale[0], size=X.shape)
+
+        before_X_shape = X.shape
         # Add multiplicative noise to X
         X = X * (1 + eps_X)
+        after_X_shape = X.shape
+        assert before_X_shape == after_X_shape
 
         Y = np.array(Y)
-        Y_values = np.array(Y_values)
-        print(X.shape, Y.shape, Y_values.shape)
+        print('X.shape={}, Y.shape={}, Y_values.shape={}'.format(X.shape, Y.shape, Y_values.shape))
 
         data = np.hstack((Y.reshape((Y.shape[0], 1)), X))
-        print(data.shape)
+        print('data.shape={}'.format(data.shape))
 
         np.savetxt(fname=self.data_file_path, X=data, comments='', delimiter=',')
         print('Splitting dataset...')

@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.6, 0.0], x_range=[-10, 10], bias_range=[-10, 10])
+                                   xy_noise_scale=[0.1, 0.1], x_range=[-10, 10], bias_range=[-1, 1])
     data_saved_path = data_generator()
 
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -75,4 +75,4 @@ if __name__ == '__main__':
                                                  test_fraction=TEST_DATA_FRACTION, results_folder_path=RESULTS_FOLDER,
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list)
 
-    learning_experimenter()
+    # learning_experimenter()
