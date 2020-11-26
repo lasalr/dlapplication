@@ -73,15 +73,15 @@ class DataGenerator:
         # Adding Gaussian noise to result
         eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
 
+        theta = statistics.median(Y_values)
+
         before_Y_values_shape = Y_values.shape
         # Add multiplicative noise to y
-        # Y_values = Y_values * (1 + eps_y)
+        Y_values = Y_values * (1 + eps_y)
         # Add additive noise to y
-        Y_values = Y_values + eps_y
+        # Y_values = Y_values + eps_y
         after_Y_values_shape = Y_values.shape
         assert before_Y_values_shape == after_Y_values_shape
-
-        theta = statistics.median(Y_values)
 
         Y = [1 if y_val >= theta else -1 for y_val in Y_values]
         print(np.average(Y))
