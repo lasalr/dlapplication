@@ -26,14 +26,14 @@ if __name__ == '__main__':
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-10, 10)]
+    C_list = [2 ** x for x in range(-12, 12)]
     n_jobs = -1
-    rff_gamma_list = [2 ** x for x in range(-10, 10)]
+    rff_gamma_list = [2 ** x for x in range(-12, 12)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.1, 0.1], x_range=[-10, 10], bias_range=[-1, 1])
+                                   xy_noise_scale=[0.3, 0.1], x_range=[-10, 10], bias_range=[-1, 1])
     data_saved_path = data_generator()
 
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
