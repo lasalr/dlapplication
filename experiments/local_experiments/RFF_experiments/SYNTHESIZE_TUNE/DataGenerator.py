@@ -66,9 +66,9 @@ class DataGenerator:
             Y_values.append(y_point)
 
         # Scaling y
-        scaler = StandardScaler()
+        # scaler = StandardScaler()
         Y_values = np.array(Y_values)
-        Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
+        # Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
 
         # Adding Gaussian noise to result
         eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
@@ -85,7 +85,7 @@ class DataGenerator:
 
         Y = [1 if y_val >= theta else -1 for y_val in Y_values]
         print('Average label value, np.average(Y)={}'.format(np.average(Y)))
-
+        assert np.average(Y) < 0.3
         X = np.array(X)
         # Scaling X
         scaler = StandardScaler()
@@ -143,5 +143,6 @@ class DataGenerator:
 
 
 if __name__ == '__main__':
+    np.random.seed = DataGenerator.RANDOM_STATE
     gen = DataGenerator(poly_deg=3, size=500, dim=5, data_folder='./Data/')
     gen()
