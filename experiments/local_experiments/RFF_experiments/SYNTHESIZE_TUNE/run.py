@@ -18,7 +18,7 @@ DATASET_SIZE = 5_0000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 0.005  # Tune using 2500 data points
+TUNE_DATA_FRACTION = 0.5  # Tune using 2500 data points
 TEST_DATA_FRACTION = 0.003  # Test aggregated models using 3000 data points
 
 if __name__ == '__main__':
