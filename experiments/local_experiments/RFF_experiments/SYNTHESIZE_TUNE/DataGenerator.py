@@ -74,7 +74,7 @@ class DataGenerator:
         eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
 
         theta = statistics.median(Y_values)
-
+        print('SD of Y_values={} with Y_values.shape={}'.format(np.std(a=Y_values), Y_values.shape))
         before_Y_values_shape = Y_values.shape
         # Add multiplicative noise to y
         Y_values = Y_values * (1 + eps_y)
@@ -84,7 +84,7 @@ class DataGenerator:
         assert before_Y_values_shape == after_Y_values_shape
 
         Y = [1 if y_val >= theta else -1 for y_val in Y_values]
-        print(np.average(Y))
+        print('Average label value, np.average(Y)={}'.format(np.average(Y)))
 
         X = np.array(X)
         # Scaling X
