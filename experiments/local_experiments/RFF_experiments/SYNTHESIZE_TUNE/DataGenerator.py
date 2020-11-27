@@ -142,7 +142,7 @@ class DataGenerator:
         return np.random.uniform(low=self.min_coef, high=self.max_coef, size=int(n_coeff))
 
 
-if __name__ == '__main__':
-    np.random.seed = DataGenerator.RANDOM_STATE
-    gen = DataGenerator(poly_deg=3, size=500, dim=5, data_folder='./Data/')
-    gen()
+# if __name__ == '__main__':
+    # np.random.seed = DataGenerator.RANDOM_STATE
+    # gen = DataGenerator(poly_deg=3, size=500, dim=5, data_folder='./Data/')
+    # gen()

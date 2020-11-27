@@ -24,11 +24,11 @@ class LearningExperimenter:
     RANDOM_STATE = 123
 
     def __init__(self, rff_sampler_gamma, reg_param, train_data_path, test_data_path, dim, data_label_col, dataset_name,
-                 results_folder_path, n_nodes_list, n_components_list, model_type='LinearSVCRFF', test_fraction=0.1):
+                 results_folder_path, n_nodes_list, n_components_list, max_node_samples_list, model_type='LinearSVCRFF', test_fraction=0.1):
 
         self.n_nodes_list = n_nodes_list
         self.n_components_list = n_components_list
-        self.max_node_samples_list = list(reversed([25, 50, 100, 200, 500]))
+        self.max_node_samples_list = max_node_samples_list
         self.agg_types_list = ['Radon point', 'Averaging']
         self.test_fraction = test_fraction
         self.rff_sampler_gamma = rff_sampler_gamma
