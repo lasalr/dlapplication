@@ -14,11 +14,11 @@ DATA_FOLDER = './Data/'
 RESULTS_FOLDER = './Results/'
 
 DATASET_NAME = 'SYNTHETIC-AUTO1'
-DATASET_SIZE = 50000
+DATASET_SIZE = 10_000_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 1000 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
+TUNE_DATA_FRACTION = 2000 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
 TEST_DATA_FRACTION = 3000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
 
 if __name__ == '__main__':
