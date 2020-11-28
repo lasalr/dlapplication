@@ -39,7 +39,7 @@ if __name__ == '__main__':
     # idx += 1
     # print('Starting tuning experiment {} of {}'.format(idx, len(xy_noises)))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.2, 0.2], x_range=[1, 1.2], bias_range=[-1, 1])
+                                   xy_noise_scale=[0.2, 0.2], x_range=[0.95, 1.5], bias_range=[-1, 1])
     data_saved_path = data_generator()
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
                                  os.path.basename(data_saved_path))
