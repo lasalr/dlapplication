@@ -14,11 +14,11 @@ DATA_FOLDER = './Data/'
 RESULTS_FOLDER = './Results/'
 
 DATASET_NAME = 'SYNTHETIC-AUTO1'
-DATASET_SIZE = 50_000
+DATASET_SIZE = 10_000_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
+TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
 TEST_DATA_FRACTION = 3000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
 
 if __name__ == '__main__':
@@ -26,9 +26,9 @@ if __name__ == '__main__':
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-12, 12, 2)]  # [2 ** x for x in range(-12, 12)]
+    C_list = [2 ** x for x in range(-12, 12)]
     n_jobs = -1
-    rff_gamma_list = [2 ** x for x in range(-12, 12, 2)]  # [2 ** x for x in range(-12, 12)]
+    rff_gamma_list = [2 ** x for x in range(-12, 12)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
@@ -86,4 +86,4 @@ if __name__ == '__main__':
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list,
                                                  max_node_samples_list=max_samples_list)
 
-    # learning_experimenter()
+    learning_experimenter()
