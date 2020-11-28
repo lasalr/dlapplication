@@ -9,6 +9,7 @@ from datetime import datetime
 import numpy as np
 import scipy.special
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
 from experiments.local_experiments.RFF_experiments.data_handling import split_dataset
 
@@ -65,11 +66,21 @@ class DataGenerator:
             X.append(x_point)
             Y_values.append(y_point)
 
-        # Scaling y
-        # scaler = StandardScaler()
-        Y_values = np.array(Y_values)
-        # Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
+        plt.plot(X)
+        plt.savefig('figX1.png')
 
+        # Scaling y
+        scaler = StandardScaler()
+        Y_values = np.array(Y_values)
+        plt.plot(Y_values)
+        plt.savefig('fig1.png')
+        plt.hist(Y_values)
+        plt.savefig('hist1.png')
+        Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
+        plt.plot(Y_values)
+        plt.savefig('fig2.png')
+        plt.hist(Y_values)
+        plt.savefig('hist2.png')
         # Adding Gaussian noise to result
         eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
 
@@ -113,7 +124,7 @@ class DataGenerator:
     def generate_datapoint(self, coeffs, bias):
         # Sample X (vector of DIM dimensions)
         X = np.random.uniform(low=self.x_range[0], high=self.x_range[1], size=self.dim)
-
+        # print(X)
         # Create polynomial combinations e.g. (x1^3, x2^3, x1^2 * x2, ...)
         #     (x1^2, x2^2, x3^2, x1*x2, ...) ... (...)
         poly = [itertools.combinations_with_replacement(X, r) for r in
@@ -122,14 +133,16 @@ class DataGenerator:
         # Multiplying each tuple from above
         multiplied_polys_temp = [[functools.reduce(operator.mul, list(tup), 1) for tup in p] for
                                  p in poly]
+        # print('multiplied_polys_temp={}'.format(multiplied_polys_temp))
 
         # Multiplying final values with coefficients
         multiplied_poly = [functools.reduce(operator.mul, val_list + [c], 1) for c, val_list in
                            zip(coeffs, multiplied_polys_temp)]
 
+        # print('multiplied_poly={}'.format(multiplied_poly))
         # Calculating result
         y_val = bias + sum(multiplied_poly)
-
+        # print('y_val={}'.format(y_val))
         # Return row of data
         return X, y_val
 
