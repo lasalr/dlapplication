@@ -124,7 +124,7 @@ class DataGenerator:
         elif self.method == 'sklearn':
             X, Y = make_classification(n_samples=self.size, n_features=self.dim, n_informative=self.dim, n_redundant=0,
                                        n_classes=2, n_clusters_per_class=10, flip_y=self.xy_noise_scale[1], class_sep=1,
-                                       scale=100, random_state=DataGenerator.RANDOM_STATE, hypercube=False)
+                                       scale=10, random_state=DataGenerator.RANDOM_STATE, hypercube=False)
             # Reduce class_sep to make harder
             # flip_y is label noise
             # hypercube If True, the clusters are put on the vertices of a hypercube. If False, the clusters are put on

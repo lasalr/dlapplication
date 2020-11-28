@@ -13,7 +13,7 @@ RANDOM_STATE = 123
 DATA_FOLDER = './Data/'
 RESULTS_FOLDER = './Results/'
 
-DATASET_NAME = 'SYNTHETIC-AUTO1'
+DATASET_NAME = 'SYNTHETIC-AUTO2'
 DATASET_SIZE = 10_000_000
 DIM = 5
 POLY_DEG = 3
@@ -26,10 +26,10 @@ if __name__ == '__main__':
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-12, 12)]
+    C_list = [2 ** x for x in range(-14, 14)]
     n_jobs = -1
-    rff_gamma_list = [2 ** x for x in range(-12, 12)]
-    n_components_list = [x for x in range(2, 1100, 100)]
+    rff_gamma_list = [2 ** x for x in range(-14, 14)]
+    n_components_list = [x for x in range(2, 1600, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
     # xy_noises = [[0.1, 0.01], [0.1, 0.001], [0.1, 0.0001], [0.1, 0.00001], [0.05, 0], [0.1, 0], [0.2, 0], [0.3, 0], [0.4, 0]]
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     #                                xy_noise_scale=[0.025, 0.025], x_range=[0.95, 1.5], bias_range=[-1, 1], method='custom')
 
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[None, 0.05], method='sklearn')
+                                   xy_noise_scale=[None, 0.1], method='sklearn')
 
     data_saved_path = data_generator()
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -68,7 +68,17 @@ if __name__ == '__main__':
                                                                                                   svc_best_score,
                                                                                                   svc_rff_best_params,
                                                                                                   svc_rff_best_score))
-
+    if svc_rff_best_score - svc_best_score < 0.05:
+        print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
+        print('Deleting data file {}'.format(data_saved_path))
+        os.remove(path=data_saved_path)
+        print('Deleting val data file {}'.format(val_data_path))
+        os.remove(path=val_data_path)
+        print('Deleting train data file {}'.format(train_data_path))
+        os.remove(path=train_data_path)
+        print('Deleting test data file {}'.format(test_data_path))
+        os.remove(path=test_data_path)
+        sys.exit()
     n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
     n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
