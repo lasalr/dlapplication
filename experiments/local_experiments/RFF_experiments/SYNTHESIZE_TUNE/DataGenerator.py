@@ -23,12 +23,16 @@ class DataGenerator:
     """
     RANDOM_STATE = 123
 
-    def __init__(self, poly_deg, size, dim, data_folder, xy_noise_scale=None, x_range=None, bias_range=None):
+    def __init__(self, poly_deg, size, dim, data_folder, xy_noise_scale=None, x_range=None, bias_range=None, min_max_coeff=None):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
-        self.min_coef = -10
-        self.max_coef = 10
+        if min_max_coeff is None:
+            self.min_coef = -10
+            self.max_coef = 10
+        else:
+            self.min_coef = min_max_coeff[0]
+            self.max_coef = min_max_coeff[1]
         self.data_folder = data_folder
         if xy_noise_scale is None:
             self.xy_noise_scale = [0.1, 0.1]
