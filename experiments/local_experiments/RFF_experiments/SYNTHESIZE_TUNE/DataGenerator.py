@@ -8,6 +8,7 @@ from datetime import datetime
 
 import numpy as np
 import scipy.special
+from sklearn.datasets import make_classification
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
@@ -23,10 +24,11 @@ class DataGenerator:
     """
     RANDOM_STATE = 123
 
-    def __init__(self, poly_deg, size, dim, data_folder, xy_noise_scale=None, x_range=None, bias_range=None, min_max_coeff=None):
+    def __init__(self, poly_deg, size, dim, data_folder, method='custom', xy_noise_scale=None, x_range=None, bias_range=None, min_max_coeff=None):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
+        self.method = method
         if min_max_coeff is None:
             self.min_coef = -10
             self.max_coef = 10
@@ -60,62 +62,75 @@ class DataGenerator:
                                            'TEST_' + os.path.basename(self.data_file_path))
 
         np.random.seed = DataGenerator.RANDOM_STATE
-        coeffs = self.generate_coeffs()
-        bias = np.random.uniform(low=self.bias_range[0], high=self.bias_range[1])
-        size = self.size
+        print("Generating data using method={}".format(self.method))
+        if self.method == 'custom':
+            coeffs = self.generate_coeffs()
+            bias = np.random.uniform(low=self.bias_range[0], high=self.bias_range[1])
+            size = self.size
 
-        X, Y_values = [], []
-        for i in range(size):
-            x_point, y_point = self.generate_datapoint(coeffs, bias)
-            X.append(x_point)
-            Y_values.append(y_point)
+            X, Y_values = [], []
+            for i in range(size):
+                x_point, y_point = self.generate_datapoint(coeffs, bias)
+                X.append(x_point)
+                Y_values.append(y_point)
 
-        plt.plot(X)
-        plt.savefig('figX1.png')
+            plt.plot(X)
+            plt.savefig('figX1.png')
 
-        # Scaling y
-        scaler = StandardScaler()
-        Y_values = np.array(Y_values)
-        plt.plot(Y_values)
-        plt.savefig('fig1.png')
-        plt.hist(Y_values)
-        plt.savefig('hist1.png')
-        Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
-        plt.plot(Y_values)
-        plt.savefig('fig2.png')
-        plt.hist(Y_values)
-        plt.savefig('hist2.png')
-        # Adding Gaussian noise to result
-        eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
+            # Scaling y
+            scaler = StandardScaler()
+            Y_values = np.array(Y_values)
+            plt.plot(Y_values)
+            plt.savefig('fig1.png')
+            plt.hist(Y_values)
+            plt.savefig('hist1.png')
+            Y_values = scaler.fit_transform(Y_values.reshape(-1, 1))
+            plt.plot(Y_values)
+            plt.savefig('fig2.png')
+            plt.hist(Y_values)
+            plt.savefig('hist2.png')
+            # Adding Gaussian noise to result
+            eps_y = np.random.normal(loc=0.0, scale=self.xy_noise_scale[1], size=Y_values.shape)
 
-        theta = statistics.median(Y_values)
-        print('SD of Y_values={} with Y_values.shape={}'.format(np.std(a=Y_values), Y_values.shape))
-        before_Y_values_shape = Y_values.shape
-        # Add multiplicative noise to y
-        Y_values = Y_values * (1 + eps_y)
-        # Add additive noise to y
-        # Y_values = Y_values + eps_y
-        after_Y_values_shape = Y_values.shape
-        assert before_Y_values_shape == after_Y_values_shape
+            theta = statistics.median(Y_values)
+            print('SD of Y_values={} with Y_values.shape={}'.format(np.std(a=Y_values), Y_values.shape))
+            before_Y_values_shape = Y_values.shape
+            # Add multiplicative noise to y
+            Y_values = Y_values * (1 + eps_y)
+            # Add additive noise to y
+            # Y_values = Y_values + eps_y
+            after_Y_values_shape = Y_values.shape
+            assert before_Y_values_shape == after_Y_values_shape
 
-        Y = [1 if y_val >= theta else -1 for y_val in Y_values]
-        print('Average label value, np.average(Y)={}'.format(np.average(Y)))
-        assert np.average(Y) < 0.3
-        X = np.array(X)
-        # Scaling X
-        scaler = StandardScaler()
-        X = scaler.fit_transform(X)
-        # adding Gaussian noise to features
-        eps_X = np.random.normal(loc=0.0, scale=self.xy_noise_scale[0], size=X.shape)
+            Y = [1 if y_val >= theta else -1 for y_val in Y_values]
+            print('Average label value, np.average(Y)={}'.format(np.average(Y)))
+            assert np.average(Y) < 0.3
+            X = np.array(X)
+            # Scaling X
+            scaler = StandardScaler()
+            X = scaler.fit_transform(X)
+            # adding Gaussian noise to features
+            eps_X = np.random.normal(loc=0.0, scale=self.xy_noise_scale[0], size=X.shape)
 
-        before_X_shape = X.shape
-        # Add multiplicative noise to X
-        X = X * (1 + eps_X)
-        after_X_shape = X.shape
-        assert before_X_shape == after_X_shape
+            before_X_shape = X.shape
+            # Add multiplicative noise to X
+            X = X * (1 + eps_X)
+            after_X_shape = X.shape
+            assert before_X_shape == after_X_shape
 
-        Y = np.array(Y)
-        print('X.shape={}, Y.shape={}, Y_values.shape={}'.format(X.shape, Y.shape, Y_values.shape))
+            Y = np.array(Y)
+            print('X.shape={}, Y.shape={}, Y_values.shape={}'.format(X.shape, Y.shape, Y_values.shape))
+
+        elif self.method == 'sklearn':
+            X, Y = make_classification(n_samples=self.size, n_features=self.dim, n_informative=self.dim, n_redundant=0,
+                                       n_classes=2, n_clusters_per_class=10, flip_y=self.xy_noise_scale[1], class_sep=1,
+                                       scale=100, random_state=DataGenerator.RANDOM_STATE, hypercube=False)
+            # Reduce class_sep to make harder
+            # flip_y is label noise
+            # hypercube If True, the clusters are put on the vertices of a hypercube. If False, the clusters are put on
+            # the vertices of a random polytope.
+        else:
+            raise ValueError('Incorrect method given!')
 
         data = np.hstack((Y.reshape((Y.shape[0], 1)), X))
         print('data.shape={}'.format(data.shape))
@@ -149,6 +164,14 @@ class DataGenerator:
         # print('y_val={}'.format(y_val))
         # Return row of data
         return X, y_val
+
+    def generate_datapoint_gaussian(self, coeffs, bias):
+        # X = np.random.uniform(low=self.x_range[0], high=self.x_range[1], size=self.dim)
+        # y_val = bias + sum(multiplied_poly)
+        # print('y_val={}'.format(y_val))
+        # Return row of data
+        # return X, y_val
+        pass
 
     def generate_coeffs(self):
         # Calculating number of coefficients
