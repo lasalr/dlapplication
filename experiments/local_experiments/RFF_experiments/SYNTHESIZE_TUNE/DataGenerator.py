@@ -24,11 +24,13 @@ class DataGenerator:
     """
     RANDOM_STATE = 123
 
-    def __init__(self, poly_deg, size, dim, data_folder, method='custom', xy_noise_scale=None, x_range=None, bias_range=None, min_max_coeff=None):
+    def __init__(self, poly_deg, size, dim, data_folder, data_name, method='custom', xy_noise_scale=None, x_range=None,
+                 bias_range=None, min_max_coeff=None):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
         self.method = method
+        self.data_name = data_name
         if min_max_coeff is None:
             self.min_coef = -10
             self.max_coef = 10
@@ -52,8 +54,7 @@ class DataGenerator:
     def __call__(self):
         if not os.path.exists(self.data_folder):
             os.mkdir(self.data_folder)
-        self.data_file_path = os.path.join(self.data_folder, 'SYNTHETIC_DATA_' +
-                                           str(datetime.now()).replace(':', '_').replace(' ', '_')[:19] + '.csv')
+        self.data_file_path = os.path.join(self.data_folder, self.data_name + '.csv')
         self.val_file_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',
                                           'VAL_' + os.path.basename(self.data_file_path))
         self.train_data_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',
@@ -124,7 +125,7 @@ class DataGenerator:
         elif self.method == 'sklearn':
             X, Y = make_classification(n_samples=self.size, n_features=self.dim, n_informative=self.dim, n_redundant=0,
                                        n_classes=2, n_clusters_per_class=10, flip_y=self.xy_noise_scale[1], class_sep=1,
-                                       scale=10, random_state=DataGenerator.RANDOM_STATE, hypercube=False)
+                                       scale=1, random_state=DataGenerator.RANDOM_STATE, hypercube=False)
             # Reduce class_sep to make harder
             # flip_y is label noise
             # hypercube If True, the clusters are put on the vertices of a hypercube. If False, the clusters are put on

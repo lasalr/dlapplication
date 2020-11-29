@@ -48,15 +48,11 @@ class LearningExperimenter:
 
         # Load test data
         X, y = load_data(path=self.test_data_path, label_col=self.data_label_col, d=self.dim)
-        _, X_test, _, y_test = train_test_split(X, y, test_size=self.test_fraction, random_state=LearningExperimenter.RANDOM_STATE)
-
-        # Create outer folder for all experiments
-        folder_ts = 'Exp_' + re.sub(r'[\s]', '__', re.sub(r'[\:-]', '_', str(datetime.now())[:19]))
-        sub_root_folder = os.path.join(self.results_folder_path, folder_ts)
-
-        if not os.path.exists(sub_root_folder):
-            print('Creating folder {}'.format(str(sub_root_folder)))
-            os.mkdir(path=sub_root_folder)
+        _, X_test, _, y_test = train_test_split(X, y, test_size=self.test_fraction,
+                                                random_state=LearningExperimenter.RANDOM_STATE)
+        if not os.path.exists(self.results_folder_path):
+            print('Creating folder {}'.format(str(self.results_folder_path)))
+            os.mkdir(path=self.results_folder_path)
 
         all_results_dict = {}
         exp_indx = 0
@@ -101,20 +97,21 @@ class LearningExperimenter:
                     exp_indx += 1
 
                 # Log interim df
-                pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(sub_root_folder, 'interim_results.csv'))
+                pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(self.results_folder_path, 'interim_results.csv'))
                 print('Logged interim results after completion of experiment {}'.format(exp_indx))
 
         # Log final df
-        pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(sub_root_folder, 'final_results.csv'))
+        pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(self.results_folder_path, 'final_results.csv'))
         print('Logged final results')
 
     def get_calc_metrics(self, X_test, y_test, experiment_info_dict, aggregation_type, model):
         # Calculating metrics and storing in dict
-        experiment_info_dict['accuracy'] = model.score(X=X_test, y=y_test)
+        det_dict = experiment_info_dict.copy()
+        det_dict['accuracy'] = model.score(X=X_test, y=y_test)
         y_test_df_score = model.decision_function(X_test)
-        experiment_info_dict['rocauc'] = roc_auc_score(y_true=y_test, y_score=y_test_df_score)
-        experiment_info_dict['aggregator'] = aggregation_type
-        return experiment_info_dict
+        det_dict['rocauc'] = roc_auc_score(y_true=y_test, y_score=y_test_df_score)
+        det_dict['aggregator'] = aggregation_type
+        return det_dict
 
     def aggregate_models_memory(self, model_dict, agg_type):
         # Creating aggregator
@@ -169,7 +166,8 @@ class LearningExperimenter:
 
     def score_model(self, X, y, n_components, model=None, sampler=None, ):
         if isinstance(model, LinearSVC) and (sampler is not None):
-            sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_components, random_state=RANDOM_STATE)
+            sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_components,
+                                 random_state=LearningExperimenter.RANDOM_STATE)
             X_test = sampler.fit_transform(X)
         elif isinstance(model, LinearSVC) and (sampler is None):
             X_test = X
@@ -211,7 +209,7 @@ class LearningExperimenter:
             else:
                 raise ValueError('Incorrect model type given.')
             # Creating LinearSVC model
-            svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
+            svc_model = LinearSVC(C=self.reg_param, loss='hinge', dual=False, max_iter=2000,
                                   random_state=LearningExperimenter.RANDOM_STATE)
             # Training model
             trained_model = self.train_and_get_model(X=train_features, y=train_label, model=svc_model,
@@ -267,7 +265,7 @@ class LearningExperimenter:
 
     def set_model(self, model):
         # Creating LinearSVC
-        svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
+        svc_model = LinearSVC(C=self.reg_param, loss='hinge', dual=False, max_iter=2000,
                               random_state=LearningExperimenter.RANDOM_STATE)
         # Setting parameters
         w = model.get().tolist()

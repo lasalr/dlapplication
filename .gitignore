@@ -35,3 +35,13 @@ experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/Results/
 experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/split/
 
 *.csv
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/fig1.png
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/fig2.png
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/figX1.png
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/hist1.png
+
+experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/hist2.png

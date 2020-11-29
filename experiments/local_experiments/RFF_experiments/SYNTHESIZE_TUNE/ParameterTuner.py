@@ -1,7 +1,7 @@
 import os
 import sys
 from datetime import datetime
-
+import pandas as pd
 from sklearn.kernel_approximation import RBFSampler
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
@@ -10,7 +10,8 @@ from sklearn.svm import LinearSVC
 sys.path.append("../../../..")
 sys.path.append("../../../../../dlplatform")
 
-from experiments.local_experiments.RFF_experiments.data_handling import load_data, split_dataset, write_csv
+from experiments.local_experiments.RFF_experiments.data_handling import load_data
+
 
 class ParameterTuner:
     RANDOM_STATE = 123
@@ -57,8 +58,8 @@ class ParameterTuner:
         print('writing results to file...')
         if not os.path.exists(self.results_folder_path):
             os.mkdir(self.results_folder_path)
-        write_csv(path=self.results_folder_path, name='param_tune_linearsvc_' + self.dataset_name + '_',
-                  start_time=tune_start_time, results=gs_model.cv_results_, sortby_col='rank_test_score')
+        self.write_to_csv(name='linearsvc_' + self.dataset_name + '_', results=gs_model.cv_results_,
+                          sortby_col='rank_test_score')
 
         # Parameter tuning for Linear SVC with RFF
         print('Starting: Parameter tuning for Linear SVC with RFF...')
@@ -69,7 +70,11 @@ class ParameterTuner:
                                     scoring=self.score_method, n_jobs=self.n_jobs)
         gs_model_rff.fit(X_param, y_param)
         print('writing results to file...')
-        write_csv(path=self.results_folder_path, name='param_tune_linearsvc_rff_' + self.dataset_name,
-                  start_time=tune_start_time, results=gs_model_rff.cv_results_, sortby_col='rank_test_score')
+        self.write_to_csv(name='linearsvc_rff_' + self.dataset_name, results=gs_model_rff.cv_results_,
+                          sortby_col='rank_test_score')
 
         return gs_model, gs_model_rff
+
+    def write_to_csv(self, name: str, results: dict, sortby_col: str):
+        out_file = os.path.join(self.results_folder_path, 'Tuning_' + str(name) + '.csv')
+        pd.DataFrame(results).sort_values(sortby_col).to_csv(out_file, index=False)
