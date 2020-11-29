@@ -9,7 +9,6 @@ import sys
 import numpy as np
 import scipy.special
 from sklearn.datasets import make_classification
-from sklearn.datasets import make_spd_matrix
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
@@ -27,7 +26,8 @@ class DataGenerator:
     RANDOM_STATE = 123
 
     def __init__(self, poly_deg, size, dim, data_folder, data_name, method='custom', xy_noise_scale=None, x_range=None,
-                 bias_range=None, min_max_coeff=None, gaussian_means=None, cov_matrix_random_state=RANDOM_STATE):
+                 bias_range=None, min_max_coeff=None, gaussian_means=None, cov_matrix_random_state=RANDOM_STATE,
+                 cov_matrix1=None, cov_matrix2=None):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
@@ -59,7 +59,19 @@ class DataGenerator:
 
         if gaussian_means is None:
             self.gaussian_means = [[5, 4, 7, -5, 0], [5.5, 3.5, 7.2, -5.1, 0.6]]
+        else:
+            self.gaussian_means = gaussian_means
         self.cov_matrix_random_state = cov_matrix_random_state
+
+        if cov_matrix1 is None:
+            self.cov_matrix1 = np.array([[10, 0, 1, 4, 1], [0, -5, 1, 5, 0], [5, 3, 0, 0, 1], [1, 1, 1, 1, 1], [4, 3, -2, 1, 0]])
+        else:
+            self.cov_matrix1 = cov_matrix1
+
+        if cov_matrix2 is None:
+            self.cov_matrix2 = np.array([[8, 1, 2, 3, 4], [1, -3, 2, 8, -1], [4, 2, -3, 5, 3], [1, 2, 2, 2, 1], [1, 7, -3, 2, -3]])
+        else:
+            self.cov_matrix2 = cov_matrix2
 
     def __call__(self):
         if not os.path.exists(self.data_folder):
@@ -186,10 +198,7 @@ class DataGenerator:
     def generate_gaussian_data(self):
         print('Generating Gaussian data')
         # For +1 class
-        # cov_m1 = make_spd_matrix(n_dim=self.dim, random_state=self.cov_matrix_random_state + 1)
-        cov_m1 = np.array([[10, 0, 1, 4, 1], [0, -5, 1, 5, 0], [5, 3, 0, 0, 1], [1, 1, 1, 1, 1], [4, 3, -2, 1, 0]])
-
-
+        cov_m1 = self.cov_matrix1
         X1 = multivariate_normal.rvs(mean=self.gaussian_means[0], cov=cov_m1,
                                      size=int(math.ceil(self.size/2)), random_state=DataGenerator.RANDOM_STATE)
         print('X1.shape={}'.format(X1.shape))
@@ -197,9 +206,9 @@ class DataGenerator:
         print('y1.shape={}'.format(y1.shape))
         data1 = np.hstack((y1, X1))
         np.random.shuffle(data1)
+
         # For -1 class
-        # cov_m2 = make_spd_matrix(n_dim=self.dim, random_state=self.cov_matrix_random_state - 1)
-        cov_m2 = np.array([[8, 1, 2, 3, 4], [1, -3, 2, 8, -1], [4, 2, -3, 5, 3], [1, 2, 2, 2, 1], [1, 7, -3, 2, -3]])
+        cov_m2 = self.cov_matrix2
         X2 = multivariate_normal.rvs(mean=self.gaussian_means[1], cov=cov_m2,
                                      size=int(math.floor(self.size/2)), random_state=DataGenerator.RANDOM_STATE)
         print('X2.shape={}'.format(X2.shape))
