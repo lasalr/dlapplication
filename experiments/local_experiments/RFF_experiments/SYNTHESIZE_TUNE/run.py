@@ -46,8 +46,8 @@ if __name__ == '__main__':
     # idx += 1
     # print('Starting tuning experiment {} of {}'.format(idx, len(xy_noises)))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   data_name=DATASET_NAME, xy_noise_scale=[0.1, 0.05], x_range=[0.95, 1.5],
-                                   bias_range=[-10, 50], method='custom')
+                                   data_name=DATASET_NAME, xy_noise_scale=[0.2, -0.15], x_range=[0.95, 1.5],
+                                   bias_range=[-10, 150], method='custom')
 
     # data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
     #                                xy_noise_scale=[None, 0.05], method='sklearn')
@@ -73,6 +73,18 @@ if __name__ == '__main__':
     print(param_results)
     with open(os.path.join(RESULTS_FOLDER, 'param_results.txt'), 'w') as fw:
         fw.write(param_results)
+
+    if gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05:
+        print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
+        print('Deleting data file {}'.format(data_saved_path))
+        os.remove(path=data_saved_path)
+        print('Deleting val data file {}'.format(val_data_path))
+        os.remove(path=val_data_path)
+        print('Deleting train data file {}'.format(train_data_path))
+        os.remove(path=train_data_path)
+        print('Deleting test data file {}'.format(test_data_path))
+        os.remove(path=test_data_path)
+        sys.exit()
 
     n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
