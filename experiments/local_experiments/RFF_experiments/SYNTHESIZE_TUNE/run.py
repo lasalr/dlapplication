@@ -29,8 +29,6 @@ if __name__ == '__main__':
     if not os.path.exists(os.path.join(RESULTS_FOLDER, 'scripts')):
         os.mkdir(os.path.join(RESULTS_FOLDER, 'scripts'))
 
-    print('__file__:')
-    print(__file__)
     # copy scripts
     shutil.copy(__file__, os.path.join(RESULTS_FOLDER, 'scripts', os.path.basename(__file__)))
     C_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
@@ -45,12 +43,16 @@ if __name__ == '__main__':
     # for xy in xy_noises:
     # idx += 1
     # print('Starting tuning experiment {} of {}'.format(idx, len(xy_noises)))
-    data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   data_name=DATASET_NAME, xy_noise_scale=[0.2, 0.15], x_range=[0.95, 1.5],
-                                   bias_range=[-10, 150], method='custom')
+
+    # data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
+    #                                data_name=DATASET_NAME, xy_noise_scale=[0.2, 0.15], x_range=[0.95, 1.5],
+    #                                bias_range=[-10, 150], method='custom')
 
     # data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
     #                                xy_noise_scale=[None, 0.05], method='sklearn')
+
+    data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
+                                   data_name=DATASET_NAME, method='gaussian')
 
     data_saved_path = data_generator()
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -90,7 +92,7 @@ if __name__ == '__main__':
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
     n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
     n_components_list = n_comps2 + n_comps1
-    max_samples_list = list(reversed([25, 50, 100, 200, 500]))
+    max_samples_list = list(reversed([25, 50, 100, 200, 500, 1000]))
 
     # n_comps1 = list([i for i in range(2, 1100, 200)])
     # n_nodes_list = [(x + 3) for x in n_comps1]

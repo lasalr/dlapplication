@@ -1,17 +1,18 @@
 import functools
 import itertools
+import math
 import operator
 import os
 import shutil
 import statistics
 import sys
-from datetime import datetime
-
 import numpy as np
 import scipy.special
 from sklearn.datasets import make_classification
+from sklearn.datasets import make_spd_matrix
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+from scipy.stats import multivariate_normal
 
 from experiments.local_experiments.RFF_experiments.data_handling import split_dataset
 
@@ -26,12 +27,13 @@ class DataGenerator:
     RANDOM_STATE = 123
 
     def __init__(self, poly_deg, size, dim, data_folder, data_name, method='custom', xy_noise_scale=None, x_range=None,
-                 bias_range=None, min_max_coeff=None):
+                 bias_range=None, min_max_coeff=None, gaussian_means=None, cov_matrix_random_state=RANDOM_STATE):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
         self.method = method
         self.data_name = data_name
+
         if min_max_coeff is None:
             self.min_coef = -10
             self.max_coef = 10
@@ -39,18 +41,25 @@ class DataGenerator:
             self.min_coef = min_max_coeff[0]
             self.max_coef = min_max_coeff[1]
         self.data_folder = data_folder
+
         if xy_noise_scale is None:
             self.xy_noise_scale = [0.1, 0.1]
         else:
             self.xy_noise_scale = xy_noise_scale
+
         if x_range is None:
             self.x_range = [-10, 10]
         else:
             self.x_range = x_range
+
         if bias_range is None:
             self.bias_range = [-1, 1]
         else:
             self.bias_range = bias_range
+
+        if gaussian_means is None:
+            self.gaussian_means = [[5, 4, 7, -5, 0], [5.5, 3.5, 7.2, -5.1, 0.6]]
+        self.cov_matrix_random_state = cov_matrix_random_state
 
     def __call__(self):
         if not os.path.exists(self.data_folder):
@@ -126,6 +135,7 @@ class DataGenerator:
 
             Y = np.array(Y)
             print('X.shape={}, Y.shape={}, Y_values.shape={}'.format(X.shape, Y.shape, Y_values.shape))
+            data = np.hstack((Y.reshape((Y.shape[0], 1)), X))
 
         elif self.method == 'sklearn':
             X, Y = make_classification(n_samples=self.size, n_features=self.dim, n_informative=self.dim, n_redundant=0,
@@ -135,12 +145,12 @@ class DataGenerator:
             # flip_y is label noise
             # hypercube If True, the clusters are put on the vertices of a hypercube. If False, the clusters are put on
             # the vertices of a random polytope.
+            data = np.hstack((Y.reshape((Y.shape[0], 1)), X))
         elif self.method == 'gaussian':
-            raise NotImplementedError
+            data = self.generate_gaussian_data()
         else:
             raise ValueError('Incorrect method given!')
 
-        data = np.hstack((Y.reshape((Y.shape[0], 1)), X))
         print('data.shape={}'.format(data.shape))
 
         np.savetxt(fname=self.data_file_path, X=data, comments='', delimiter=',')
@@ -173,13 +183,33 @@ class DataGenerator:
         # Return row of data
         return X, y_val
 
-    def generate_datapoint_gaussian(self, coeffs, bias):
-        # X = np.random.uniform(low=self.x_range[0], high=self.x_range[1], size=self.dim)
-        # y_val = bias + sum(multiplied_poly)
-        # print('y_val={}'.format(y_val))
-        # Return row of data
-        # return X, y_val
-        pass
+    def generate_gaussian_data(self):
+        print('Generating Gaussian data')
+        # For +1 class
+        # cov_m1 = make_spd_matrix(n_dim=self.dim, random_state=self.cov_matrix_random_state + 1)
+        cov_m1 = np.array([[10, 0, 1, 4, 1], [0, -5, 1, 5, 0], [5, 3, 0, 0, 1], [1, 1, 1, 1, 1], [4, 3, -2, 1, 0]])
+
+
+        X1 = multivariate_normal.rvs(mean=self.gaussian_means[0], cov=cov_m1,
+                                     size=int(math.ceil(self.size/2)), random_state=DataGenerator.RANDOM_STATE)
+        print('X1.shape={}'.format(X1.shape))
+        y1 = np.full(shape=(X1.shape[0], 1), fill_value=1, dtype=np.int16)
+        print('y1.shape={}'.format(y1.shape))
+        data1 = np.hstack((y1, X1))
+        np.random.shuffle(data1)
+        # For -1 class
+        # cov_m2 = make_spd_matrix(n_dim=self.dim, random_state=self.cov_matrix_random_state - 1)
+        cov_m2 = np.array([[8, 1, 2, 3, 4], [1, -3, 2, 8, -1], [4, 2, -3, 5, 3], [1, 2, 2, 2, 1], [1, 7, -3, 2, -3]])
+        X2 = multivariate_normal.rvs(mean=self.gaussian_means[1], cov=cov_m2,
+                                     size=int(math.floor(self.size/2)), random_state=DataGenerator.RANDOM_STATE)
+        print('X2.shape={}'.format(X2.shape))
+        y2 = np.full(shape=(X2.shape[0], 1), fill_value=-1, dtype=np.int16)
+        print('y2.shape={}'.format(y2.shape))
+        data2 = np.hstack((y2, X2))
+        np.random.shuffle(data2)
+        data = np.vstack((data1, data2))
+        print('data.shape={}'.format(data.shape))
+        return data
 
     def generate_coeffs(self):
         # Calculating number of coefficients
