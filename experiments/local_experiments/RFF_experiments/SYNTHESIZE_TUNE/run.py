@@ -46,8 +46,8 @@ if __name__ == '__main__':
     # idx += 1
     # print('Starting tuning experiment {} of {}'.format(idx, len(xy_noises)))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   data_name=DATASET_NAME, xy_noise_scale=[0.05, 0.05], x_range=[0.95, 1.5],
-                                   bias_range=[-10, 10], method='custom')
+                                   data_name=DATASET_NAME, xy_noise_scale=[0.1, 0.05], x_range=[0.95, 1.5],
+                                   bias_range=[-10, 50], method='custom')
 
     # data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
     #                                xy_noise_scale=[None, 0.05], method='sklearn')
