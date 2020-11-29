@@ -76,7 +76,7 @@ class LearningExperimenter:
             for max_smp in self.max_node_samples_list:
                 # Save to dictionary of models
                 trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c, full_df=full_train_data_df,
-                                                          max_samples=max_smp, print_every=int(max_smp/10))
+                                                          max_samples=max_smp, print_every=int(max_smp/5))
 
                 for agg_type in self.agg_types_list:
                     print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
