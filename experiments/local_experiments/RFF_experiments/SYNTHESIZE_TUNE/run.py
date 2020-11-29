@@ -74,16 +74,16 @@ if __name__ == '__main__':
     with open(os.path.join(RESULTS_FOLDER, 'param_results.txt'), 'w') as fw:
         fw.write(param_results)
 
-    # n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
-    # n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
-    # n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
-    # n_components_list = n_comps2 + n_comps1
-    # max_samples_list = list(reversed([25, 50, 100, 200, 500]))
+    n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
+    n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
+    n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
+    n_components_list = n_comps2 + n_comps1
+    max_samples_list = list(reversed([25, 50, 100, 200, 500]))
 
-    n_comps1 = list([i for i in range(2, 1100, 200)])
-    n_nodes_list = [(x + 3) for x in n_comps1]
-    n_components_list = n_comps1
-    max_samples_list = list([25, 50, 100, 200, 500])
+    # n_comps1 = list([i for i in range(2, 1100, 200)])
+    # n_nodes_list = [(x + 3) for x in n_comps1]
+    # n_components_list = n_comps1
+    # max_samples_list = list([25, 50, 100, 200, 500])
 
     learning_experimenter = LearningExperimenter(rff_sampler_gamma=gs_model_rff_svc.best_params_['rff__gamma'],
                                                  reg_param=gs_model_rff_svc.best_params_['svc__C'],

@@ -135,6 +135,8 @@ class DataGenerator:
             # flip_y is label noise
             # hypercube If True, the clusters are put on the vertices of a hypercube. If False, the clusters are put on
             # the vertices of a random polytope.
+        elif self.method == 'gaussian':
+            raise NotImplementedError
         else:
             raise ValueError('Incorrect method given!')
 
