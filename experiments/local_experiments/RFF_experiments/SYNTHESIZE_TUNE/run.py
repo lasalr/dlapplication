@@ -16,12 +16,12 @@ RESULTS_FOLDER = os.path.join('./Results/', 'Exp_' + re.sub(r'[\s]', '__', re.su
 DATA_FOLDER = RESULTS_FOLDER
 
 DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
-DATASET_SIZE = 50_000
+DATASET_SIZE = 10_000_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 100 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
-TEST_DATA_FRACTION = 300 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
+TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
+TEST_DATA_FRACTION = 2000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
 
 if __name__ == '__main__':
     if not os.path.exists(RESULTS_FOLDER):
