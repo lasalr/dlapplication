@@ -53,10 +53,9 @@ def getRadonPoint(S, r):
     rtest_plus = r * 1. / np.linalg.norm(r)  # normiert
     rtest_minus = r_minus * 1. / np.linalg.norm(r_minus)  # normiert
     if np.linalg.norm(rtest_plus + rtest_minus) > EPS:
-        print(
-            "Something went wrong!!! r+ = " + str(r) + " but r- = " + str(-1 * r_minus) + ". They should be the same!")
+        print("Something went wrong!!! r+ = " + str(r) + " but r- = " + str(-1 * r_minus) +
+              ". They should be the same!")
     return r
-
 
 def getRadonPointHierarchical(vectors):
     n, d = vectors.shape

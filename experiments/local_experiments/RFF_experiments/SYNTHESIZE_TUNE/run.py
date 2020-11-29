@@ -1,14 +1,14 @@
 import os
+import shutil
 import sys
 from datetime import datetime
 import re
+
 sys.path.append("../../../..")
 sys.path.append("../../../../../dlplatform")
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.DataGenerator import DataGenerator
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.ParameterTuner import ParameterTuner
-
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.LearningExperimenter import LearningExperimenter
-from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE import RadonAggregation
 
 RANDOM_STATE = 123
 TIME_START = str(datetime.now())[:19]
@@ -20,17 +20,26 @@ DATASET_SIZE = 50_000
 DIM = 5
 POLY_DEG = 3
 DATA_LABEL_COL = 0
-TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
-TEST_DATA_FRACTION = 3000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
+TUNE_DATA_FRACTION = 250 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
+TEST_DATA_FRACTION = 300 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
 
 if __name__ == '__main__':
+    if not os.path.exists(RESULTS_FOLDER):
+        os.mkdir(RESULTS_FOLDER)
+    if not os.path.exists(os.path.join(RESULTS_FOLDER, 'scripts')):
+        os.mkdir(os.path.join(RESULTS_FOLDER, 'scripts'))
+
+    print('__file__:')
+    print(__file__)
+    # copy scripts
+    shutil.copy(__file__, os.path.join(RESULTS_FOLDER, 'scripts', os.path.basename(__file__)))
     # C_list = [2 ** x for x in range(-12, 14)]
     # n_jobs = 4
     # rff_gamma_list = [2 ** x for x in range(-12, 12)]
     # n_components_list = [x for x in range(2, 1100, 100)]
-    C_list = [2 ** x for x in range(-12, 12, 2)]  # [2 ** x for x in range(-12, 12)]
+    C_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
     n_jobs = -1
-    rff_gamma_list = [2 ** x for x in range(-12, 12, 2)]  # [2 ** x for x in range(-12, 12)]
+    rff_gamma_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Generating dataset in dir: {}'.format(DATA_FOLDER))
@@ -41,8 +50,8 @@ if __name__ == '__main__':
     # idx += 1
     # print('Starting tuning experiment {} of {}'.format(idx, len(xy_noises)))
     data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   xy_noise_scale=[0.025, 0.025], x_range=[0.95, 1.5], bias_range=[-1, 1],
-                                   method='custom')
+                                   data_name=DATASET_NAME, xy_noise_scale=[0.025, 0.025], x_range=[0.95, 1.5],
+                                   bias_range=[-1, 1], method='custom')
 
     # data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
     #                                xy_noise_scale=[None, 0.05], method='sklearn')
@@ -61,10 +70,11 @@ if __name__ == '__main__':
                                  results_folder_path=RESULTS_FOLDER, tune_data_fraction=TUNE_DATA_FRACTION, dim=DIM,
                                  data_label_col=DATA_LABEL_COL, score_method='roc_auc')
     gs_model_svc, gs_model_rff_svc = param_tuner()
-    print('Tuned parameters\nsvc_best_params={} score={}\nsvc_rff_best_params={} score={}'.format(gs_model_svc.best_params_,
-                                                                                                  gs_model_svc.best_score_,
-                                                                                                  gs_model_rff_svc.best_params_,
-                                                                                                  gs_model_rff_svc.best_score_))
+    print('Tuned parameters\nsvc_best_params={} score={}\nsvc_rff_best_params={} score={}'.format(
+        gs_model_svc.best_params_,
+        gs_model_svc.best_score_,
+        gs_model_rff_svc.best_params_,
+        gs_model_rff_svc.best_score_))
     n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
     n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
@@ -82,4 +92,4 @@ if __name__ == '__main__':
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list,
                                                  max_node_samples_list=max_samples_list)
 
-    # learning_experimenter()
+    learning_experimenter()

@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import sys
 from datetime import datetime
 import numpy as np
@@ -43,6 +44,9 @@ class LearningExperimenter:
 
     def __call__(self):
 
+        # Copy script to results folder
+        shutil.copy(__file__, os.path.join(self.results_folder_path, 'scripts', os.path.basename(__file__)))
+
         # Load full train data to dataframe
         full_train_data_df = self.data_to_memory()
 
@@ -64,7 +68,6 @@ class LearningExperimenter:
                     total_exp_count += 1
 
         for n_c, n_nd in zip(self.n_components_list, self.n_nodes_list):
-            print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
             # Create RFF sampler
             sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_c, random_state=LearningExperimenter.RANDOM_STATE)
             # Generating RFF features from test data
@@ -73,9 +76,10 @@ class LearningExperimenter:
             for max_smp in self.max_node_samples_list:
                 # Save to dictionary of models
                 trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c, full_df=full_train_data_df,
-                                                          max_samples=max_smp, print_every=300)
+                                                          max_samples=max_smp, print_every=int(max_smp/10))
 
                 for agg_type in self.agg_types_list:
+                    print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
                     details = {}
                     details['MODEL_TYPE'] = self.model_type
                     details['DATASET_NAME'] = self.dataset_name
@@ -209,7 +213,7 @@ class LearningExperimenter:
             else:
                 raise ValueError('Incorrect model type given.')
             # Creating LinearSVC model
-            svc_model = LinearSVC(C=self.reg_param, loss='hinge', dual=False, max_iter=2000,
+            svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
                                   random_state=LearningExperimenter.RANDOM_STATE)
             # Training model
             trained_model = self.train_and_get_model(X=train_features, y=train_label, model=svc_model,
@@ -265,7 +269,7 @@ class LearningExperimenter:
 
     def set_model(self, model):
         # Creating LinearSVC
-        svc_model = LinearSVC(C=self.reg_param, loss='hinge', dual=False, max_iter=2000,
+        svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
                               random_state=LearningExperimenter.RANDOM_STATE)
         # Setting parameters
         w = model.get().tolist()

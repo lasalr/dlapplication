@@ -2,6 +2,7 @@ import functools
 import itertools
 import operator
 import os
+import shutil
 import statistics
 import sys
 from datetime import datetime
@@ -54,6 +55,10 @@ class DataGenerator:
     def __call__(self):
         if not os.path.exists(self.data_folder):
             os.mkdir(self.data_folder)
+
+        # Copy script to results folder
+        shutil.copy(__file__, os.path.join(self.data_folder, 'scripts', os.path.basename(__file__)))
+
         self.data_file_path = os.path.join(self.data_folder, self.data_name + '.csv')
         self.val_file_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',
                                           'VAL_' + os.path.basename(self.data_file_path))

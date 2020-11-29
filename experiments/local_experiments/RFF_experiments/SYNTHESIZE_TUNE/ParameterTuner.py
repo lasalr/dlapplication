@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 from datetime import datetime
 import pandas as pd
@@ -35,6 +36,9 @@ class ParameterTuner:
         self.data_label_col = data_label_col
 
     def __call__(self):
+        # Copy script to results folder
+        shutil.copy(__file__, os.path.join(self.results_folder_path, 'scripts', os.path.basename(__file__)))
+
         # Tune parameters
         tune_start_time = datetime.now()
         X, y = load_data(path=self.val_file_path, label_col=self.data_label_col, d=self.dim)
