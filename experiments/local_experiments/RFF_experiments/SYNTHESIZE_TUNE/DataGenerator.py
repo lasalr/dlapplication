@@ -25,9 +25,9 @@ class DataGenerator:
     """
     RANDOM_STATE = 123
 
-    def __init__(self, poly_deg, size, dim, data_folder, data_name, method='custom', xy_noise_scale=None, x_range=None,
-                 bias_range=None, min_max_coeff=None, gaussian_means=None, cov_matrix_random_state=RANDOM_STATE,
-                 cov_matrix1=None, cov_matrix2=None):
+    def __init__(self, size, dim, data_folder, data_name, results_folder, poly_deg=None, method='custom', xy_noise_scale=None,
+                 x_range=None, bias_range=None, min_max_coeff=None, gaussian_means=None,
+                 cov_matrix_random_state=RANDOM_STATE, cov_matrix1=None, cov_matrix2=None):
         self.dim = dim
         self.poly_deg = poly_deg
         self.size = size
@@ -41,6 +41,7 @@ class DataGenerator:
             self.min_coef = min_max_coeff[0]
             self.max_coef = min_max_coeff[1]
         self.data_folder = data_folder
+        self.results_folder = results_folder
 
         if xy_noise_scale is None:
             self.xy_noise_scale = [0.1, 0.1]
@@ -74,11 +75,11 @@ class DataGenerator:
             self.cov_matrix2 = cov_matrix2
 
     def __call__(self):
-        if not os.path.exists(self.data_folder):
-            os.mkdir(self.data_folder)
+        if not os.path.exists(self.results_folder):
+            os.mkdir(self.results_folder)
 
         # Copy script to results folder
-        shutil.copy(__file__, os.path.join(self.data_folder, 'scripts', os.path.basename(__file__)))
+        shutil.copy(__file__, os.path.join(self.results_folder, 'scripts', os.path.basename(__file__)))
 
         self.data_file_path = os.path.join(self.data_folder, self.data_name + '.csv')
         self.val_file_path = os.path.join(self.data_folder, os.path.dirname(self.data_file_path), 'split',

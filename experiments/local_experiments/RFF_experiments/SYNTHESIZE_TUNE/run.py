@@ -13,12 +13,13 @@ from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.LearningExper
 RANDOM_STATE = 123
 TIME_START = str(datetime.now())[:19]
 RESULTS_FOLDER = os.path.join('./Results/', 'Exp_' + re.sub(r'[\s]', '__', re.sub(r'[\:-]', '_', TIME_START)))
-DATA_FOLDER = RESULTS_FOLDER
+DATA_FOLDER = '~/nx11/resProj/dlapplication/data/HIGGS'
 
-DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
-DATASET_SIZE = 10_000_000
-DIM = 5
-POLY_DEG = 3
+# DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
+DATASET_NAME = 'HIGGS'
+DATASET_SIZE = 11_000_000
+DIM = 28
+# POLY_DEG = 3
 DATA_LABEL_COL = 0
 TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
 TEST_DATA_FRACTION = 2000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     rff_gamma_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
-    print('Generating dataset in dir: {}'.format(DATA_FOLDER))
+    print('Running data generator in dir: {}'.format(DATA_FOLDER))
     # xy_noises = [[0.1, 0.01], [0.1, 0.001], [0.1, 0.0001], [0.1, 0.00001], [0.05, 0], [0.1, 0], [0.2, 0], [0.3, 0], [0.4, 0]]
     # xy_noises = [[0.4, 0.0]]
     # idx = 0
@@ -51,8 +52,8 @@ if __name__ == '__main__':
     # data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
     #                                xy_noise_scale=[None, 0.05], method='sklearn')
 
-    data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   data_name=DATASET_NAME, method='gaussian')
+    data_generator = DataGenerator(size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
+                                   data_name=DATASET_NAME, results_folder=RESULTS_FOLDER, method='existing')
 
     data_saved_path = data_generator()
     val_data_path = os.path.join(os.path.dirname(data_saved_path), 'split', 'VAL_' +
@@ -92,7 +93,7 @@ if __name__ == '__main__':
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
     n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
     n_components_list = n_comps2 + n_comps1
-    max_samples_list = list(reversed([1000, 1250, 1500, 2000, 2500, 3000, 4000, 6000]))
+    max_samples_list = list(reversed([25, 50, 100, 200, 500, 1000, 1250, 1500, 2000, 2500, 3000, 4000, 6000]))
 
     # n_comps1 = list([i for i in range(2, 1100, 200)])
     # n_nodes_list = [(x + 3) for x in n_comps1]
