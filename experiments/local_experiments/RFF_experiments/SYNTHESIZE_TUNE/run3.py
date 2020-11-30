@@ -13,7 +13,7 @@ from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.LearningExper
 RANDOM_STATE = 123
 TIME_START = str(datetime.now())[:19]
 RESULTS_FOLDER = os.path.join('./Results/', 'Exp_' + re.sub(r'[\s]', '__', re.sub(r'[\:-]', '_', TIME_START)))
-DATA_FOLDER = '~/nx11/resProj/dlapplication/data/HEPMASS'
+DATA_FOLDER = '/projects/nx11/resProj/dlapplication/data/HEPMASS'
 
 # DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
 DATASET_NAME = 'HEPMASS'
