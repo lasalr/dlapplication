@@ -89,8 +89,15 @@ class DataGenerator:
                                            'TEST_' + os.path.basename(self.data_file_path))
 
         np.random.seed = DataGenerator.RANDOM_STATE
-        print("Generating data using method={}".format(self.method))
-        if self.method == 'custom':
+        print("Data generator using method={}".format(self.method))
+
+        if self.method == 'existing':
+            print('Using existing dataset at path={}'.format(self.data_file_path))
+            print('Splitting dataset...')
+            split_dataset(file_path=os.path.abspath(self.data_file_path))  # Does not save if file is present
+            return os.path.abspath(self.data_file_path)
+
+        elif self.method == 'custom':
             coeffs = self.generate_coeffs()
             bias = np.random.uniform(low=self.bias_range[0], high=self.bias_range[1])
             size = self.size
