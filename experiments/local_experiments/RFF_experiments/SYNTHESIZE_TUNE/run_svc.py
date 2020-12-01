@@ -93,11 +93,10 @@ if __name__ == '__main__':
             os.remove(path=test_data_path)
             sys.exit()
 
-    n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
-    n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
-    n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
-    n_components_list = n_comps2 + n_comps1
-    max_samples_list = list(reversed([25, 50, 100, 200, 500, 1000, 1250, 1500, 2000, 2500, 3000, 4000, 6000]))
+    n_comps2 = list(reversed([i for i in range(2, 160, 70)]))
+    n_nodes_list = [(x + 3) ** 2 for x in n_comps2]
+    n_components_list = None
+    max_samples_list = list(reversed([25, 6000]))
 
     # n_comps1 = list([i for i in range(2, 1100, 200)])
     # n_nodes_list = [(x + 3) for x in n_comps1]

@@ -96,7 +96,7 @@ if __name__ == '__main__':
     n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
     n_nodes_list = [(x + 3) ** 2 for x in n_comps2] + [(x + 3) for x in n_comps1]
-    n_components_list = n_comps2 + n_comps1
+    n_components_list = None
     max_samples_list = list(reversed([25, 50, 100, 200, 500, 1000, 1250, 1500, 2000, 2500, 3000, 4000, 6000]))
 
     # n_comps1 = list([i for i in range(2, 1100, 200)])
@@ -104,13 +104,12 @@ if __name__ == '__main__':
     # n_components_list = n_comps1
     # max_samples_list = list([25, 50, 100, 200, 500])
 
-    learning_experimenter = LearningExperimenter(rff_sampler_gamma=gs_model_rff_svc.best_params_['rff__gamma'],
-                                                 reg_param=gs_model_rff_svc.best_params_['svc__C'],
+    learning_experimenter = LearningExperimenter(rff_sampler_gamma=None,
+                                                 reg_param=gs_model_svc.best_params_['svc__C'],
                                                  train_data_path=train_data_path, test_data_path=test_data_path,
                                                  dim=DIM, data_label_col=DATA_LABEL_COL, dataset_name=DATASET_NAME,
-                                                 model_type='LinearSVCRFF',
+                                                 model_type='LinearSVC',
                                                  test_fraction=TEST_DATA_FRACTION, results_folder_path=RESULTS_FOLDER,
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list,
                                                  max_node_samples_list=max_samples_list)
-
     learning_experimenter()
