@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # max_samples_list = list([25, 50, 100, 200, 500])
 
     learning_experimenter = LearningExperimenter(rff_sampler_gamma=None,
-                                                 reg_param=gs_model_svc.best_params_['svc__C'],
+                                                 reg_param=gs_model_svc.best_params_['C'],
                                                  train_data_path=train_data_path, test_data_path=test_data_path,
                                                  dim=DIM, data_label_col=DATA_LABEL_COL, dataset_name=DATASET_NAME,
                                                  model_type='LinearSVC',
