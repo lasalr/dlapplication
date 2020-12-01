@@ -3,7 +3,6 @@ import shutil
 import sys
 from datetime import datetime
 import re
-import numpy as np
 from sklearn.datasets import make_spd_matrix
 
 sys.path.append("../../../..")
@@ -20,10 +19,11 @@ DATA_FOLDER = RESULTS_FOLDER
 DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
 DATASET_SIZE = 10_000_000
 DIM = 5
-POLY_DEG = 3
+# POLY_DEG = 3
 DATA_LABEL_COL = 0
 TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
 TEST_DATA_FRACTION = 2000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
+CHECK_METRIC = False
 
 if __name__ == '__main__':
     if not os.path.exists(RESULTS_FOLDER):
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     rff_gamma_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
-    print('Generating dataset in dir: {}'.format(DATA_FOLDER))
+    print('Running data generator in dir: {}'.format(DATA_FOLDER))
     # xy_noises = [[0.1, 0.01], [0.1, 0.001], [0.1, 0.0001], [0.1, 0.00001], [0.05, 0], [0.1, 0], [0.2, 0], [0.3, 0], [0.4, 0]]
     # xy_noises = [[0.4, 0.0]]
     # idx = 0
@@ -56,8 +56,8 @@ if __name__ == '__main__':
     cov2 = make_spd_matrix(n_dim=DIM, random_state=323 - 1)
     print('cov1={}'.format(cov1))
     print('cov2={}'.format(cov2))
-    data_generator = DataGenerator(poly_deg=POLY_DEG, size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
-                                   data_name=DATASET_NAME, method='gaussian',
+    data_generator = DataGenerator(size=DATASET_SIZE, dim=DIM, data_folder=DATA_FOLDER,
+                                   data_name=DATASET_NAME, method='gaussian', results_folder=RESULTS_FOLDER,
                                    gaussian_means=[[5, 4, 7, -5, 0], [5.5, 3.5, 7.2, -5.1, 0.6]],
                                    cov_matrix1=cov1,
                                    cov_matrix2=cov2)
@@ -84,17 +84,21 @@ if __name__ == '__main__':
     with open(os.path.join(RESULTS_FOLDER, 'param_results.txt'), 'w') as fw:
         fw.write(param_results)
 
-    if gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05:
-        print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
-        print('Deleting data file {}'.format(data_saved_path))
-        os.remove(path=data_saved_path)
-        print('Deleting val data file {}'.format(val_data_path))
-        os.remove(path=val_data_path)
-        print('Deleting train data file {}'.format(train_data_path))
-        os.remove(path=train_data_path)
-        print('Deleting test data file {}'.format(test_data_path))
-        os.remove(path=test_data_path)
-        sys.exit()
+    if (gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05):
+        if not CHECK_METRIC:
+            print(
+                'svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05 but continuing with experiment')
+        else:
+            print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
+            print('Deleting data file {}'.format(data_saved_path))
+            os.remove(path=data_saved_path)
+            print('Deleting val data file {}'.format(val_data_path))
+            os.remove(path=val_data_path)
+            print('Deleting train data file {}'.format(train_data_path))
+            os.remove(path=train_data_path)
+            print('Deleting test data file {}'.format(test_data_path))
+            os.remove(path=test_data_path)
+            sys.exit()
 
     n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
