@@ -67,42 +67,68 @@ class LearningExperimenter:
                 for a in self.agg_types_list:
                     total_exp_count += 1
 
-        for n_c, n_nd in zip(self.n_components_list, self.n_nodes_list):
-            # Create RFF sampler
-            sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_c, random_state=LearningExperimenter.RANDOM_STATE)
-            # Generating RFF features from test data
-            X_test_sampled = sampler.fit_transform(X_test)
+        if self.model_type == 'LinearSVCRFF':
+            for n_c, n_nd in zip(self.n_components_list, self.n_nodes_list):
+                # Create RFF sampler
+                sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_c,
+                                     random_state=LearningExperimenter.RANDOM_STATE)
+                # Generating RFF features from test data
+                X_test_sampled = sampler.fit_transform(X_test)
 
-            for max_smp in self.max_node_samples_list:
-                # Save to dictionary of models
-                trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c, full_df=full_train_data_df,
-                                                          max_samples=max_smp, print_every=int(max_smp/5))
+                for max_smp in self.max_node_samples_list:
+                    # Save to dictionary of models
+                    trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c, full_df=full_train_data_df,
+                                                              max_samples=max_smp, print_every=int(max_smp/5))
 
-                for agg_type in self.agg_types_list:
-                    print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
-                    details = {}
-                    details['MODEL_TYPE'] = self.model_type
-                    details['DATASET_NAME'] = self.dataset_name
-                    details['N_NODES'] = n_nd
-                    details['N_COMPONENTS'] = n_c
-                    details['MAX_NODE_SAMPLES'] = max_smp
+                    for agg_type in self.agg_types_list:
+                        print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
+                        details = {}
+                        details['MODEL_TYPE'] = self.model_type
+                        details['DATASET_NAME'] = self.dataset_name
+                        details['N_NODES'] = n_nd
+                        details['N_COMPONENTS'] = n_c
+                        details['MAX_NODE_SAMPLES'] = max_smp
 
-                    agg_model = self.aggregate_models_memory(model_dict=trained_models, agg_type=agg_type)
-                    svc_model = self.set_model(agg_model)
+                        agg_model = self.aggregate_models_memory(model_dict=trained_models, agg_type=agg_type)
+                        svc_model = self.set_model(agg_model)
 
-                    if self.model_type == 'LinearSVCRFF':
-                        all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test_sampled, y_test=y_test,
-                                                                           experiment_info_dict=details,
-                                                                           aggregation_type=agg_type, model=svc_model)
-                    elif self.model_type == 'LinearSVC':
+                        if self.model_type == 'LinearSVCRFF':
+                            all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test_sampled, y_test=y_test,
+                                                                               experiment_info_dict=details,
+                                                                               aggregation_type=agg_type,
+                                                                               model=svc_model)
+                        exp_indx += 1
+                    # Log interim df
+                    pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(self.results_folder_path, 'interim_results.csv'))
+                    print('Logged interim results after completion of experiment {}'.format(exp_indx))
+
+        elif self.model_type == 'LinearSVC':
+            for n_nd in self.n_nodes_list:
+                for max_smp in self.max_node_samples_list:
+                    # Save to dictionary of models
+                    trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=None,
+                                                              full_df=full_train_data_df,
+                                                              max_samples=max_smp, print_every=int(max_smp / 5))
+                    for agg_type in self.agg_types_list:
+                        print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
+                        details = {}
+                        details['MODEL_TYPE'] = self.model_type
+                        details['DATASET_NAME'] = self.dataset_name
+                        details['N_NODES'] = n_nd
+                        details['N_COMPONENTS'] = '-'
+                        details['MAX_NODE_SAMPLES'] = max_smp
+
+                        agg_model = self.aggregate_models_memory(model_dict=trained_models, agg_type=agg_type)
+                        svc_model = self.set_model(agg_model)
                         all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test, y_test=y_test,
                                                                            experiment_info_dict=details,
-                                                                           aggregation_type=agg_type, model=svc_model)
-                    exp_indx += 1
-
-                # Log interim df
-                pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(self.results_folder_path, 'interim_results.csv'))
-                print('Logged interim results after completion of experiment {}'.format(exp_indx))
+                                                                           aggregation_type=agg_type,
+                                                                           model=svc_model)
+                        exp_indx += 1
+                    # Log interim df
+                    pd.DataFrame(all_results_dict).transpose().to_csv(
+                        os.path.join(self.results_folder_path, 'interim_results.csv'))
+                    print('Logged interim results after completion of experiment {}'.format(exp_indx))
 
         # Log final df
         pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(self.results_folder_path, 'final_results.csv'))
