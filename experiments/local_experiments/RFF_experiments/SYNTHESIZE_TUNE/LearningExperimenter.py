@@ -62,10 +62,16 @@ class LearningExperimenter:
         exp_indx = 0
 
         total_exp_count = 0
-        for c, n in zip(self.n_components_list, self.n_nodes_list):
-            for m in self.max_node_samples_list:
-                for a in self.agg_types_list:
-                    total_exp_count += 1
+        if self.model_type == 'LinearSVCRFF':
+            for c, n in zip(self.n_components_list, self.n_nodes_list):
+                for m in self.max_node_samples_list:
+                    for a in self.agg_types_list:
+                        total_exp_count += 1
+        elif self.model_type == 'LinearSVC':
+            for n in self.n_nodes_list:
+                for m in self.max_node_samples_list:
+                    for a in self.agg_types_list:
+                        total_exp_count += 1
 
         if self.model_type == 'LinearSVCRFF':
             for n_c, n_nd in zip(self.n_components_list, self.n_nodes_list):
