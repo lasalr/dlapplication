@@ -167,7 +167,8 @@ class LearningExperimenter:
         Loads entire dataset to memory
         """
         header_names = ['f' + str(x) if x != self.data_label_col else 'label' for x in range(self.dim + 1)]
-        full_df = pd.read_csv(filepath_or_buffer=self.train_data_path, names=header_names)
+        full_df = pd.read_csv(filepath_or_buffer=self.train_data_path, names=header_names,
+                              dtype={h: float for h in header_names})
         return full_df
 
     def load_df_round_robin_memory(self, node_id, n_nodes, max_node_samples, df_large):
