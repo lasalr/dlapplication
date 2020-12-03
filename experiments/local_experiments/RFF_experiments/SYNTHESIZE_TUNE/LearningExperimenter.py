@@ -21,11 +21,11 @@ from DLplatform.aggregating import RadonPoint, Average
 
 
 class LearningExperimenter:
-
     RANDOM_STATE = 123
 
     def __init__(self, rff_sampler_gamma, reg_param, train_data_path, test_data_path, dim, data_label_col, dataset_name,
-                 results_folder_path, n_nodes_list, n_components_list, max_node_samples_list, model_type='LinearSVCRFF', test_fraction=0.1):
+                 results_folder_path, n_nodes_list, n_components_list, max_node_samples_list, model_type='LinearSVCRFF',
+                 test_fraction=0.1):
 
         self.n_nodes_list = n_nodes_list
         self.n_components_list = n_components_list
@@ -83,8 +83,9 @@ class LearningExperimenter:
 
                 for max_smp in self.max_node_samples_list:
                     # Save to dictionary of models
-                    trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c, full_df=full_train_data_df,
-                                                              max_samples=max_smp, print_every=int(max_smp/5))
+                    trained_models = self.train_for_all_nodes(n_nodes=n_nd, n_components=n_c,
+                                                              full_df=full_train_data_df,
+                                                              max_samples=max_smp, print_every=int(max_smp / 5))
 
                     for agg_type in self.agg_types_list:
                         print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
@@ -99,12 +100,13 @@ class LearningExperimenter:
                         svc_model = self.set_model(agg_model)
 
                         all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test_sampled, y_test=y_test,
-                                                                               experiment_info_dict=details,
-                                                                               aggregation_type=agg_type,
-                                                                               model=svc_model)
+                                                                           experiment_info_dict=details,
+                                                                           aggregation_type=agg_type,
+                                                                           model=svc_model)
                         exp_indx += 1
                     # Log interim df
-                    pd.DataFrame(all_results_dict).transpose().to_csv(os.path.join(self.results_folder_path, 'interim_results.csv'))
+                    pd.DataFrame(all_results_dict).transpose().to_csv(
+                        os.path.join(self.results_folder_path, 'interim_results.csv'))
                     print('Logged interim results after completion of experiment {}'.format(exp_indx))
 
         elif self.model_type == 'LinearSVC':
