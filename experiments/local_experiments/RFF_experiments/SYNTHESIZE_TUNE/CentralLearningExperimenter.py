@@ -97,7 +97,7 @@ class CentralLearningExperimenter:
             for max_smp in self.max_samples_list:
                 # Save to dictionary of models
                 svc_model = self.train_single_model(n_components=None, full_df=full_train_data_df,
-                                                    max_samples=max_smp, print_every=int(max_smp / 5))
+                                                    max_samples=max_smp)
 
                 print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
                 details = {}
