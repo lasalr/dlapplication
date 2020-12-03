@@ -17,12 +17,12 @@ RANDOM_STATE = 123
 TIME_START = str(datetime.now())[:19]
 RESULTS_FOLDER = os.path.join('./Results/', 'Exp_' + re.sub(r'[\s]', '__', re.sub(r'[\:-]', '_', TIME_START)))
 # DATA_FOLDER = '/projects/nx11/resProj/dlapplication/data/HIGGS'
-DATA_FOLDER = 'C:/Users/lasal/Documents/resProj/dlapplication/data/HIGGS'
+DATA_FOLDER = 'C:/Users/lasal/Documents/resProj/dlapplication/data/SUSY'
 
 # DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
-DATASET_NAME = 'HIGGS'
-DATASET_SIZE = 11_000_000
-DIM = 28
+DATASET_NAME = 'SUSY'
+DATASET_SIZE = 5_000_000
+DIM = 18
 # POLY_DEG = 3
 DATA_LABEL_COL = 0
 TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
