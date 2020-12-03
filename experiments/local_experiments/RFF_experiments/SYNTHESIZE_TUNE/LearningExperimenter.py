@@ -98,8 +98,7 @@ class LearningExperimenter:
                         agg_model = self.aggregate_models_memory(model_dict=trained_models, agg_type=agg_type)
                         svc_model = self.set_model(agg_model)
 
-                        if self.model_type == 'LinearSVCRFF':
-                            all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test_sampled, y_test=y_test,
+                        all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test_sampled, y_test=y_test,
                                                                                experiment_info_dict=details,
                                                                                aggregation_type=agg_type,
                                                                                model=svc_model)
