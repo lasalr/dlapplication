@@ -4,11 +4,10 @@ import sys
 from datetime import datetime
 import re
 
-from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.ParameterTuner import ParameterTuner
-
 sys.path.append("../../../..")
 sys.path.append("../../../../../dlplatform")
 
+from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.ParameterTuner import ParameterTuner
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.CentralLearningExperimenter import \
     CentralLearningExperimenter
 from experiments.local_experiments.RFF_experiments.SYNTHESIZE_TUNE.DataGenerator import DataGenerator
