@@ -104,9 +104,13 @@ if __name__ == '__main__':
     # n_components_list = n_comps1
     # max_samples_list = list([25, 50, 100, 200, 500])
 
-    n_nodes_list = [1005, 805, 605, 405, 205, 5]
-    n_components_list = [1002, 802, 602, 402, 202, 2]
-    max_samples_list = [1000, 500, 200, 100, 50, 25]
+    # n_nodes_list = [1005, 805, 605, 405, 205, 5]
+    # n_components_list = [1002, 802, 602, 402, 202, 2]
+    # max_samples_list = [1000, 500, 200, 100, 50, 25]
+
+    n_nodes_list = [1005]
+    n_components_list = [1002]
+    max_samples_list = [6000, 4000, 3000, 2500, 2000, 1500, 1250]
 
     learning_experimenter = LearningExperimenter(rff_sampler_gamma=gs_model_rff_svc.best_params_['rff__gamma'],
                                                  reg_param=gs_model_rff_svc.best_params_['svc__C'],
