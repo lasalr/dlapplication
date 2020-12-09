@@ -6,6 +6,7 @@ from sklearn.kernel_approximation import RBFSampler
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
+from sklearn.svm import SVC
 
 sys.path.append("../../../..")
 sys.path.append("../../../../../dlplatform")
@@ -17,13 +18,14 @@ class CentralLearningExperimenter:
     RANDOM_STATE = 123
 
     def __init__(self, rff_sampler_gamma, reg_param, train_data_path, test_data_path, dim, data_label_col, dataset_name,
-                 results_folder_path, n_components_list, max_samples_list, model_type,
+                 results_folder_path, n_components_list, max_samples_list, model_type, kernel_gamma,
                  test_fraction=0.1):
 
         self.n_components_list = n_components_list
         self.max_samples_list = max_samples_list
         self.test_fraction = test_fraction
         self.rff_sampler_gamma = rff_sampler_gamma
+        self.kernel_gamma = kernel_gamma
         self.reg_param = reg_param
         self.model_type = model_type
         self.train_data_path = train_data_path
@@ -62,7 +64,35 @@ class CentralLearningExperimenter:
             for m in self.max_samples_list:
                 total_exp_count += 1
 
-        if self.model_type == 'LinearSVCRFF':
+        elif self.model_type == 'KernelSVC':
+            for m in self.max_samples_list:
+                total_exp_count += 1
+
+        if self.model_type == 'KernelSVC':
+            for max_smp in self.max_samples_list:
+                # Save to dictionary of models
+                svc_model = self.train_single_model(n_components=None, full_df=full_train_data_df,
+                                                    max_samples=max_smp)
+
+                print('Running experiment {} of {}'.format(exp_indx, total_exp_count))
+                details = {}
+                details['MODEL_TYPE'] = self.model_type
+                details['DATASET_NAME'] = self.dataset_name
+                details['N_NODES'] = 1
+                details['N_COMPONENTS'] = '-'
+                details['MAX_NODE_SAMPLES'] = max_smp
+
+                all_results_dict[exp_indx] = self.get_calc_metrics(X_test=X_test, y_test=y_test,
+                                                                   experiment_info_dict=details,
+                                                                   model=svc_model)
+                all_results_dict[exp_indx]['aggregator'] = 'None'
+                exp_indx += 1
+                # Log interim df
+                pd.DataFrame(all_results_dict).transpose().to_csv(
+                    os.path.join(self.results_folder_path, 'interim_results.csv'))
+                print('Logged interim results after completion of experiment {}'.format(exp_indx))
+
+        elif self.model_type == 'LinearSVCRFF':
             for n_c in self.n_components_list:
                 # Create RFF sampler
                 sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_c,
@@ -153,6 +183,8 @@ class CentralLearningExperimenter:
             X_train = sampler.fit_transform(X)
         elif isinstance(model, LinearSVC) and (sampler is None):
             X_train = X
+        elif isinstance(model, SVC) and (sampler is None):
+            X_train = X
         else:
             raise ValueError('Incorrect model type')
 
@@ -192,15 +224,26 @@ class CentralLearningExperimenter:
         if self.model_type == 'LinearSVCRFF':
             rff_sampler = RBFSampler(gamma=self.rff_sampler_gamma, n_components=n_components,
                                      random_state=CentralLearningExperimenter.RANDOM_STATE)
+            # Creating LinearSVC model
+            svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
+                                  random_state=CentralLearningExperimenter.RANDOM_STATE)
+            # Training model
+            trained_model = self.train_and_get_model(X=train_features, y=train_label, model=svc_model,
+                                                     sampler=rff_sampler)
         elif self.model_type == 'LinearSVC':
             rff_sampler = None
+            # Creating LinearSVC model
+            svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
+                                  random_state=CentralLearningExperimenter.RANDOM_STATE)
+            # Training model
+            trained_model = self.train_and_get_model(X=train_features, y=train_label, model=svc_model,
+                                                     sampler=rff_sampler)
+        elif self.model_type == 'KernelSVC':
+            svc_model = SVC(C=self.reg_param, gamma=self.kernel_gamma, cache_size=8192,
+                            random_state=CentralLearningExperimenter.RANDOM_STATE)
+            trained_model = self.train_and_get_model(X=train_features, y=train_label, model=svc_model, sampler=None)
         else:
             raise ValueError('Incorrect model type given.')
-        # Creating LinearSVC model
-        svc_model = LinearSVC(C=self.reg_param, loss='squared_hinge', dual=False, max_iter=2000,
-                              random_state=CentralLearningExperimenter.RANDOM_STATE)
-        # Training model
-        trained_model = self.train_and_get_model(X=train_features, y=train_label, model=svc_model,
-                                                 sampler=rff_sampler)
+
         print('Trained model')
         return trained_model
