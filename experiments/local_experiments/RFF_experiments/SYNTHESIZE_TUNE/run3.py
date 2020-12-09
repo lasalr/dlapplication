@@ -23,6 +23,7 @@ DIM = 28
 DATA_LABEL_COL = 0
 TUNE_DATA_FRACTION = 2500 / (DATASET_SIZE * 0.1)  # Tune using 2500 data points
 TEST_DATA_FRACTION = 2000 / (DATASET_SIZE * 0.2)  # 0.003 # Test aggregated models using 3000 data points
+CHECK_METRIC = False
 
 if __name__ == '__main__':
     if not os.path.exists(RESULTS_FOLDER):
@@ -32,9 +33,9 @@ if __name__ == '__main__':
 
     # copy scripts
     shutil.copy(__file__, os.path.join(RESULTS_FOLDER, 'scripts', os.path.basename(__file__)))
-    C_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
+    C_list = [2 ** x for x in range(-14, 14)]  # [2 ** x for x in range(-12, 12)]
     n_jobs = -1
-    rff_gamma_list = [2 ** x for x in range(-12, 12)]  # [2 ** x for x in range(-12, 12)]
+    rff_gamma_list = [2 ** x for x in range(-14, 14)]  # [2 ** x for x in range(-12, 12)]
     n_components_list = [x for x in range(2, 1100, 100)]
 
     print('Running data generator in dir: {}'.format(DATA_FOLDER))
@@ -77,17 +78,20 @@ if __name__ == '__main__':
     with open(os.path.join(RESULTS_FOLDER, 'param_results.txt'), 'w') as fw:
         fw.write(param_results)
 
-    if gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05:
-        print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
-        print('Deleting data file {}'.format(data_saved_path))
-        os.remove(path=data_saved_path)
-        print('Deleting val data file {}'.format(val_data_path))
-        os.remove(path=val_data_path)
-        print('Deleting train data file {}'.format(train_data_path))
-        os.remove(path=train_data_path)
-        print('Deleting test data file {}'.format(test_data_path))
-        os.remove(path=test_data_path)
-        sys.exit()
+    if (gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05):
+        if not CHECK_METRIC:
+            print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05 but continuing with experiment')
+        else:
+            print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
+            print('Deleting data file {}'.format(data_saved_path))
+            os.remove(path=data_saved_path)
+            print('Deleting val data file {}'.format(val_data_path))
+            os.remove(path=val_data_path)
+            print('Deleting train data file {}'.format(train_data_path))
+            os.remove(path=train_data_path)
+            print('Deleting test data file {}'.format(test_data_path))
+            os.remove(path=test_data_path)
+            sys.exit()
 
     n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
