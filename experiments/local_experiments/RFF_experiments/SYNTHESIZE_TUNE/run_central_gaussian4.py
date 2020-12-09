@@ -70,8 +70,8 @@ if __name__ == '__main__':
         for samples in samples_list:
             max_samples_list.append(n_d * samples)
 
-    learning_experimenter_svc_rff = CentralLearningExperimenter(rff_sampler_gamma=0.00390625,
-                                                                reg_param=1024,
+    learning_experimenter_svc_rff = CentralLearningExperimenter(rff_sampler_gamma=0.001953125,
+                                                                reg_param=2048,
                                                                 train_data_path=train_data_path,
                                                                 test_data_path=test_data_path,
                                                                 dim=DIM, data_label_col=DATA_LABEL_COL,
