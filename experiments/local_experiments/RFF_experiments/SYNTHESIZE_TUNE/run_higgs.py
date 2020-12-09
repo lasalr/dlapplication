@@ -14,6 +14,7 @@ RANDOM_STATE = 123
 TIME_START = str(datetime.now())[:19]
 RESULTS_FOLDER = os.path.join('./Results/', 'Exp_' + re.sub(r'[\s]', '__', re.sub(r'[\:-]', '_', TIME_START)))
 DATA_FOLDER = '/projects/nx11/resProj/dlapplication/data/HIGGS'
+# DATA_FOLDER = 'C:/Users/lasal/Documents/resProj/dlapplication/data/HIGGS'
 
 # DATASET_NAME = 'SYN' + re.sub(r'[\s]', '.', re.sub(r'[\:-]', '', TIME_START))
 DATASET_NAME = 'HIGGS'
@@ -65,33 +66,33 @@ if __name__ == '__main__':
                                   os.path.basename(data_saved_path))
 
     print('Generated dataset {}'.format(data_saved_path))
-    param_tuner = ParameterTuner(C_list=C_list, rff_gamma_list=rff_gamma_list, n_components_list=n_components_list,
-                                 n_jobs=n_jobs, dataset_name=DATASET_NAME, val_file_path=val_data_path,
-                                 results_folder_path=RESULTS_FOLDER, tune_data_fraction=TUNE_DATA_FRACTION, dim=DIM,
-                                 data_label_col=DATA_LABEL_COL, score_method='roc_auc')
-    gs_model_svc, gs_model_rff_svc = param_tuner()
-    param_results = 'Tuned parameters\nsvc_best_params={} score={}\n'.format(gs_model_svc.best_params_,
-                                                                             gs_model_svc.best_score_)
-    param_results += 'svc_rff_best_params={} score={}'.format(gs_model_rff_svc.best_params_,
-                                                              gs_model_rff_svc.best_score_)
-    print(param_results)
-    with open(os.path.join(RESULTS_FOLDER, 'param_results.txt'), 'w') as fw:
-        fw.write(param_results)
-
-    if (gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05):
-        if not CHECK_METRIC:
-            print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05 but continuing with experiment')
-        else:
-            print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
-            print('Deleting data file {}'.format(data_saved_path))
-            os.remove(path=data_saved_path)
-            print('Deleting val data file {}'.format(val_data_path))
-            os.remove(path=val_data_path)
-            print('Deleting train data file {}'.format(train_data_path))
-            os.remove(path=train_data_path)
-            print('Deleting test data file {}'.format(test_data_path))
-            os.remove(path=test_data_path)
-            sys.exit()
+    # param_tuner = ParameterTuner(C_list=C_list, rff_gamma_list=rff_gamma_list, n_components_list=n_components_list,
+    #                              n_jobs=n_jobs, dataset_name=DATASET_NAME, val_file_path=val_data_path,
+    #                              results_folder_path=RESULTS_FOLDER, tune_data_fraction=TUNE_DATA_FRACTION, dim=DIM,
+    #                              data_label_col=DATA_LABEL_COL, score_method='roc_auc')
+    # gs_model_svc, gs_model_rff_svc = param_tuner()
+    # param_results = 'Tuned parameters\nsvc_best_params={} score={}\n'.format(gs_model_svc.best_params_,
+    #                                                                          gs_model_svc.best_score_)
+    # param_results += 'svc_rff_best_params={} score={}'.format(gs_model_rff_svc.best_params_,
+    #                                                           gs_model_rff_svc.best_score_)
+    # print(param_results)
+    # with open(os.path.join(RESULTS_FOLDER, 'param_results.txt'), 'w') as fw:
+    #     fw.write(param_results)
+    #
+    # if (gs_model_rff_svc.best_score_ - gs_model_svc.best_score_ < 0.05):
+    #     if not CHECK_METRIC:
+    #         print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05 but continuing with experiment')
+    #     else:
+    #         print('svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05! Stopping experiment')
+    #         print('Deleting data file {}'.format(data_saved_path))
+    #         os.remove(path=data_saved_path)
+    #         print('Deleting val data file {}'.format(val_data_path))
+    #         os.remove(path=val_data_path)
+    #         print('Deleting train data file {}'.format(train_data_path))
+    #         os.remove(path=train_data_path)
+    #         print('Deleting test data file {}'.format(test_data_path))
+    #         os.remove(path=test_data_path)
+    #         sys.exit()
 
     # n_comps1 = list(reversed([i for i in range(2, 1100, 200)]))
     # n_comps2 = list(reversed([i for i in range(2, 160, 40)]))
@@ -112,13 +113,12 @@ if __name__ == '__main__':
     n_components_list = [1002]
     max_samples_list = [6000, 4000, 3000, 2500, 2000, 1500, 1250]
 
-    learning_experimenter = LearningExperimenter(rff_sampler_gamma=gs_model_rff_svc.best_params_['rff__gamma'],
-                                                 reg_param=gs_model_rff_svc.best_params_['svc__C'],
+    learning_experimenter = LearningExperimenter(rff_sampler_gamma=0.00411522633744856,
+                                                 reg_param=512.0,
                                                  train_data_path=train_data_path, test_data_path=test_data_path,
                                                  dim=DIM, data_label_col=DATA_LABEL_COL, dataset_name=DATASET_NAME,
                                                  model_type='LinearSVCRFF',
                                                  test_fraction=TEST_DATA_FRACTION, results_folder_path=RESULTS_FOLDER,
                                                  n_nodes_list=n_nodes_list, n_components_list=n_components_list,
                                                  max_node_samples_list=max_samples_list)
-
     learning_experimenter()
