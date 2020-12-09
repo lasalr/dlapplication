@@ -18,7 +18,8 @@ class ParameterTuner:
     RANDOM_STATE = 123
 
     def __init__(self, C_list: list, rff_gamma_list: list, n_components_list: list, n_jobs: int, dataset_name,
-                 val_file_path, results_folder_path, tune_data_fraction, dim, data_label_col, score_method='roc_auc'):
+                 val_file_path, results_folder_path, tune_data_fraction, dim, data_label_col, score_method='roc_auc',
+                 tune_model_type='all'):
         self.C_list = C_list
         self.rff_gamma_list = rff_gamma_list
         self.n_components_list = n_components_list
@@ -34,6 +35,7 @@ class ParameterTuner:
         self.tune_data_fraction = tune_data_fraction
         self.dim = dim
         self.data_label_col = data_label_col
+        self.tune_model_type = tune_model_type
 
     def __call__(self):
         # Copy script to results folder
@@ -64,6 +66,10 @@ class ParameterTuner:
             os.mkdir(self.results_folder_path)
         self.write_to_csv(name='linearsvc_' + self.dataset_name + '_', results=gs_model.cv_results_,
                           sortby_col='rank_test_score')
+
+        if self.tune_model_type == 'LinearSVC':
+            print('Only tuned LinearSVC')
+            return gs_model, None
 
         # Parameter tuning for Linear SVC with RFF
         print('Starting: Parameter tuning for Linear SVC with RFF...')
