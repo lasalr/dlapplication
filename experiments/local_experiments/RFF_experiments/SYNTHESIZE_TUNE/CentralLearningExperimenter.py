@@ -18,7 +18,7 @@ class CentralLearningExperimenter:
     RANDOM_STATE = 123
 
     def __init__(self, rff_sampler_gamma, reg_param, train_data_path, test_data_path, dim, data_label_col, dataset_name,
-                 results_folder_path, n_components_list, max_samples_list, model_type, kernel_gamma,
+                 results_folder_path, n_components_list, max_samples_list, model_type, kernel_gamma=None,
                  test_fraction=0.1):
 
         self.n_components_list = n_components_list
