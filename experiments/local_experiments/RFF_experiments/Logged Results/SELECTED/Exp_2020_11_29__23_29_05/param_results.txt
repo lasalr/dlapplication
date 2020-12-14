@@ -1,0 +1,3 @@
+Tuned parameters
+svc_best_params={'C': 0.00390625, 'dual': False, 'random_state': 123} score=0.605400560602518
+svc_rff_best_params={'rff__gamma': 0.001953125, 'rff__n_components': 602, 'rff__random_state': 123, 'svc__C': 2048} score=0.9352874225096667

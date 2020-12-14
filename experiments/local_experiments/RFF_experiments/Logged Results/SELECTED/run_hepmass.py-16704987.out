@@ -1,0 +1,19 @@
+Running data generator in dir: /projects/nx11/resProj/dlapplication/data/HEPMASS
+Data generator using method=existing
+Using existing dataset at path=/projects/nx11/resProj/dlapplication/data/HEPMASS/HEPMASS.csv
+Splitting dataset...
+Generated dataset /projects/nx11/resProj/dlapplication/data/HEPMASS/HEPMASS.csv
+X_param=(1667, 28)
+y_param.shape=(1667,)
+Data loaded
+Starting: Parameter tuning for Linear SVC without RFF...
+Fitting 5 folds for each of 28 candidates, totalling 140 fits
+writing results to file...
+Starting: Parameter tuning for Linear SVC with RFF...
+Fitting 5 folds for each of 8624 candidates, totalling 43120 fits
+writing results to file...
+Tuned parameters
+svc_best_params={'C': 256, 'dual': False, 'random_state': 123} score=0.9100511191742481
+svc_rff_best_params={'rff__gamma': 6.103515625e-05, 'rff__n_components': 1002, 'rff__random_state': 123, 'svc__C': 32} score=0.9183968114560864
+svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05 but continuing with experiment
+Finished reading 6000 rows of data for node 0

@@ -1,0 +1,26 @@
+/home/lran0009/.conda/envs/dlResearch/lib/python3.7/site-packages/scipy/stats/_multivariate.py:664: RuntimeWarning: covariance is not positive-semidefinite.
+  out = random_state.multivariate_normal(mean, cov, size)
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 24 concurrent workers.
+[Parallel(n_jobs=-1)]: Done   2 tasks      | elapsed:    2.2s
+[Parallel(n_jobs=-1)]: Done 120 out of 120 | elapsed:    2.3s finished
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 24 concurrent workers.
+[Parallel(n_jobs=-1)]: Done   2 tasks      | elapsed:    0.0s
+[Parallel(n_jobs=-1)]: Done 400 tasks      | elapsed:    1.5s
+[Parallel(n_jobs=-1)]: Done 1252 tasks      | elapsed:   11.7s
+[Parallel(n_jobs=-1)]: Done 2192 tasks      | elapsed:   20.2s
+[Parallel(n_jobs=-1)]: Done 2690 tasks      | elapsed:   29.1s
+[Parallel(n_jobs=-1)]: Done 3792 tasks      | elapsed:   42.8s
+[Parallel(n_jobs=-1)]: Done 4994 tasks      | elapsed:  1.0min
+[Parallel(n_jobs=-1)]: Done 6224 tasks      | elapsed:  1.4min
+[Parallel(n_jobs=-1)]: Done 7548 tasks      | elapsed:  1.9min
+[Parallel(n_jobs=-1)]: Done 8837 tasks      | elapsed:  2.7min
+[Parallel(n_jobs=-1)]: Done 9890 tasks      | elapsed:  3.9min
+[Parallel(n_jobs=-1)]: Done 11040 tasks      | elapsed:  6.6min
+[Parallel(n_jobs=-1)]: Done 12482 tasks      | elapsed: 11.2min
+[Parallel(n_jobs=-1)]: Done 13832 tasks      | elapsed: 15.5min
+[Parallel(n_jobs=-1)]: Done 15546 tasks      | elapsed: 18.8min
+[Parallel(n_jobs=-1)]: Done 17625 tasks      | elapsed: 20.4min
+[Parallel(n_jobs=-1)]: Done 20110 tasks      | elapsed: 21.2min
+[Parallel(n_jobs=-1)]: Done 23808 tasks      | elapsed: 22.1min
+[Parallel(n_jobs=-1)]: Done 28412 tasks      | elapsed: 22.9min
+[Parallel(n_jobs=-1)]: Done 31680 out of 31680 | elapsed: 23.9min finished

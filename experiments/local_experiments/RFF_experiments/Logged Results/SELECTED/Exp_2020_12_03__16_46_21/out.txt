@@ -1,0 +1,621 @@
+C:\Users\lasal\anaconda3\envs\dlResearch\python.exe C:/Users/lasal/Documents/resProj/dlapplication/experiments/local_experiments/RFF_experiments/SYNTHESIZE_TUNE/run_central_susy.py
+Running data generator in dir: C:/Users/lasal/Documents/resProj/dlapplication/data/SUSY
+Data generator using method=existing
+Using existing dataset at path=C:/Users/lasal/Documents/resProj/dlapplication/data/SUSY\SUSY.csv
+Splitting dataset...
+All files are already present. No splitting done.
+Generated dataset C:\Users\lasal\Documents\resProj\dlapplication\data\SUSY\SUSY.csv
+[Parallel(n_jobs=5)]: Using backend LokyBackend with 5 concurrent workers.
+X_param=(1000, 18)
+y_param.shape=(1000,)
+Data loaded
+Starting: Parameter tuning for Linear SVC without RFF...
+Fitting 5 folds for each of 24 candidates, totalling 120 fits
+[Parallel(n_jobs=5)]: Done  45 tasks      | elapsed:    2.8s
+[Parallel(n_jobs=5)]: Done 120 out of 120 | elapsed:    3.0s finished
+writing results to file...
+Starting: Parameter tuning for Linear SVC with RFF...
+[Parallel(n_jobs=5)]: Using backend LokyBackend with 5 concurrent workers.
+Fitting 5 folds for each of 6336 candidates, totalling 31680 fits
+[Parallel(n_jobs=5)]: Done 150 tasks      | elapsed:    0.3s
+[Parallel(n_jobs=5)]: Done 785 tasks      | elapsed:   11.4s
+[Parallel(n_jobs=5)]: Done 1200 tasks      | elapsed:   31.3s
+[Parallel(n_jobs=5)]: Done 2345 tasks      | elapsed:  1.1min
+[Parallel(n_jobs=5)]: Done 3365 tasks      | elapsed:  1.6min
+[Parallel(n_jobs=5)]: Done 4575 tasks      | elapsed:  2.5min
+[Parallel(n_jobs=5)]: Done 5318 tasks      | elapsed:  3.4min
+[Parallel(n_jobs=5)]: Done 6600 tasks      | elapsed:  4.8min
+[Parallel(n_jobs=5)]: Done 7870 tasks      | elapsed:  7.0min
+[Parallel(n_jobs=5)]: Done 9165 tasks      | elapsed: 11.4min
+[Parallel(n_jobs=5)]: Done 10545 tasks      | elapsed: 18.3min
+[Parallel(n_jobs=5)]: Done 11855 tasks      | elapsed: 27.1min
+[Parallel(n_jobs=5)]: Done 13760 tasks      | elapsed: 36.1min
+[Parallel(n_jobs=5)]: Done 15535 tasks      | elapsed: 48.1min
+[Parallel(n_jobs=5)]: Done 17910 tasks      | elapsed: 63.5min
+[Parallel(n_jobs=5)]: Done 20455 tasks      | elapsed: 80.1min
+[Parallel(n_jobs=5)]: Done 22925 tasks      | elapsed: 96.3min
+[Parallel(n_jobs=5)]: Done 25208 tasks      | elapsed: 111.9min
+[Parallel(n_jobs=5)]: Done 28617 tasks      | elapsed: 128.9min
+[Parallel(n_jobs=5)]: Done 31640 tasks      | elapsed: 148.8min
+[Parallel(n_jobs=5)]: Done 31680 out of 31680 | elapsed: 151.0min finished
+writing results to file...
+Tuned parameters
+svc_best_params={'C': 2, 'dual': False, 'random_state': 123} score=0.8502755197488536
+svc_rff_best_params={'rff__gamma': 0.000244140625, 'rff__n_components': 502, 'rff__random_state': 123, 'svc__C': 2048} score=0.8587583188090718
+svc_rff_best_score={} does not exceed svc_best_score={} by at least 0.05 but continuing with experiment
+Finished reading 6000 rows of data
+Trained model
+Running experiment 0 of 13
+Logged interim results after completion of experiment 1
+Finished reading 4000 rows of data
+Trained model
+Running experiment 1 of 13
+Logged interim results after completion of experiment 2
+Finished reading 3000 rows of data
+Trained model
+Running experiment 2 of 13
+Logged interim results after completion of experiment 3
+Finished reading 2500 rows of data
+Trained model
+Running experiment 3 of 13
+Logged interim results after completion of experiment 4
+Finished reading 2000 rows of data
+Trained model
+Running experiment 4 of 13
+Logged interim results after completion of experiment 5
+Finished reading 1500 rows of data
+Trained model
+Running experiment 5 of 13
+Logged interim results after completion of experiment 6
+Finished reading 1250 rows of data
+Trained model
+Running experiment 6 of 13
+Logged interim results after completion of experiment 7
+Finished reading 1000 rows of data
+Trained model
+Running experiment 7 of 13
+Logged interim results after completion of experiment 8
+Finished reading 500 rows of data
+Trained model
+Running experiment 8 of 13
+Logged interim results after completion of experiment 9
+Finished reading 200 rows of data
+Trained model
+Running experiment 9 of 13
+Logged interim results after completion of experiment 10
+Finished reading 100 rows of data
+Trained model
+Running experiment 10 of 13
+Logged interim results after completion of experiment 11
+Finished reading 50 rows of data
+Trained model
+Running experiment 11 of 13
+Logged interim results after completion of experiment 12
+Finished reading 25 rows of data
+Trained model
+Running experiment 12 of 13
+Logged interim results after completion of experiment 13
+Logged final results
+Finished reading 6000 rows of data
+Trained model
+Running experiment 0 of 130
+Logged interim results after completion of experiment 1
+Finished reading 4000 rows of data
+Trained model
+Running experiment 1 of 130
+Logged interim results after completion of experiment 2
+Finished reading 3000 rows of data
+Trained model
+Running experiment 2 of 130
+Logged interim results after completion of experiment 3
+Finished reading 2500 rows of data
+Trained model
+Running experiment 3 of 130
+Logged interim results after completion of experiment 4
+Finished reading 2000 rows of data
+Trained model
+Running experiment 4 of 130
+Logged interim results after completion of experiment 5
+Finished reading 1500 rows of data
+Trained model
+Running experiment 5 of 130
+Logged interim results after completion of experiment 6
+Finished reading 1250 rows of data
+Trained model
+Running experiment 6 of 130
+Logged interim results after completion of experiment 7
+Finished reading 1000 rows of data
+Trained model
+Running experiment 7 of 130
+Logged interim results after completion of experiment 8
+Finished reading 500 rows of data
+Trained model
+Running experiment 8 of 130
+Logged interim results after completion of experiment 9
+Finished reading 200 rows of data
+Trained model
+Running experiment 9 of 130
+Logged interim results after completion of experiment 10
+Finished reading 100 rows of data
+Trained model
+Running experiment 10 of 130
+Logged interim results after completion of experiment 11
+Finished reading 50 rows of data
+Trained model
+Running experiment 11 of 130
+Logged interim results after completion of experiment 12
+Finished reading 25 rows of data
+Trained model
+Running experiment 12 of 130
+Logged interim results after completion of experiment 13
+Finished reading 6000 rows of data
+Trained model
+Running experiment 13 of 130
+Logged interim results after completion of experiment 14
+Finished reading 4000 rows of data
+Trained model
+Running experiment 14 of 130
+Logged interim results after completion of experiment 15
+Finished reading 3000 rows of data
+Trained model
+Running experiment 15 of 130
+Logged interim results after completion of experiment 16
+Finished reading 2500 rows of data
+Trained model
+Running experiment 16 of 130
+Logged interim results after completion of experiment 17
+Finished reading 2000 rows of data
+Trained model
+Running experiment 17 of 130
+Logged interim results after completion of experiment 18
+Finished reading 1500 rows of data
+Trained model
+Running experiment 18 of 130
+Logged interim results after completion of experiment 19
+Finished reading 1250 rows of data
+Trained model
+Running experiment 19 of 130
+Logged interim results after completion of experiment 20
+Finished reading 1000 rows of data
+Trained model
+Running experiment 20 of 130
+Logged interim results after completion of experiment 21
+Finished reading 500 rows of data
+Trained model
+Running experiment 21 of 130
+Logged interim results after completion of experiment 22
+Finished reading 200 rows of data
+Trained model
+Running experiment 22 of 130
+Logged interim results after completion of experiment 23
+Finished reading 100 rows of data
+Trained model
+Running experiment 23 of 130
+Logged interim results after completion of experiment 24
+Finished reading 50 rows of data
+Trained model
+Running experiment 24 of 130
+Logged interim results after completion of experiment 25
+Finished reading 25 rows of data
+Trained model
+Running experiment 25 of 130
+Logged interim results after completion of experiment 26
+Finished reading 6000 rows of data
+Trained model
+Running experiment 26 of 130
+Logged interim results after completion of experiment 27
+Finished reading 4000 rows of data
+Trained model
+Running experiment 27 of 130
+Logged interim results after completion of experiment 28
+Finished reading 3000 rows of data
+Trained model
+Running experiment 28 of 130
+Logged interim results after completion of experiment 29
+Finished reading 2500 rows of data
+Trained model
+Running experiment 29 of 130
+Logged interim results after completion of experiment 30
+Finished reading 2000 rows of data
+Trained model
+Running experiment 30 of 130
+Logged interim results after completion of experiment 31
+Finished reading 1500 rows of data
+Trained model
+Running experiment 31 of 130
+Logged interim results after completion of experiment 32
+Finished reading 1250 rows of data
+Trained model
+Running experiment 32 of 130
+Logged interim results after completion of experiment 33
+Finished reading 1000 rows of data
+Trained model
+Running experiment 33 of 130
+Logged interim results after completion of experiment 34
+Finished reading 500 rows of data
+Trained model
+Running experiment 34 of 130
+Logged interim results after completion of experiment 35
+Finished reading 200 rows of data
+Trained model
+Running experiment 35 of 130
+Logged interim results after completion of experiment 36
+Finished reading 100 rows of data
+Trained model
+Running experiment 36 of 130
+Logged interim results after completion of experiment 37
+Finished reading 50 rows of data
+Trained model
+Running experiment 37 of 130
+Logged interim results after completion of experiment 38
+Finished reading 25 rows of data
+Trained model
+Running experiment 38 of 130
+Logged interim results after completion of experiment 39
+Finished reading 6000 rows of data
+Trained model
+Running experiment 39 of 130
+Logged interim results after completion of experiment 40
+Finished reading 4000 rows of data
+Trained model
+Running experiment 40 of 130
+Logged interim results after completion of experiment 41
+Finished reading 3000 rows of data
+Trained model
+Running experiment 41 of 130
+Logged interim results after completion of experiment 42
+Finished reading 2500 rows of data
+Trained model
+Running experiment 42 of 130
+Logged interim results after completion of experiment 43
+Finished reading 2000 rows of data
+Trained model
+Running experiment 43 of 130
+Logged interim results after completion of experiment 44
+Finished reading 1500 rows of data
+Trained model
+Running experiment 44 of 130
+Logged interim results after completion of experiment 45
+Finished reading 1250 rows of data
+Trained model
+Running experiment 45 of 130
+Logged interim results after completion of experiment 46
+Finished reading 1000 rows of data
+Trained model
+Running experiment 46 of 130
+Logged interim results after completion of experiment 47
+Finished reading 500 rows of data
+Trained model
+Running experiment 47 of 130
+Logged interim results after completion of experiment 48
+Finished reading 200 rows of data
+Trained model
+Running experiment 48 of 130
+Logged interim results after completion of experiment 49
+Finished reading 100 rows of data
+Trained model
+Running experiment 49 of 130
+Logged interim results after completion of experiment 50
+Finished reading 50 rows of data
+Trained model
+Running experiment 50 of 130
+Logged interim results after completion of experiment 51
+Finished reading 25 rows of data
+Trained model
+Running experiment 51 of 130
+Logged interim results after completion of experiment 52
+Finished reading 6000 rows of data
+Trained model
+Running experiment 52 of 130
+Logged interim results after completion of experiment 53
+Finished reading 4000 rows of data
+Trained model
+Running experiment 53 of 130
+Logged interim results after completion of experiment 54
+Finished reading 3000 rows of data
+Trained model
+Running experiment 54 of 130
+Logged interim results after completion of experiment 55
+Finished reading 2500 rows of data
+Trained model
+Running experiment 55 of 130
+Logged interim results after completion of experiment 56
+Finished reading 2000 rows of data
+Trained model
+Running experiment 56 of 130
+Logged interim results after completion of experiment 57
+Finished reading 1500 rows of data
+Trained model
+Running experiment 57 of 130
+Logged interim results after completion of experiment 58
+Finished reading 1250 rows of data
+Trained model
+Running experiment 58 of 130
+Logged interim results after completion of experiment 59
+Finished reading 1000 rows of data
+Trained model
+Running experiment 59 of 130
+Logged interim results after completion of experiment 60
+Finished reading 500 rows of data
+Trained model
+Running experiment 60 of 130
+Logged interim results after completion of experiment 61
+Finished reading 200 rows of data
+Trained model
+Running experiment 61 of 130
+Logged interim results after completion of experiment 62
+Finished reading 100 rows of data
+Trained model
+Running experiment 62 of 130
+Logged interim results after completion of experiment 63
+Finished reading 50 rows of data
+Trained model
+Running experiment 63 of 130
+Logged interim results after completion of experiment 64
+Finished reading 25 rows of data
+Trained model
+Running experiment 64 of 130
+Logged interim results after completion of experiment 65
+Finished reading 6000 rows of data
+Trained model
+Running experiment 65 of 130
+Logged interim results after completion of experiment 66
+Finished reading 4000 rows of data
+Trained model
+Running experiment 66 of 130
+Logged interim results after completion of experiment 67
+Finished reading 3000 rows of data
+Trained model
+Running experiment 67 of 130
+Logged interim results after completion of experiment 68
+Finished reading 2500 rows of data
+Trained model
+Running experiment 68 of 130
+Logged interim results after completion of experiment 69
+Finished reading 2000 rows of data
+Trained model
+Running experiment 69 of 130
+Logged interim results after completion of experiment 70
+Finished reading 1500 rows of data
+Trained model
+Running experiment 70 of 130
+Logged interim results after completion of experiment 71
+Finished reading 1250 rows of data
+Trained model
+Running experiment 71 of 130
+Logged interim results after completion of experiment 72
+Finished reading 1000 rows of data
+Trained model
+Running experiment 72 of 130
+Logged interim results after completion of experiment 73
+Finished reading 500 rows of data
+Trained model
+Running experiment 73 of 130
+Logged interim results after completion of experiment 74
+Finished reading 200 rows of data
+Trained model
+Running experiment 74 of 130
+Logged interim results after completion of experiment 75
+Finished reading 100 rows of data
+Trained model
+Running experiment 75 of 130
+Logged interim results after completion of experiment 76
+Finished reading 50 rows of data
+Trained model
+Running experiment 76 of 130
+Logged interim results after completion of experiment 77
+Finished reading 25 rows of data
+Trained model
+Running experiment 77 of 130
+Logged interim results after completion of experiment 78
+Finished reading 6000 rows of data
+Trained model
+Running experiment 78 of 130
+Logged interim results after completion of experiment 79
+Finished reading 4000 rows of data
+Trained model
+Running experiment 79 of 130
+Logged interim results after completion of experiment 80
+Finished reading 3000 rows of data
+Trained model
+Running experiment 80 of 130
+Logged interim results after completion of experiment 81
+Finished reading 2500 rows of data
+Trained model
+Running experiment 81 of 130
+Logged interim results after completion of experiment 82
+Finished reading 2000 rows of data
+Trained model
+Running experiment 82 of 130
+Logged interim results after completion of experiment 83
+Finished reading 1500 rows of data
+Trained model
+Running experiment 83 of 130
+Logged interim results after completion of experiment 84
+Finished reading 1250 rows of data
+Trained model
+Running experiment 84 of 130
+Logged interim results after completion of experiment 85
+Finished reading 1000 rows of data
+Trained model
+Running experiment 85 of 130
+Logged interim results after completion of experiment 86
+Finished reading 500 rows of data
+Trained model
+Running experiment 86 of 130
+Logged interim results after completion of experiment 87
+Finished reading 200 rows of data
+Trained model
+Running experiment 87 of 130
+Logged interim results after completion of experiment 88
+Finished reading 100 rows of data
+Trained model
+Running experiment 88 of 130
+Logged interim results after completion of experiment 89
+Finished reading 50 rows of data
+Trained model
+Running experiment 89 of 130
+Logged interim results after completion of experiment 90
+Finished reading 25 rows of data
+Trained model
+Running experiment 90 of 130
+Logged interim results after completion of experiment 91
+Finished reading 6000 rows of data
+Trained model
+Running experiment 91 of 130
+Logged interim results after completion of experiment 92
+Finished reading 4000 rows of data
+Trained model
+Running experiment 92 of 130
+Logged interim results after completion of experiment 93
+Finished reading 3000 rows of data
+Trained model
+Running experiment 93 of 130
+Logged interim results after completion of experiment 94
+Finished reading 2500 rows of data
+Trained model
+Running experiment 94 of 130
+Logged interim results after completion of experiment 95
+Finished reading 2000 rows of data
+Trained model
+Running experiment 95 of 130
+Logged interim results after completion of experiment 96
+Finished reading 1500 rows of data
+Trained model
+Running experiment 96 of 130
+Logged interim results after completion of experiment 97
+Finished reading 1250 rows of data
+Trained model
+Running experiment 97 of 130
+Logged interim results after completion of experiment 98
+Finished reading 1000 rows of data
+Trained model
+Running experiment 98 of 130
+Logged interim results after completion of experiment 99
+Finished reading 500 rows of data
+Trained model
+Running experiment 99 of 130
+Logged interim results after completion of experiment 100
+Finished reading 200 rows of data
+Trained model
+Running experiment 100 of 130
+Logged interim results after completion of experiment 101
+Finished reading 100 rows of data
+Trained model
+Running experiment 101 of 130
+Logged interim results after completion of experiment 102
+Finished reading 50 rows of data
+Trained model
+Running experiment 102 of 130
+Logged interim results after completion of experiment 103
+Finished reading 25 rows of data
+Trained model
+Running experiment 103 of 130
+Logged interim results after completion of experiment 104
+Finished reading 6000 rows of data
+Trained model
+Running experiment 104 of 130
+Logged interim results after completion of experiment 105
+Finished reading 4000 rows of data
+Trained model
+Running experiment 105 of 130
+Logged interim results after completion of experiment 106
+Finished reading 3000 rows of data
+Trained model
+Running experiment 106 of 130
+Logged interim results after completion of experiment 107
+Finished reading 2500 rows of data
+Trained model
+Running experiment 107 of 130
+Logged interim results after completion of experiment 108
+Finished reading 2000 rows of data
+Trained model
+Running experiment 108 of 130
+Logged interim results after completion of experiment 109
+Finished reading 1500 rows of data
+Trained model
+Running experiment 109 of 130
+Logged interim results after completion of experiment 110
+Finished reading 1250 rows of data
+Trained model
+Running experiment 110 of 130
+Logged interim results after completion of experiment 111
+Finished reading 1000 rows of data
+Trained model
+Running experiment 111 of 130
+Logged interim results after completion of experiment 112
+Finished reading 500 rows of data
+Trained model
+Running experiment 112 of 130
+Logged interim results after completion of experiment 113
+Finished reading 200 rows of data
+Trained model
+Running experiment 113 of 130
+Logged interim results after completion of experiment 114
+Finished reading 100 rows of data
+Trained model
+Running experiment 114 of 130
+Logged interim results after completion of experiment 115
+Finished reading 50 rows of data
+Trained model
+Running experiment 115 of 130
+Logged interim results after completion of experiment 116
+Finished reading 25 rows of data
+Trained model
+Running experiment 116 of 130
+Logged interim results after completion of experiment 117
+Finished reading 6000 rows of data
+Trained model
+Running experiment 117 of 130
+Logged interim results after completion of experiment 118
+Finished reading 4000 rows of data
+Trained model
+Running experiment 118 of 130
+Logged interim results after completion of experiment 119
+Finished reading 3000 rows of data
+Trained model
+Running experiment 119 of 130
+Logged interim results after completion of experiment 120
+Finished reading 2500 rows of data
+Trained model
+Running experiment 120 of 130
+Logged interim results after completion of experiment 121
+Finished reading 2000 rows of data
+Trained model
+Running experiment 121 of 130
+Logged interim results after completion of experiment 122
+Finished reading 1500 rows of data
+Trained model
+Running experiment 122 of 130
+Logged interim results after completion of experiment 123
+Finished reading 1250 rows of data
+Trained model
+Running experiment 123 of 130
+Logged interim results after completion of experiment 124
+Finished reading 1000 rows of data
+Trained model
+Running experiment 124 of 130
+Logged interim results after completion of experiment 125
+Finished reading 500 rows of data
+Trained model
+Running experiment 125 of 130
+Logged interim results after completion of experiment 126
+Finished reading 200 rows of data
+Trained model
+Running experiment 126 of 130
+Logged interim results after completion of experiment 127
+Finished reading 100 rows of data
+Trained model
+Running experiment 127 of 130
+Logged interim results after completion of experiment 128
+Finished reading 50 rows of data
+Trained model
+Running experiment 128 of 130
+Logged interim results after completion of experiment 129
+Finished reading 25 rows of data
+Trained model
+Running experiment 129 of 130
+Logged interim results after completion of experiment 130
+Logged final results
+
+Process finished with exit code 0
